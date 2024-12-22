@@ -1,0 +1,14 @@
+.logout-button {
+    background-color: red; /* Couleur rouge */
+    color: white; /* Couleur du texte en blanc */
+    font-size: 1.5rem; /* Augmente la taille du texte */
+    padding: 10px 20px; /* Ajoute de l'espace autour du texte */
+    border: none; /* Supprime les bordures par défaut */
+    border-radius: 5px; /* Ajoute des coins arrondis */
+    cursor: pointer; /* Change le curseur au survol */
+  }
+  
+  .logout-button {
+    background-color: darkred; /* Couleur légèrement plus sombre au survol */
+  }
+  

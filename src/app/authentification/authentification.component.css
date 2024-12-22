@@ -1,0 +1,160 @@
+/* Conteneur principal */
+.auth-container {
+    display: flex;
+    width: 100%;
+    justify-content: center; /* Centrer le formulaire et l'image */
+    align-items: center;
+    gap: 20px; /* Réduire l'espacement entre la photo et le formulaire */
+    height: 100vh;
+}
+
+/* Section de connexion */
+.login-section {
+    background-color: #fff;
+    width: 30%; /* Fixe la largeur du formulaire à 30% */
+    height: 70%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    
+    /* Centrer le contenu à l'intérieur du formulaire */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligner les éléments en haut de la section */
+    align-items: center; /* Centrer horizontalement */
+    padding: 20px;
+    box-sizing: border-box;
+    margin-right: 50px; /* Espacement avec la droite */
+}
+
+/* Style du titre h2 */
+.login-section h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #00A551;
+    margin-bottom: 30px; /* Espacement sous le titre pour séparer les champs */
+    text-align: center; /* Centrer le titre */
+}
+
+/* Style des groupes de formulaire */
+.form-group {
+    width: 100%;
+    margin-bottom: 20px; /* Espacement entre les champs pour éviter qu'ils soient trop proches */
+}
+
+/* Style des inputs */
+input {
+    width: 100%; /* Augmenter la largeur */
+    padding: 12px 16px; /* Padding plus large pour plus de confort */
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur */
+    transition: all 0.3s ease; /* Effet de transition pour un changement fluide */
+    margin-bottom: 20px; /* Ajoute un espacement de 20px sous chaque champ input */
+}
+
+/* Style au focus */
+input:focus {
+    border-color: #4CAF50; /* Change la bordure en vert au focus */
+    outline: none; /* Enlève l'outline par défaut */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); /* Ajoute une ombre subtile pour l'effet focus */
+}
+
+/* Style pour le bouton de connexion */
+button {
+    width: 50%;
+    padding: 14px; /* Augmenter la taille pour plus de confort */
+    font-size: 16px;
+    background-color: #4CAF50; /* Couleur principale */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transition pour le survol */
+}
+
+button:hover {
+    background-color: #45a049; /* Changement de couleur au survol */
+    transform: translateY(-2px); /* Effet de déplacement pour un effet de surélévation */
+}
+
+button:active {
+    background-color: #388e3c; /* Couleur encore plus foncée lors du clic */
+    transform: translateY(0); /* Annule l'effet de déplacement lors du clic */
+}
+
+/* Paragraphe d'info sous le formulaire */
+.para {
+    padding: 20px 0;
+    text-align: center; /* Centrer le texte */
+}
+
+/* Espacement sous les labels */
+.login-section .form-group label {
+    margin-bottom: 10px; /* Ajoute l'espacement sous le label */
+    font-weight: bold;
+    color: #333;
+}
+
+/* Ajout de l'espacement général autour de tout le formulaire */
+.login-section form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Espacement général entre les éléments */
+.login-section .form-group {
+    margin-bottom: 20px; /* Réduit l'espace entre chaque champ */
+}
+
+/* Image dans la section */
+.image-section {
+    width: 50%; /* Fixe la largeur du conteneur de l'image */
+    display: flex;
+    justify-content: center; /* Centre l'image horizontalement */
+    align-items: center; /* Centre l'image verticalement */
+    overflow: hidden; /* Empêche les débordements éventuels */
+}
+
+/* Image dans la section */
+.auth-image {
+    width: 100%; /* L'image prend 100% de la largeur de son conteneur */
+    height: 80vh; /* La hauteur de l'image sera 80% de la hauteur de la fenêtre */
+    object-fit: cover; /* S'assure que l'image couvre tout l'espace sans distorsion */
+    animation: fadeInZoom 2s ease-in-out forwards; /* Animation d'apparition avec effet zoom */
+}
+
+/* Définition de l'animation */
+@keyframes fadeInZoom {
+    0% {
+        opacity: 0;
+        transform: scale(0.8); /* Réduction initiale de l'image */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1); /* Taille normale à la fin */
+    }
+}
+
+
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  button[disabled] {
+    background-color: gray;
+  }
+  
+

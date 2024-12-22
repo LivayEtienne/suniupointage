@@ -1,0 +1,36 @@
+<div class="auth-container">
+  <div class="image-section">
+    <img src="imagesunupointage.jpg" alt="Illustration" class="auth-image">
+  </div>
+  <div class="login-section">
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+      <h2>Connectez-vous</h2>
+      <p class="para">Connectez-vous pour accéder à votre espace</p>
+      
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email" class="espace">Email</label>
+        <input type="email" id="email" formControlName="email" placeholder="Entrez votre email">
+        <div *ngIf="isFieldInvalid('email')" class="error-message">
+          L'email est requis et doit être valide.
+        </div>
+      </div>
+      
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password" class="espace">Mot de passe</label>
+        <input type="password" id="password" formControlName="password" placeholder="Entrez votre mot de passe">
+        <div *ngIf="isFieldInvalid('password')" class="error-message">
+          Le mot de passe est requis et doit contenir au moins 6 caractères.
+        </div>
+      </div>
+      
+      <!-- Error message for the whole form -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" [disabled]="authForm.invalid">Connexion</button>
+    </form>
+  </div>
+</div>
