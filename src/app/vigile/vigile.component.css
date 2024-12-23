@@ -1,0 +1,121 @@
+.button-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px; /* Espace entre les boutons */
+}
+.btn i {
+    margin-right: 5px; /* Ajoute un espace entre l'icône et le texte */
+}
+.btn {
+    padding: 10px 20px; /* Ajoute du rembourrage */
+    border: none; /* Supprime la bordure par défaut */
+    border-radius: 5px; /* Arrondit les coins */
+    color: white; /* Couleur du texte */
+    cursor: pointer; /* Change le curseur au survol */
+    transition: background-color 0.3s; /* Effet de transition */
+}
+
+.btn-success {
+    background-color: #28a745; /* Couleur de fond du bouton vert */
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Couleur au survol du bouton vert */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Couleur de fond du bouton rouge */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Couleur au survol du bouton rouge */
+}
+
+
+.splash-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Prend toute la hauteur de la fenêtre */
+    background-color: #ffffff; /* Couleur de fond */
+    position: relative;
+}
+
+.logo {
+    width: 1000px; /* Ajustez la taille de votre logo */
+    height: 1000px; /* Ajustez la taille de votre logo */
+    animation: fadeIn 10s ease-in-out, rotate 20s infinite;
+    transform-style: preserve-3d; /* Assure que les transformations 3D sont préservées */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+        transform: rotateX(360deg) rotateY(360deg);
+    }
+    100% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
+}
+
+.button-container {
+    margin-top: 20px; /* Espace entre le logo et les boutons */
+    display: flex;
+    gap: 10px; /* Espace entre les boutons */
+}
+
+.btn {
+    padding: 10px 20px; /* Ajoute du rembourrage */
+    border: none; /* Supprime la bordure par défaut */
+    border-radius: 5px; /* Arrondit les coins */
+    color: white; /* Couleur du texte */
+    cursor: pointer; /* Change le curseur au survol */
+    transition: background-color 0.3s; /* Effet de transition */
+}
+
+.btn-success {
+    background-color: #28a745; /* Couleur de fond du bouton vert */
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Couleur au survol du bouton vert */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Couleur de fond du bouton rouge */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Couleur au survol du bouton rouge */
+}
