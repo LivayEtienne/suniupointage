@@ -1,0 +1,86 @@
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    background: white;
+    padding: 30px 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+.logo {
+    width: 150px; /* Largeur du logo */
+    height: 150px; /* Hauteur du logo */
+    border-radius: 80%; /* Pour que l'image soit circulaire */
+    overflow: hidden; /* Masque tout ce qui dépasse du cercle */
+    display: flex;
+    align-items: center; /* Centrer verticalement l'image */
+    justify-content: center; /* Centrer horizontalement l'image */
+   margin-left: -30px;
+    margin-top: -60px;
+}
+
+.logo img {
+    width: 100%; /* Ajuster l'image à la taille du conteneur */
+    height: 100%; /* Ajuster l'image à la taille du conteneur */
+    object-fit: cover; /* S'assure que l'image remplit bien le cercle */
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+   
+}
+
+.nav-item {
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #464255;
+    transition: all 0.3s ease;
+    font-size:x-large;
+padding-left: 80px;
+}
+
+.nav-item i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-item.active {
+    background: #e6f7f1;
+    color: #00bf8f;
+    border-left: 4px solid #00bf8f;
+}
+
+.nav-item:hover:not(.active) {
+    background: #f5f5f5;
+    color: #333;
+}
+.logout {
+    margin-top: 250px; /* Positionnement en bas */
+    color: #000000; /* Texte blanc */
+    background-color: #FF0606; /* Rouge vif pour le fond */
+    border-radius: 5px; /* Bordures légèrement arrondies */
+    width: 60%; /* Largeur ajustée pour correspondre à la barre */
+   margin-left: 10px;
+    padding: 10px 0; /* Ajouter de l'espace intérieur pour le texte */
+    font-size: 14px; /* Taille de la police adaptée */
+ height: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour l'effet 3D */
+    cursor: pointer; /* Curseur en mode "cliquable" */
+    border: none; /* Supprimer toute bordure par défaut */
+    transition: background-color 0.3s ease; /* Animation lors du survol */
+}
+
+.logout:hover {
+    background-color: #FF0606; /* Rouge légèrement plus foncé au survol */
+}

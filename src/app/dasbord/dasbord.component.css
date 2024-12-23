@@ -1,0 +1,156 @@
+
+.dashboard-container {
+    padding: 24px;
+    background-color: #f9fafb;
+    margin-left: 290px;
+}
+
+.search-container {
+    position: relative;
+    margin-bottom: 24px;
+    max-width: 500px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #EEEEEE;
+    font-size: 14px;
+}
+
+.search-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.search-icon {
+    width: 20px;
+    height: 20px;
+    color: #9ca3af;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+    margin-top: 50px;
+}
+
+.secondary-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+
+}
+
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.custom-icon {
+    width: 120px;  /* Taille par défaut de l'icône */
+    height: 120px;
+    object-fit: contain;
+  margin-left: 80px;
+}
+.stat-icon {
+    padding: 12px;
+    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 40px;
+    font-weight:bolder;
+    color: #464255;
+    margin-left: 100px;
+   
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 30px;
+    margin-left: 90px;
+}
+
+.charts-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+.chart-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card h3 {
+    color: #6b7280;
+    font-size: 25px;
+    margin-bottom: 16px;
+}
+
+canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+
+
+.date-selector {
+    margin-bottom: 20px;
+    text-align: right;
+    margin-right: 550px;
+  }
+  
+  .date-selector input {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-left: -200px;
+  }
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-pic {
+    width: 40px; /* Taille de l'image */
+    height: 40px;
+    border-radius: 50%; /* Rend l'image circulaire */
+    object-fit: cover;
+    border: 2px solid #ccc; /* Optionnel, ajoute une bordure */
+}
