@@ -1,49 +1,72 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-authentification',
-  imports: [ CommonModule, ReactiveFormsModule ],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './authentification.component.html',
   styleUrls: ['./authentification.component.css']
 })
-export class AuthentificationComponent {
-  authForm: FormGroup;  // Formulaire réactif
-  errorMessage: string = ''; // Message d'erreur générique
+export class AuthentificationComponent implements OnInit, OnDestroy {
+  authForm: FormGroup;  // Formulaire réactif pour l'email et mot de passe
+  rfidCode: string = '';  // Code RFID pour l'authentification par RFID
+  errorMessage: string = '';  // Message d'erreur générique
+  authenticationMessage: string = '';  // Message d'authentification via RFID
+  isAuthenticated: boolean = false;  // Statut d'authentification
+  wsSubscription: Subscription | undefined;  // Pour stocker la souscription au WebSocket
 
-  constructor(private authService: AuthService, private router: Router, private fb: FormBuilder) {
-    // Initialisation du formulaire avec les validations
+  constructor(
+    private authService: AuthService,  // Service pour l'authentification
+    private router: Router,  // Pour la redirection
+    private fb: FormBuilder  // FormBuilder pour créer le formulaire réactif
+  ) {
+    // Initialisation du formulaire avec validation
     this.authForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, this.customEmailValidator]],  // Validation de l'email
       password: ['', [Validators.required, Validators.minLength(6)]]  // Validation du mot de passe
     });
   }
 
+  ngOnInit(): void {
+    // Connexion au WebSocket au démarrage du composant
+    this.authService.connectWebSocket();
+
+    // Souscription aux messages du WebSocket
+    this.wsSubscription = this.authService.message$.subscribe((message) => {
+      // Vérification de l'authentification via RFID
+      if (message.authenticated) {
+        this.isAuthenticated = true;
+        console.log(`Utilisateur authentifié avec succès! Rôle : ${message.role}`);  // Affichage du rôle dans la console
+        this.router.navigate(['/reussi']);  // Redirection vers le tableau de bord
+      } else if (message.authenticated === false && message.error) {
+        this.authenticationMessage = message.error;
+      }
+    });
+  }
+
   // Fonction de validation personnalisée pour l'email
   customEmailValidator(control: AbstractControl): ValidationErrors | null {
     const email = control.value;
-    // Vérifie si l'email contient au moins un "@" et un "." après "@", et n'accepte pas les TLD trop courts
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    // Vérifie qu'il y a au moins 2 caractères pour le domaine de l'email après le point
     const validEmail = email && emailPattern.test(email);
     
     if (validEmail) {
       const domain = email.split('@')[1];
       const tld = domain.split('.').pop();
-      // Rejette les TLD avec moins de 2 caractères (ex: .co, .tv, etc.)
       if (tld && tld.length < 2) {
         return { 'invalidTLD': true };
       }
     }
 
-    return validEmail ? null : { 'invalidEmail': true };  // L'email est valide ou pas
+    return validEmail ? null : { 'invalidEmail': true };
   }
 
-  // Méthode pour gérer la soumission du formulaire
+  // Méthode pour gérer la soumission du formulaire (email + mot de passe)
   onSubmit(): void {
     if (this.authForm.valid) {
       const { email, password } = this.authForm.value;
@@ -53,14 +76,11 @@ export class AuthentificationComponent {
           console.log('Connexion réussie', response);
 
           if (response && response.token) {
-            // Enregistrer le token dans le localStorage
-            localStorage.setItem('authToken', response.token);
-            console.log('Token enregistré dans le localStorage');
+            localStorage.setItem('authToken', response.token);  // Stocker le token dans le localStorage
+            this.router.navigate(['/reussi']);  // Rediriger vers le tableau de bord
           } else {
             console.error('Aucun token reçu dans la réponse');
           }
-
-          this.router.navigate(['/reussi']); // Rediriger vers la page "reussi"
         },
         (error: any) => {
           console.error('Erreur de connexion', error);
@@ -69,6 +89,15 @@ export class AuthentificationComponent {
       );
     } else {
       this.errorMessage = 'Veuillez remplir correctement tous les champs.';  // Message d'erreur si formulaire invalide
+    }
+  }
+
+  // Méthode pour l'authentification par RFID
+  onRfidLogin(): void {
+    if (this.rfidCode.trim()) {
+      this.authService.authenticateWithRFID(this.rfidCode);  // Appeler le service pour authentification RFID
+    } else {
+      this.authenticationMessage = 'Veuillez scanner une carte RFID';
     }
   }
 
@@ -124,5 +153,13 @@ export class AuthentificationComponent {
       return 'Le mot de passe doit contenir au moins 6 caractères.';
     }
     return 'Utilisez un mot de passe complexe (minimum 6 caractères).';
+  }
+
+  ngOnDestroy(): void {
+    // Déconnexion de WebSocket et nettoyage des abonnements lorsque le composant est détruit
+    if (this.wsSubscription) {
+      this.wsSubscription.unsubscribe();
+    }
+    this.authService.disconnectWebSocket();
   }
 }
