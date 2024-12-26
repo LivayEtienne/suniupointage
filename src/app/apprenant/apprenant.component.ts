@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ApprenantService } from '../apprenant.service';
 import { CommonModule } from '@angular/common';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { DashboardComponent } from '../dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-apprenant',
   standalone: true,
-  imports: [SidebarComponent, DashboardComponent, CommonModule, FormsModule],
+  imports: [ CommonModule, FormsModule],
   templateUrl: './apprenant.component.html',
   styleUrls: ['./apprenant.component.css'],
 })
@@ -33,25 +30,22 @@ export class ApprenantComponent implements OnInit {
 
   // Variables pour la pagination
   currentPage: number = 1;  // Page actuelle
-  itemsPerPage: number = 5;  // Nombre d'éléments par page modifié à 5
+  itemsPerPage: number = 5;  // Nombre d'éléments par page
   totalItems: number = 0;    // Total des éléments
 
-  constructor(private apprenantService: ApprenantService) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.loadApprenants();
   }
 
   loadApprenants(): void {
-    this.apprenantService.getApprenants().subscribe({
-      next: (data: any[]) => {
-        this.apprenants = data;
-        this.totalItems = this.apprenants.length;
-      },
-      error: (error: any) => {
-        console.error('Erreur lors du chargement des apprenants:', error);
-      },
-    });
+    // Simuler des données pour tester sans service
+    this.apprenants = [
+      { id: 1, user: { nom: 'John', prenom: 'Doe', email: 'john.doe@example.com', role: 'apprenant', adresse: '123 rue', telephone: '1234567890', fonction: 'Étudiant' }, cohorte: { id: 'C1', name: 'Cohorte 1' } },
+      { id: 2, user: { nom: 'Jane', prenom: 'Doe', email: 'jane.doe@example.com', role: 'apprenant', adresse: '456 rue', telephone: '9876543210', fonction: 'Étudiant' }, cohorte: { id: 'C2', name: 'Cohorte 2' } },
+    ];
+    this.totalItems = this.apprenants.length;
   }
 
   get paginatedApprenants() {
@@ -94,58 +88,33 @@ export class ApprenantComponent implements OnInit {
 
   onSubmit(): void {
     const apprenantData = {
-      nom: this.nom,
-      prenom: this.prenom,
-      email: this.email,
-      password: this.password,
-      role: this.role,
-      adresse: this.adresse,
-      telephone: this.telephone,
-      fonction: this.fonction,
-      id_cohorte: this.cohorte,
+      user: {
+        nom: this.nom,
+        prenom: this.prenom,
+        email: this.email,
+        role: this.role,
+        adresse: this.adresse,
+        telephone: this.telephone,
+        fonction: this.fonction,
+      },
+      cohorte: { id: this.cohorte },
     };
 
     if (this.isEditMode && this.selectedApprenant) {
-      this.apprenantService
-        .updateApprenant(this.selectedApprenant.id, apprenantData)
-        .subscribe({
-          next: () => {
-            alert('Apprenant mis à jour avec succès');
-            this.loadApprenants();
-            this.closeModal();
-          },
-          error: (error: any) => {
-            console.error('Erreur lors de la mise à jour:', error);
-            alert('Erreur lors de la mise à jour');
-          },
-        });
+      // Mettre à jour un apprenant
+      const index = this.apprenants.findIndex(a => a.id === this.selectedApprenant.id);
+      if (index !== -1) {
+        this.apprenants[index] = { ...this.apprenants[index], ...apprenantData };
+        alert('Apprenant mis à jour avec succès');
+      }
     } else {
-      this.apprenantService.registerUser(apprenantData).subscribe({
-        next: (response: any) => {
-          const apprenantCreationData = {
-            id_user: response.id,
-            id_cohorte: this.cohorte,
-            fonction: this.fonction,
-          };
-
-          this.apprenantService.addApprenant(apprenantCreationData).subscribe({
-            next: () => {
-              this.loadApprenants();
-              this.closeModal();
-              alert('Apprenant inscrit avec succès');
-            },
-            error: (error: any) => {
-              console.error("Erreur lors de l'ajout de l'apprenant:", error);
-              alert("Erreur lors de l'ajout de l'apprenant");
-            },
-          });
-        },
-        error: (error: any) => {
-          console.error('Erreur lors de l\'inscription:', error);
-          alert('Erreur lors de l\'inscription');
-        },
-      });
+      // Ajouter un nouvel apprenant
+      const newId = this.apprenants.length ? Math.max(...this.apprenants.map(a => a.id)) + 1 : 1;
+      this.apprenants.push({ id: newId, ...apprenantData });
+      alert('Apprenant ajouté avec succès');
     }
+    this.loadApprenants();
+    this.closeModal();
   }
 
   openEditModal(apprenant: any): void {
@@ -167,19 +136,11 @@ export class ApprenantComponent implements OnInit {
     this.openModal();
   }
 
-  deleteApprenant(id: string): void {
+  deleteApprenant(id: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet apprenant ?')) {
-      this.apprenantService.deleteApprenant(parseInt(id, 10)).subscribe({
-        next: () => {
-          alert('Apprenant supprimé avec succès');
-          this.loadApprenants();
-        },
-        error: (error: any) => {
-          console.error('Erreur lors de la suppression:', error);
-          alert('Erreur lors de la suppression');
-        },
-      });
+      this.apprenants = this.apprenants.filter(apprenant => apprenant.id !== id);
+      alert('Apprenant supprimé avec succès');
+      this.loadApprenants();
     }
   }
-  
 }

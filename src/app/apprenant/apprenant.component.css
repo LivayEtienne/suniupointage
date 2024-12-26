@@ -1,268 +1,226 @@
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+/* Style général */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
+}
 
-.modal-content {
-  border-radius: 15px;
+/* Container principal */
+.apprenant-container {
+  margin: 20px auto;
   padding: 20px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  max-width: 1200px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.modal-header {
-  border-bottom: none;
-  text-align: center;
+/* Boutons */
+button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.modal-title {
-  font-size: 24px;
-  color: #007bff; /* Couleur du titre */
+button:hover {
+  opacity: 0.8;
 }
 
-.formulaire-inscription .form-group {
-  margin-bottom: 15px;
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
 }
 
 .btn-primary {
-  width: 100%;
   background-color: #007bff;
-  border: none;
-  border-radius: 5px;
+  color: #fff;
 }
 
-.alert {
+/* Modal */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Le reste du code modal reste inchangé */
+.modal-content {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 500px;
+  max-width: 90%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.modal-header h5 {
+  margin: 0;
+}
+
+.close {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* Formulaire */
+form {
+  margin-top: 15px;
+}
+
+.form-group {
   margin-bottom: 15px;
 }
 
-.sidebar {
-    width: 400px;
-    height: 100vh;
-    background: white;
-    padding: 30px 0;
-    position: fixed;
-    left: 0;
-    top: 0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-}
-.logo {
-    width: 150px; /* Largeur du logo */
-    height: 150px; /* Hauteur du logo */
-    border-radius: 80%; /* Pour que l'image soit circulaire */
-    overflow: hidden; /* Masque tout ce qui dépasse du cercle */
-    display: flex;
-    align-items: center; /* Centrer verticalement l'image */
-    justify-content: center; /* Centrer horizontalement l'image */
-   margin-left: -30px;
-    margin-top: -60px;
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-.logo img {
-    width: 100%; /* Ajuster l'image à la taille du conteneur */
-    height: 100%; /* Ajuster l'image à la taille du conteneur */
-    object-fit: cover; /* S'assure que l'image remplit bien le cercle */
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s ease;
 }
 
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-   
+.form-group input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-.nav-item {
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #464255;
-    transition: all 0.3s ease;
-    font-size:large;
-
+.alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
 }
 
-.nav-item i {
-    margin-right: 12px;
-    width: 20px;
-    text-align: center;
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
 }
 
-/* .nav-item.active {
-    background: #e6f7f1;
-    color: #00bf8f;
-    border-left: 4px solid #00bf8f;
-} */
-
-.nav-item:hover:not(.active) {
-    background:#e6f7f1;;
-    color: #333;
-}
-.logout {
-    margin-top: 300px; /* Positionnement en bas */
-    color: #000000; /* Texte blanc */
-    background-color: #FF0606; /* Rouge vif pour le fond */
-    border-radius: 5px; /* Bordures légèrement arrondies */
-    width: 60%; /* Largeur ajustée pour correspondre à la barre */
-   margin-left: 10px;
-    padding: 10px 0; /* Ajouter de l'espace intérieur pour le texte */
-    font-size: 14px; /* Taille de la police adaptée */
- height: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour l'effet 3D */
-    cursor: pointer; /* Curseur en mode "cliquable" */
-    border: none; /* Supprimer toute bordure par défaut */
-    transition: background-color 0.3s ease; /* Animation lors du survol */
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.logout:hover {
-    background-color: #FF0606; /* Rouge légèrement plus foncé au survol */
+.table thead th {
+  background: #007bff;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
 }
 
+.table tbody tr {
+  background: #fff;
+  transition: background 0.3s ease;
+}
 
+.table tbody tr:hover {
+  background: #f9f9f9;
+}
 
+.table td, .table th {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
 
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
+.pagination button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #333;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
+.pagination button:hover {
+  background: #007bff;
+  color: #fff;
+}
 
+.pagination button:disabled {
+  background: #f0f0f0;
+  color: #aaa;
+  cursor: not-allowed;
+}
 
+.pagination span {
+  font-size: 14px;
+  margin: 0 10px;
+}
 
-.apprenant-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    margin-left: 279px;
-  }
-  
-  h2 {
-    margin-bottom: 20px;
-  }
-  
-  .upload-button {
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .upload-button:hover {
-    background-color: #0056b3;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
-  
-  .action-button {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .action-button:hover {
-    opacity: 0.8;
-  }
-  
-  .action-button:not(:last-child) {
-    margin-right: 5px;
-  }
-  
-  td {
-    color: #333;
-  }
-  
-  tr:hover {
-    background-color: #f1f1f1;
-  }
-
-
-
-
-  .modal {
-    display: block; /* Assure que le modal est visible */
-    background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-  }
-  
-  .modal-dialog {
-    margin: auto; /* Centre le modal horizontalement */
-  }
-  
-  .modal-dialog-centered {
-    display: flex;
-    align-items: center; /* Centre verticalement */
-    min-height: calc(100vh - 1rem); /* Ajuster pour la hauteur de l'écran */
-  }
-
-  .apprenant-container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .main-content {
-    flex: 1;
-    padding: 20px;
-    max-width: 100%;
-  }
-  
-  .modal-dialog {
-    max-width: 500px;
-    width: 100%;
-  }
-  
-  .table {
-    width: 100%;
-    margin-top: 20px;
-  }
-  
-  .table-responsive {
-    overflow-x: auto;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
+@media screen and (max-width: 768px) {
   .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+    flex-direction: column;
+    gap: 10px;
   }
-  
-  .pagination button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .pagination button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-  
-  .pagination span {
-    align-self: center;
-  }
-  
-  
 
-  
-  @media (max-width: 768px) {
-    .modal-dialog {
-      margin: 20px;
-    }
-  
-    .select-item {
-      margin: 0; /* Ajustement pour le responsive */
-    }
+  .pagination button {
+    width: 100%;
   }
+}
+
+/* Icones */
+.fas {
+  cursor: pointer;
+  margin: 0 5px;
+  transition: color 0.3s ease;
+}
+
+.fas.fa-edit {
+  color: #007bff;
+}
+
+.fas.fa-trash-alt {
+  color: #dc3545;
+}
+
+.fas:hover {
+  opacity: 0.7;
+}

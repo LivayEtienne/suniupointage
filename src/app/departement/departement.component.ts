@@ -1,8 +1,6 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DepartmentService } from '../departement.service';
 
 interface Department {
   nom: string;
@@ -15,8 +13,7 @@ interface Department {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './departement.component.html',
-  styleUrls: ['./departement.component.css'],
-  providers: [DepartmentService]
+  styleUrls: ['./departement.component.css']
 })
 export class DepartementComponent implements OnInit {
   departments: Department[] = [];
@@ -27,22 +24,19 @@ export class DepartementComponent implements OnInit {
     date_de_creation: ''
   };
 
-  constructor(private departmentService: DepartmentService) {}
+  constructor() {}
 
   ngOnInit() {
     this.loadDepartments();
   }
 
   loadDepartments() {
-    this.departmentService.getDepartments().subscribe({
-      next: (data) => {
-        this.departments = data;
-        console.log('Départements chargés :', data);
-      },
-      error: (error) => {
-        console.error('Erreur lors du chargement des départements :', error);
-      }
-    });
+    // Exemple de données locales pour initialiser la liste des départements
+    this.departments = [
+      { nom: 'Informatique', code: 'INFO', date_de_creation: '2020-01-15' },
+      { nom: 'Mathematiques', code: 'MATH', date_de_creation: '2019-09-01' }
+    ];
+    console.log('Départements chargés :', this.departments);
   }
 
   openAddDepartmentForm() {
@@ -56,16 +50,9 @@ export class DepartementComponent implements OnInit {
 
   addDepartment() {
     if (this.newDepartment.nom.trim() && this.newDepartment.code.trim() && this.newDepartment.date_de_creation) {
-      this.departmentService.addDepartment(this.newDepartment).subscribe({
-        next: (data) => {
-          this.departments.push(data);
-          this.cancelAddDepartment();
-          console.log('Département ajouté :', data);
-        },
-        error: (error) => {
-          console.error('Erreur lors de l\'ajout du département :', error);
-        }
-      });
+      this.departments.push({ ...this.newDepartment });
+      this.cancelAddDepartment();
+      console.log('Département ajouté :', this.newDepartment);
     } else {
       console.log('Tous les champs sont obligatoires.');
     }
