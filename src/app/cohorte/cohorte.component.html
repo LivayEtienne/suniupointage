@@ -1,0 +1,51 @@
+<!-- 
+<button class="add-cohorte-btn" (click)="openAddCohorteForm()">Ajouter Cohorte</button>
+
+ Formulaire pour ajouter une cohorte 
+<div *ngIf="isAddCohorteFormVisible">
+  <div class="add-cohorte-form">
+    <input type="text" [(ngModel)]="newCohorte.nom" placeholder="Nom de la cohorte" />
+    <input type="text" [(ngModel)]="newCohorte.code" placeholder="Code de la cohorte" />
+    <input type="date" [(ngModel)]="newCohorte.date_de_creation" placeholder="Date de création" />
+    <button (click)="addCohorte()">Ajouter</button>
+    <button (click)="cancelAddCohorte()">Annuler</button>
+  </div>
+</div>
+
+<div class="container">
+  <div class="cohorte-list">
+    <div class="cohorte-card" *ngFor="let cohorte of cohortes">
+      <div class="cohorte-name">{{ cohorte.nom }}</div>
+      <div class="cohorte-code">{{ cohorte.code }}</div>
+      <div class="cohorte-date">Créée le : {{ cohorte.date_de_creation }}</div>
+    </div>
+  </div>
+</div>
+ -->
+
+ <button class="add-cohorte-btn" (click)="openAddCohorteForm()">Ajouter Cohorte</button>
+
+<!-- Formulaire pour ajouter une cohorte -->
+<div *ngIf="isAddCohorteFormVisible" class="modal">
+  <div class="modal-content">
+    <h2>Ajouter une Cohorte</h2>
+    <input type="text" [(ngModel)]="newCohorte.nom" placeholder="Nom de la cohorte" />
+    <input type="text" [(ngModel)]="newCohorte.code" placeholder="Code de la cohorte" />
+    <input type="date" [(ngModel)]="newCohorte.date_de_creation" placeholder="Date de création" />
+
+    <div class="button-container">
+      <button class="validate-btn" (click)="addCohorte()">Valider</button>
+      <button class="cancel-btn" (click)="cancelAddCohorte()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="cohorte-list">
+    <div class="cohorte-card" *ngFor="let cohorte of cohortes">
+      <div class="cohorte-name">{{ cohorte.nom }}</div>
+      <div class="cohorte-code">{{ cohorte.code }}</div>
+      <div class="cohorte-date">Créée le : {{ cohorte.date_de_creation }}</div>
+    </div>
+  </div>
+</div>

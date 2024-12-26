@@ -1,0 +1,45 @@
+<!-- <button class="add-department-btn">Ajouter departement</button>
+
+<div class="container">
+    
+    
+    <div class="department-list">
+      <div class="department-card" *ngFor="let department of departments">
+        <div class="icon">
+          <img src="assets/icons/department-icon.svg" alt="Icone département" />
+        </div>
+        <div class="department-name">{{ department.nom }}</div>
+      </div>
+    </div>
+  </div>
+  
+  
+ -->
+
+ <button class="add-department-btn" (click)="openAddDepartmentForm()">Ajouter département</button>
+
+ <!-- Formulaire pour ajouter un département -->
+ <div *ngIf="isAddDepartmentFormVisible" class="modal">
+   <div class="modal-content">
+     <h2>Ajouter un Département</h2>
+     <input type="text" [(ngModel)]="newDepartment.nom" placeholder="Nom du département" />
+     <input type="text" [(ngModel)]="newDepartment.code" placeholder="Code du département" />
+     <input type="date" [(ngModel)]="newDepartment.date_de_creation" placeholder="Date de création" />
+     
+     <div class="button-container">
+       <button class="validate-btn" (click)="addDepartment()">Valider</button>
+       <button class="cancel-btn" (click)="cancelAddDepartment()">Annuler</button>
+     </div>
+   </div>
+ </div>
+ 
+ <div class="container">
+   <div class="department-list">
+     <div class="department-card" *ngFor="let department of departments">
+       <div class="icon">
+         <img src="assets/icons/department-icon.svg" alt="Icone département" />
+       </div>
+       <div class="department-name">{{ department.nom }}</div>
+     </div>
+   </div>
+ </div>
