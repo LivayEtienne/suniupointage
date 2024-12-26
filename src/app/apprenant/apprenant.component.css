@@ -1,98 +1,165 @@
-/* Style général */
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f5f5f5;
-  color: #333;
-}
-
-/* Container principal */
-.apprenant-container {
-  margin: 20px auto;
+.container {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
-  max-width: 1200px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
 }
 
-/* Boutons */
-button {
+.table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.btn {
   padding: 10px 20px;
-  font-size: 14px;
-  border: none;
-  border-radius: 5px;
+  margin: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-.btn-success {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: #fff;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
 .btn-primary {
   background-color: #007bff;
-  color: #fff;
+  color: white;
 }
 
-/* Modal */
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.pagination {
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-top: 20px;
 }
 
-/* Le reste du code modal reste inchangé */
-.modal-content {
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  padding: 10px 15px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  color: #007bff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.page-link:hover {
+  background-color: #f8f9fa;
+}
+
+.page-item.disabled .page-link {
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.page-item.active .page-link {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal.show {
+  opacity: 1;
+}
+
+.modal-dialog {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
   width: 500px;
-  max-width: 90%;
+  max-width: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transform: translateY(-50px);
+  transition: transform 0.3s ease;
+}
+
+.modal.show .modal-dialog {
+  transform: translateY(0);
 }
 
 .modal-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 15px;
   border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa;
 }
 
-.modal-header h5 {
+.modal-title {
   margin: 0;
+  font-size: 1.25rem;
 }
 
 .close {
-  font-size: 1.5rem;
   background: none;
   border: none;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
-
-/* Formulaire */
-form {
-  margin-top: 15px;
+.modal-body {
+  padding: 15px;
 }
 
 .form-group {
@@ -105,122 +172,48 @@ form {
   font-weight: bold;
 }
 
-.form-group input {
+.form-group input, .form-group select {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  transition: all 0.3s ease;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
 }
 
-.form-group input:focus {
+.form-group input:focus, .form-group select:focus {
   border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
 }
 
 .alert {
   padding: 10px;
-  margin-bottom: 15px;
+  color: white;
+  background-color: #dc3545;
   border-radius: 5px;
+  margin-top: 15px;
 }
 
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
-/* Table */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+.btn-primary:hover {
+  background-color: #0056b3;
 }
 
-.table thead th {
-  background: #007bff;
-  color: #fff;
+/* Autres styles existants */
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
   padding: 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.table tbody tr {
-  background: #fff;
-  transition: background 0.3s ease;
-}
-
-.table tbody tr:hover {
-  background: #f9f9f9;
-}
-
-.table td, .table th {
-  padding: 10px;
-  border: 1px solid #ddd;
-}
-
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  margin: 0 5px;
-  padding: 8px 12px;
-  font-size: 14px;
-  border: 1px solid #ddd;
-  background: #fff;
-  color: #333;
   border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.pagination button:hover {
-  background: #007bff;
-  color: #fff;
-}
-
-.pagination button:disabled {
-  background: #f0f0f0;
-  color: #aaa;
-  cursor: not-allowed;
-}
-
-.pagination span {
-  font-size: 14px;
-  margin: 0 10px;
-}
-
-@media screen and (max-width: 768px) {
-  .pagination {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .pagination button {
-    width: 100%;
-  }
-}
-
-/* Icones */
-.fas {
-  cursor: pointer;
-  margin: 0 5px;
-  transition: color 0.3s ease;
-}
-
-.fas.fa-edit {
-  color: #007bff;
-}
-
-.fas.fa-trash-alt {
-  color: #dc3545;
-}
-
-.fas:hover {
-  opacity: 0.7;
+  margin-top: 15px;
 }

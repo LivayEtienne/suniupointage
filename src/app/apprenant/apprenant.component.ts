@@ -1,146 +1,218 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { UserService } from '../user.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; 
+
+interface Apprenant {
+  id: number;
+  nom: string;
+  prenom: string;
+  photo?: string;
+  email: string;
+  password?: string;
+  adresse: string;
+  telephone: string;
+  matricule?: string;
+  cardId?: string;
+  role: string;
+  statut: string;
+}
 
 @Component({
   selector: 'app-apprenant',
-  standalone: true,
-  imports: [ CommonModule, FormsModule],
+  imports: [FormsModule, CommonModule] ,
   templateUrl: './apprenant.component.html',
-  styleUrls: ['./apprenant.component.css'],
+  styleUrls: ['./apprenant.component.css']
 })
-
 export class ApprenantComponent implements OnInit {
-  apprenants: any[] = [];
-  isEditMode: boolean = false;
-  selectedApprenant: any = null;
-
-  // Variables pour le formulaire
+  // Variables liées au formulaire
   nom: string = '';
   prenom: string = '';
   email: string = '';
-  password: string = '';
-  role: string = 'apprenant'; // Rôle par défaut
   adresse: string = '';
   telephone: string = '';
-  fonction: string = '';
-  cohorte: string = '';
+  password: string = '';
+  role: string = 'apprenant';
   isModalOpen: boolean = false;
-  errorMessage: string = '';
+  isEditMode: boolean = false;
+  errorMessage: string | null = null;
+  successMessage: string | null = null; // Variable pour le message de succès
+  apprenants: Apprenant[] = []; // Liste des apprenants
+  currentPage: number = 1;
+  totalPages: number = 1;
 
-  // Variables pour la pagination
-  currentPage: number = 1;  // Page actuelle
-  itemsPerPage: number = 5;  // Nombre d'éléments par page
-  totalItems: number = 0;    // Total des éléments
-
-  constructor() {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    this.loadApprenants();
+    this.fetchApprenants();
   }
 
-  loadApprenants(): void {
-    // Simuler des données pour tester sans service
-    this.apprenants = [
-      { id: 1, user: { nom: 'John', prenom: 'Doe', email: 'john.doe@example.com', role: 'apprenant', adresse: '123 rue', telephone: '1234567890', fonction: 'Étudiant' }, cohorte: { id: 'C1', name: 'Cohorte 1' } },
-      { id: 2, user: { nom: 'Jane', prenom: 'Doe', email: 'jane.doe@example.com', role: 'apprenant', adresse: '456 rue', telephone: '9876543210', fonction: 'Étudiant' }, cohorte: { id: 'C2', name: 'Cohorte 2' } },
-    ];
-    this.totalItems = this.apprenants.length;
-  }
-
-  get paginatedApprenants() {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.apprenants.slice(startIndex, startIndex + this.itemsPerPage);
-  }
-
-  setPage(page: number) {
-    if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-  }
-
-  get totalPages() {
-    return Math.ceil(this.totalItems / this.itemsPerPage);
-  }
-
+  // Ouvrir le modal pour ajouter un utilisateur
   openModal(): void {
     this.isModalOpen = true;
+    this.isEditMode = false;
+    this.clearForm();
   }
 
+  // Fermer le modal
   closeModal(): void {
     this.isModalOpen = false;
-    this.resetForm();
+    this.errorMessage = null;
+    this.successMessage = null; // Réinitialiser le message de succès
   }
 
-  resetForm(): void {
+  // Ouvrir le modal en mode édition
+  openEditModal(apprenant: Apprenant): void {
+    this.isModalOpen = true;
+    this.isEditMode = true;
+    this.nom = apprenant.nom || '';
+    this.prenom = apprenant.prenom || '';
+    this.email = apprenant.email || '';
+    this.adresse = apprenant.adresse || '';
+    this.telephone = apprenant.telephone || '';
+    this.password = '';  // Ne pas pré-remplir le mot de passe
+    this.role = apprenant.role || 'apprenant';
+  }
+
+  // Réinitialiser le formulaire
+  clearForm(): void {
     this.nom = '';
     this.prenom = '';
     this.email = '';
-    this.password = '';
-    this.role = 'apprenant';
     this.adresse = '';
     this.telephone = '';
-    this.fonction = '';
-    this.cohorte = '';
-    this.errorMessage = '';
-    this.isEditMode = false;
-    this.selectedApprenant = null;
+    this.password = '';
+    this.errorMessage = null;
+    this.successMessage = null; // Réinitialiser le message de succès
   }
 
+  // Soumettre le formulaire
   onSubmit(): void {
-    const apprenantData = {
-      user: {
-        nom: this.nom,
-        prenom: this.prenom,
-        email: this.email,
-        role: this.role,
-        adresse: this.adresse,
-        telephone: this.telephone,
-        fonction: this.fonction,
-      },
-      cohorte: { id: this.cohorte },
+    const userData = {
+      nom: this.nom,
+      prenom: this.prenom,
+      email: this.email,
+      adresse: this.adresse,
+      telephone: this.telephone,
+      password: this.password,
+      role: this.role
     };
 
-    if (this.isEditMode && this.selectedApprenant) {
-      // Mettre à jour un apprenant
-      const index = this.apprenants.findIndex(a => a.id === this.selectedApprenant.id);
-      if (index !== -1) {
-        this.apprenants[index] = { ...this.apprenants[index], ...apprenantData };
-        alert('Apprenant mis à jour avec succès');
-      }
+    if (this.isEditMode) {
+      // Logique d'édition de l'apprenant si nécessaire
+      // Exemple : userService.updateUser(id, userData);
     } else {
-      // Ajouter un nouvel apprenant
-      const newId = this.apprenants.length ? Math.max(...this.apprenants.map(a => a.id)) + 1 : 1;
-      this.apprenants.push({ id: newId, ...apprenantData });
-      alert('Apprenant ajouté avec succès');
+      this.userService.addUser(userData).subscribe(
+        (response) => {
+          console.log('Utilisateur ajouté avec succès:', response);
+          this.successMessage = 'Utilisateur ajouté avec succès.'; // Définir le message de succès  
+          this.fetchApprenants(); // Recharger la liste des apprenants
+          this.closeModal(); // Fermer le modal après l'ajout
+        },
+        (error) => {
+          console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
+          this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
+        }
+      );
     }
-    this.loadApprenants();
-    this.closeModal();
   }
 
-  openEditModal(apprenant: any): void {
-    this.isEditMode = true;
-    this.selectedApprenant = { ...apprenant };
-    this.nom = apprenant.user.nom;
-    this.prenom = apprenant.user.prenom;
-    this.email = apprenant.user.email;
-    this.role = apprenant.user.role;
-    this.adresse = apprenant.user.adresse;
-    this.telephone = apprenant.user.telephone;
-    this.fonction = apprenant.user.fonction;
-    this.cohorte = apprenant.cohorte.id;
-    this.openModal();
+  // Charger la liste des apprenants
+  fetchApprenants(): void {
+    this.userService.getApprenants(this.currentPage, 10).subscribe(
+      (data) => {
+        this.apprenants = data; // Assigner la liste des apprenants récupérée depuis le backend
+        this.totalPages = Math.ceil(this.apprenants.length / 10); // Exemple de calcul du nombre total de pages
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des apprenants:', error);
+      }
+    );
   }
 
-  onAddClick(): void {
-    this.resetForm();
-    this.openModal();
+  // Gérer la pagination
+  setPage(page: number): void {
+    if (page > 0 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.fetchApprenants(); // Recharger les apprenants pour la page demandée
+    }
   }
 
+  // Supprimer un apprenant
   deleteApprenant(id: number): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet apprenant ?')) {
-      this.apprenants = this.apprenants.filter(apprenant => apprenant.id !== id);
-      alert('Apprenant supprimé avec succès');
-      this.loadApprenants();
-    }
+    this.userService.deleteUser(id).subscribe(
+      (response) => {
+        console.log('Apprenant supprimé avec succès:', response);
+        this.successMessage = 'Apprenant supprimer avec succès.'; // Définir le message de succès
+        this.fetchApprenants(); // Recharger la liste après suppression
+      },
+      (error) => {
+        console.error('Erreur lors de la suppression de l\'apprenant:', error);
+      }
+    );
+  }
+
+  // Méthode pour archiver un apprenant
+  archiveApprenant(id: number): void {
+    this.userService.archiveUser(id).subscribe(
+      (response) => {
+        console.log('Apprenant archivé avec succès:', response);
+        this.successMessage = 'Apprenant archivé avec succès.'; // Définir le message de succès
+        this.fetchApprenants(); // Recharger la liste après archivage
+      },
+      (error) => {
+        console.error('Erreur lors de l\'archivage de l\'apprenant:', error);
+        this.errorMessage = 'Une erreur est survenue lors de l\'archivage de l\'apprenant.';
+      }
+    );
+  }
+
+  // Méthode pour désarchiver un apprenant
+  unarchiveApprenant(id: number): void {
+    this.userService.unarchiveUser(id).subscribe(
+      (response) => {
+        console.log('Apprenant désarchivé avec succès:', response);
+        this.successMessage = 'Apprenant désarchivé avec succès.'; // Définir le message de succès
+        this.fetchApprenants(); // Recharger la liste après désarchivage
+      },
+      (error) => {
+        console.error('Erreur lors du désarchivage de l\'apprenant:', error);
+        this.errorMessage = 'Une erreur est survenue lors du désarchivage de l\'apprenant.';
+      }
+    );
+  }
+
+  // Méthode pour basculer le statut d'un apprenant
+  toggleStatus(apprenant: Apprenant): void {
+    const newStatus = apprenant.statut === 'active' ? 'archived' : 'active';
+
+    // Créez un objet avec les données nécessaires, y compris le champ 'nom'
+    const updatedData = {
+      id: apprenant.id,
+      nom: apprenant.nom,
+      prenom: apprenant.prenom,
+      photo: apprenant.photo,
+      email: apprenant.email,
+      password: apprenant.password,
+      adresse: apprenant.adresse,
+      telephone: apprenant.telephone,
+      matricule: apprenant.matricule,
+      cardId: apprenant.cardId,
+      role: apprenant.role,
+      statut: newStatus
+    };
+
+    this.userService.updateStatus(apprenant.id, updatedData).subscribe(
+      () => {
+        apprenant.statut = newStatus;
+        console.log(`Le statut de l'apprenant a été mis à jour en ${newStatus}`);
+        this.successMessage = `Le statut de l'apprenant a été mis à jour en ${newStatus}.`; // Définir le message de succès
+      },
+      (error: HttpErrorResponse) => {
+        console.error("Erreur lors de la mise à jour du statut :", error);
+        this.errorMessage = "Impossible de mettre à jour le statut. Veuillez réessayer.";
+      }
+    );
   }
 }
