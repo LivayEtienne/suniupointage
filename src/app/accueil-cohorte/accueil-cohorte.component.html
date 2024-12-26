@@ -1,0 +1,31 @@
+<!-- Container principal -->
+<div class="apprenant-container">
+    <!-- Utilisation du SidebarComponent -->
+    <app-sidebar></app-sidebar>
+  
+    <!-- Contenu principal -->
+    <div class="main-content">
+        <app-dashboard></app-dashboard>
+        <div class="actions">
+            <button (click)="naviguerVersCohorte()">Ajout Cohorte</button>
+          </div>
+          
+
+        <!-- Grille pour afficher les cohortes -->
+        <!-- Bouton pour ajouter un département -->
+<button class="btn btn-success ajouter-departement">Ajouter département</button>
+
+<!-- Grille pour afficher les cohortes -->
+<div class="cohorte-grid">
+    <div class="cohorte-card" *ngFor="let cohorte of cohortes">
+        <div class="cohorte-icon">
+            <i class="fas fa-file-alt"></i> <!-- Icône représentative -->
+        </div>
+        <h3>{{ cohorte.nom }}</h3>
+        <p>Code: {{ cohorte.code }}</p>
+        <p>Date de création: {{ cohorte.date_de_creation | date }}</p>
+    </div>
+</div>
+    </div>
+    
+</div>

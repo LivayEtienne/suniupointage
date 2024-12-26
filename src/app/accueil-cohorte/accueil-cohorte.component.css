@@ -1,0 +1,71 @@
+/* Grille avec 3 colonnes */
+
+.cohorte-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes égales */
+    gap: 20px; /* Espace entre les cartes */
+    margin: 20px auto; /* Centrage horizontal avec auto */
+    justify-content: center; /* Centrer les éléments horizontalement */
+    align-items: center; /* Centrer les éléments verticalement */
+    max-width: 1200px; /* Largeur maximale de la grille */
+    height: auto; /* Adapter la hauteur au contenu */
+}
+.cohorte-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Espacement entre les cartes */
+  padding: 20px; /* Espacement intérieur */
+}
+
+.cohorte-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  flex: 1 1 calc(33% - 20px); /* 3 cartes par ligne avec un espacement */
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.cohorte-card:hover {
+  transform: scale(1.05); /* Effet de zoom au survol */
+}
+
+.cohorte-icon {
+  font-size: 30px; /* Taille de l'icône */
+  color: #007bff; /* Couleur de l'icône */
+  margin-bottom: 10px; /* Espacement sous l'icône */
+}
+
+.btn-success {
+  margin-bottom: 20px; /* Espacement sous le bouton */
+  padding: 10px 20px; /* Espacement intérieur du bouton */
+}
+
+  .liste-cohortes {
+    margin-left: 350px; /* Décalage de 350 pixels vers la droite */
+  }
+  
+  /* Style pour chaque carte de cohorte */
+  .cohorte-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+
+  }
+  
+  .cohorte-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+  
+  .cohorte-card p {
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+  button {
+    margin-right: 900px;
+  }
