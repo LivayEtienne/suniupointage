@@ -1,0 +1,268 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+.modal-content {
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  border-bottom: none;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 24px;
+  color: #007bff; /* Couleur du titre */
+}
+
+.formulaire-inscription .form-group {
+  margin-bottom: 15px;
+}
+
+.btn-primary {
+  width: 100%;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+}
+
+.alert {
+  margin-bottom: 15px;
+}
+
+.sidebar {
+    width: 400px;
+    height: 100vh;
+    background: white;
+    padding: 30px 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+.logo {
+    width: 150px; /* Largeur du logo */
+    height: 150px; /* Hauteur du logo */
+    border-radius: 80%; /* Pour que l'image soit circulaire */
+    overflow: hidden; /* Masque tout ce qui dépasse du cercle */
+    display: flex;
+    align-items: center; /* Centrer verticalement l'image */
+    justify-content: center; /* Centrer horizontalement l'image */
+   margin-left: -30px;
+    margin-top: -60px;
+}
+
+.logo img {
+    width: 100%; /* Ajuster l'image à la taille du conteneur */
+    height: 100%; /* Ajuster l'image à la taille du conteneur */
+    object-fit: cover; /* S'assure que l'image remplit bien le cercle */
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+   
+}
+
+.nav-item {
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #464255;
+    transition: all 0.3s ease;
+    font-size:large;
+
+}
+
+.nav-item i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+/* .nav-item.active {
+    background: #e6f7f1;
+    color: #00bf8f;
+    border-left: 4px solid #00bf8f;
+} */
+
+.nav-item:hover:not(.active) {
+    background:#e6f7f1;;
+    color: #333;
+}
+.logout {
+    margin-top: 300px; /* Positionnement en bas */
+    color: #000000; /* Texte blanc */
+    background-color: #FF0606; /* Rouge vif pour le fond */
+    border-radius: 5px; /* Bordures légèrement arrondies */
+    width: 60%; /* Largeur ajustée pour correspondre à la barre */
+   margin-left: 10px;
+    padding: 10px 0; /* Ajouter de l'espace intérieur pour le texte */
+    font-size: 14px; /* Taille de la police adaptée */
+ height: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour l'effet 3D */
+    cursor: pointer; /* Curseur en mode "cliquable" */
+    border: none; /* Supprimer toute bordure par défaut */
+    transition: background-color 0.3s ease; /* Animation lors du survol */
+}
+
+.logout:hover {
+    background-color: #FF0606; /* Rouge légèrement plus foncé au survol */
+}
+
+
+
+
+
+
+
+
+
+.apprenant-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-left: 279px;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  .upload-button {
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .upload-button:hover {
+    background-color: #0056b3;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .action-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .action-button:hover {
+    opacity: 0.8;
+  }
+  
+  .action-button:not(:last-child) {
+    margin-right: 5px;
+  }
+  
+  td {
+    color: #333;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+
+
+
+
+  .modal {
+    display: block; /* Assure que le modal est visible */
+    background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+  }
+  
+  .modal-dialog {
+    margin: auto; /* Centre le modal horizontalement */
+  }
+  
+  .modal-dialog-centered {
+    display: flex;
+    align-items: center; /* Centre verticalement */
+    min-height: calc(100vh - 1rem); /* Ajuster pour la hauteur de l'écran */
+  }
+
+  .apprenant-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    max-width: 100%;
+  }
+  
+  .modal-dialog {
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .table {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .pagination span {
+    align-self: center;
+  }
+  
+  
+
+  
+  @media (max-width: 768px) {
+    .modal-dialog {
+      margin: 20px;
+    }
+  
+    .select-item {
+      margin: 0; /* Ajustement pour le responsive */
+    }
+  }
