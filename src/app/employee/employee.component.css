@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+  }
+  
+  .dashboard {
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 200px;
+    background-color: #4CAF50; /* Couleur de fond de la sidebar */
+    color: white;
+    padding: 20px;
+  }
+  
+  .sidebar h2 {
+    margin: 0 0 20px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 10px 0;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header h1 {
+    margin: 0;
+  }
+  
+  .stats div {
+    margin-left: 20px;
+  }
+  
+  .add-apprenant {
+    margin-bottom: 20px;
+  }
+  
+  .upload-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .apprenant-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  .apprenant-table th, .apprenant-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .apprenant-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .block-btn, .edit-btn {
+    background-color: #f44336; /* Rouge pour bloquer */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .edit-btn {
+    background-color: #2196F3; /* Bleu pour éditer */
+  }
