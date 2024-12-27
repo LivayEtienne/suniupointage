@@ -1,12 +1,11 @@
 .dashboard-container {
-    padding: 20px;
-    background-color: #FAFBFF;
-    margin-left: 225px;
+    padding: 24px;
+    background-color: #f9fafb;
+    margin-left: 240px;
 }
 
 .search-container {
     position: relative;
-    margin-left: 1100px;
     margin-bottom: 24px;
     max-width: 500px;
 }
@@ -39,36 +38,28 @@
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-    border-radius: 20px;
+    gap: 24px;
     margin-bottom: 24px;
     margin-top: 70px;
-    background-color: #FAFBFF;/*color a mettre en arriere plan */
-    border-radius: 25px;
-    height: 100px;
-    margin-left: -250px;
 }
 
 .secondary-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
+    gap: 24px;
     margin-bottom: 100px;
 
 }
 
 .stat-card {
     background: white;
-    background-color: #FAFBFF;
     border-radius: 16px;
-    padding: 0px;
+    padding: 20px;
     display: flex;
     align-items: center;
-    gap: 0px;
+    gap: 16px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    margin-left: 114px; /* Décalage de 114px vers la gauche */
 }
-
 
 .custom-icon {
     width: 120px;  /* Taille par défaut de l'icône */

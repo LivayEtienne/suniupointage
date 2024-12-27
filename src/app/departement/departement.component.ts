@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DepartmentService } from '../departement.service';
+import { DashboardComponent } from "../dashboard/dashboard.component";
+import { SidebarComponent } from '../sidebar/sidebar.component';
+
 
 interface Department {
   nom: string;
@@ -13,7 +16,7 @@ interface Department {
 @Component({
   selector: 'app-departement',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DashboardComponent, SidebarComponent],
   templateUrl: './departement.component.html',
   styleUrls: ['./departement.component.css'],
   providers: [DepartmentService]

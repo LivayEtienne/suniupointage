@@ -1,11 +1,12 @@
 .container {
     padding: 20px;
     text-align: center;
+    margin-left: 104px;
   }
   
   .add-department-btn {
     padding-top: 50px;
-    margin-left: 100px;
+    margin-left: 300px;
     margin-top: 103px; /* Ajoutez cette ligne pour descendre le bouton de 103px */
     background-color: #28a745;
     color: white;
@@ -27,14 +28,14 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-  }
-  
+    }
   .department-card {
     background: white;
-    border: 1px solid #ddd;
+    border: 2px solid black;
     border-radius: 8px;
-    width: 150px;
-    padding: 15px;
+    width: 1000px;
+    height: 100px;
+    padding: 30px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -60,42 +61,7 @@
     color: #333;
     word-wrap: break-word;
   }
-  /* 
-  .add-department-form {
-    margin-top: 20px;
-  }
   
-  .add-department-form input {
-    padding: 8px;
-    margin-right: 10px;
-  }
-  
-  .add-department-form button {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .add-department-form button:hover {
-    background-color: #0056b3;
-  }
-  
-  .add-department-btn {
-    padding-top: 50px;
-    margin-left: 100px;
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
-   */
 
    .add-department-btn {
     background-color: #4CAF50; /* Vert */

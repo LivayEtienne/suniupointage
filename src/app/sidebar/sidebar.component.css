@@ -1,7 +1,7 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
 .sidebar {
-    width: 275px;
+    width: 250px;
     height: 100vh;
     background: white;
     padding: 30px 0;
@@ -73,7 +73,7 @@
    margin-left: 10px;
     padding: 10px 0; /* Ajouter de l'espace intérieur pour le texte */
     font-size: 14px; /* Taille de la police adaptée */
- height: 20px;
+ height: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour l'effet 3D */
     cursor: pointer; /* Curseur en mode "cliquable" */
     border: none; /* Supprimer toute bordure par défaut */

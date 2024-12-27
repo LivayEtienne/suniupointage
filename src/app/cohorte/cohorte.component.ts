@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CohorteService, Cohorte } from '../cohorte.service';
+import { DashboardComponent } from '../dashboard/dashboard.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+
+
 
 @Component({
   selector: 'app-cohorte',
   standalone: true, // Utilisation des composants autonomes
-  imports: [CommonModule, FormsModule], // Modules nécessaires
+  imports: [CommonModule, FormsModule, DashboardComponent, SidebarComponent], // Modules nécessaires
   templateUrl: './cohorte.component.html',
   styleUrls: ['./cohorte.component.css'],
   providers: [CohorteService], // Fournisseur du service

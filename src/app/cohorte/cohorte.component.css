@@ -9,7 +9,7 @@
     font-size: 16px;
     position: relative; /* Ajouté pour le positionnement relatif */
     margin-top: 115px; /* Décalage de 103px vers le bas */
-    margin-left: 240px; /* Décalage de 203px vers la droite */
+    margin-left: 250px; /* Décalage de 203px vers la droite */
   }
   .modal {
     display: flex;
@@ -72,17 +72,18 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 115px; /* Décalage de 207px vers le bas */
+    margin-top: 50px; /* Décalage de 207px vers le bas */
   }
   
   .cohorte-card {
     background-color: #f9f9f9;
-    border: 1px solid #ddd;
+    border: 2px solid #f0ecec;
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
     text-align: center;
-    width: 200px;
+    width: 300px;
+    height: 110px;
   }
   
   .cohorte-name {
