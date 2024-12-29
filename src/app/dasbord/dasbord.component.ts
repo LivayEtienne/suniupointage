@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-dasbord',
   standalone: true, 
-  imports: [CommonModule, FormsModule, DatePipe],
+  imports: [CommonModule, FormsModule],
   templateUrl: './dasbord.component.html',
   styleUrl:'./dasbord.component.css',
 })
@@ -69,20 +69,23 @@ export class DasbordComponent implements OnInit, AfterViewInit {
 
 
   // Préparer les données pour le graphique linéaire (heures d'arrivée)
-  prepareLineChartData() {
-    const heuresArrivee = Array(24).fill(0); // Tableau pour compter le nombre de personnes par heure (0-23 heures)
-    const selectedDateObj = new Date(this.selectedDate);
-    this.historiqueData.forEach((item: any) => {
-      const heureEntree = new Date(item.heure_entree);
-      if (heureEntree.toDateString() === selectedDateObj.toDateString()) {
-        const heure = heureEntree.getHours();
-        heuresArrivee[heure] += 1;
-      }
-    });
+ 
+prepareLineChartData() {
+  const heuresArrivee = Array(24).fill(0); // Tableau pour compter le nombre de personnes par heure (0-23 heures)
+  const selectedDateObj = new Date(this.selectedDate);
+  this.historiqueData.forEach((item: any) => {
+    const heureEntree = new Date(item.heure_entree);
+    // Vérifie si la date de l'historique correspond à la date sélectionnée
+    if (heureEntree.toDateString() === selectedDateObj.toDateString()) {
+      const heure = heureEntree.getHours();
+      heuresArrivee[heure] += 1; // Incrémente le compteur pour l'heure d'entrée
+    }
+  });
 
-    this.lineChartLabels = Array.from({ length: 15 }, (_, i) => `${i+4}:00`); // Labels de 0h à 23h
-    this.lineChartData = heuresArrivee.slice(4, 19); // Données pour le graphique linéaire
-  }
+  this.lineChartLabels = Array.from({ length: 24 }, (_, i) => `${i}:00`); // Labels de 0h à 23h
+  this.lineChartData = heuresArrivee; // Données pour le graphique linéaire
+}
+
 
   // Préparer les données pour le graphique en barres (jours de la semaine)
   prepareBarChartData() {
@@ -126,8 +129,21 @@ export class DasbordComponent implements OnInit, AfterViewInit {
           plugins: {
             legend: {
               display: false
+            },
+            tooltip: {
+              enabled: true,  // Activer les tooltips
+              mode: 'nearest', // Le mode 'nearest' affiche le tooltip sur le point le plus proche du curseur
+              intersect: false, // Permet au tooltip de s'afficher même si le curseur n'est pas directement sur un point
+              callbacks: {
+                label: (tooltipItem: any) => {
+                  const value = tooltipItem.raw; // Récupère la valeur du point sur la courbe
+                  const label = tooltipItem.label; // Récupère l'étiquette de l'axe des X (l'heure)
+                  return `${label}: ${value} personnes`; // Affiche l'heure et le nombre de personnes
+                }
+              }
             }
           },
+          
           scales: {
             x: {
               grid: {
@@ -192,7 +208,19 @@ export class DasbordComponent implements OnInit, AfterViewInit {
     }
   }
   onDateChange() {
-    this.prepareLineChartData();
-    this.initializeLineChart();
-  }
+    this.apiService.getHistoriqueDataByDate(this.selectedDate).subscribe({
+      next: (data) => {
+        this.historiqueData = data; // Charger les nouveaux historiques pour la date sélectionnée
+        this.prepareLineChartData(); // Mettre à jour les données du graphique linéaire
+        this.prepareBarChartData(); // Mettre à jour les données du graphique en barres
+        this.initializeLineChart(); // Réinitialiser le graphique linéaire avec les nouvelles données
+        this.initializeBarChart(); // Réinitialiser le graphique en barres
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des historiques pour la date sélectionnée:', error);
+      },
+    });
+}
+
+  
 }

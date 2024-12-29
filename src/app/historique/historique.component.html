@@ -1,1 +1,91 @@
-vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvhistorique
+<div class="container">
+    <div class="header">
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-icon user"></div>
+          <div class="stat-info">
+            <span class="stat-label">Utilisateur Simple</span>
+            <span class="stat-value">{{stats.totalUsers}}</span>
+           
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon admin"></div>
+          <div class="stat-info">
+            <span class="stat-label">Nombre Admin</span>
+            <span class="stat-value">{{stats.totalDepartments}}</span>
+            
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon monitor"></div>
+          <div class="stat-info">
+            <span class="stat-label">Vigile</span>
+            <span class="stat-value">{{stats.totalVigiles}}</span>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="content">
+      <div class="date-search">
+        <div class="date">
+          <input type="date" [(ngModel)]="selectedDate" (change)="filterByDate()" />
+        </div>
+        <div class="selected-date">
+          <span *ngIf="displayedDate">{{ displayedDate }}</span>
+        </div>
+        <div class="search">
+          <input 
+            type="text" 
+            placeholder="Rechercher" 
+            [(ngModel)]="searchTerm" 
+            (input)="filterUsers()"
+          >
+        </div>
+        
+      </div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th><input type="checkbox"></th>
+            <th>Nom Prenom</th>
+            <th>Status</th>
+            <th>Telephone</th>
+            <th>Arrivée</th>
+            <th>Depart</th>
+            <th>Activiter</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of getPaginatedUsers()">
+            <td><input type="checkbox"></td>
+            <td>{{user.nom}} {{user.prenom}}</td>
+            <td>{{user.role}}</td>
+            <td>{{user.telephone}}</td>
+            <td>{{user.arrivee || '---'}}</td>
+            <td>{{user.depart || '---'}}</td>
+            <td class="relative">
+              {{user.activite || '----'}}
+                 
+                
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <div class="pagination">
+        <button class="prev-btn" (click)="currentPage = currentPage - 1" [disabled]="currentPage === 1">&lt;</button>
+        <ng-container *ngFor="let page of [].constructor(getTotalPages()); let i = index">
+          <button
+             [class.active]="currentPage === i + 1"
+            (click)="currentPage = i + 1">
+            {{i + 1}}
+          </button>
+        </ng-container>
+        <button class="next-btn" (click)="currentPage = currentPage + 1" [disabled]="currentPage === getTotalPages()">&gt;</button>
+      </div>
+    </div>
+  </div>
