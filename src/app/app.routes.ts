@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
 import { ApprenantComponent } from './apprenant/apprenant.component';
-
+import { VigileComponent } from './vigile/vigile.component';    
 export const routes: Routes = [
     { path: '', redirectTo: 'apprenants', pathMatch: 'full'},
-    { path: 'apprenants', component: ApprenantComponent}
+    { path: 'apprenants', component: ApprenantComponent},
+    { path: 'vigile', component: VigileComponent},
 ];

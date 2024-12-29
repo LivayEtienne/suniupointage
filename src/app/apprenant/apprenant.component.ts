@@ -19,7 +19,7 @@ interface Apprenant {
   statut: string;
 }
 
-@Component({
+@Component({ 
   selector: 'app-apprenant',
   imports: [FormsModule, CommonModule] ,
   templateUrl: './apprenant.component.html',

@@ -1,121 +1,224 @@
-.button-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+/* Conteneur principal */
+.container {
     display: flex;
-    gap: 10px; /* Espace entre les boutons */
-}
-.btn i {
-    margin-right: 5px; /* Ajoute un espace entre l'icône et le texte */
-}
-.btn {
-    padding: 10px 20px; /* Ajoute du rembourrage */
-    border: none; /* Supprime la bordure par défaut */
-    border-radius: 5px; /* Arrondit les coins */
-    color: white; /* Couleur du texte */
-    cursor: pointer; /* Change le curseur au survol */
-    transition: background-color 0.3s; /* Effet de transition */
-}
-
-.btn-success {
-    background-color: #28a745; /* Couleur de fond du bouton vert */
-}
-
-.btn-success:hover {
-    background-color: #218838; /* Couleur au survol du bouton vert */
-}
-
-.btn-danger {
-    background-color: #dc3545; /* Couleur de fond du bouton rouge */
-}
-
-.btn-danger:hover {
-    background-color: #c82333; /* Couleur au survol du bouton rouge */
-}
-
-
-.splash-screen {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    height: 100vh; /* Prend toute la hauteur de la fenêtre */
-    background-color: #ffffff; /* Couleur de fond */
-    position: relative;
+    justify-content: center;
+    gap: 40px; /* Augmente l'espace entre les éléments */
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
-.logo {
-    width: 1000px; /* Ajustez la taille de votre logo */
-    height: 1000px; /* Ajustez la taille de votre logo */
-    animation: fadeIn 10s ease-in-out, rotate 20s infinite;
-    transform-style: preserve-3d; /* Assure que les transformations 3D sont préservées */
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes rotate {
-    0% {
-        transform: rotateX(0deg) rotateY(0deg);
-    }
-    50% {
-        transform: rotateX(360deg) rotateY(360deg);
-    }
-    100% {
-        transform: rotateX(0deg) rotateY(0deg);
-    }
-}
-
-@keyframes fadeIn {
-    0% { opacity: 0; transform: scale(0.5); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-20px);
-    }
-    60% {
-        transform: translateY(-10px);
-    }
-}
-
-.button-container {
-    margin-top: 20px; /* Espace entre le logo et les boutons */
+/* Image de profil */
+.profile-image {
+    width: 350px; /* Augmente la largeur */
+    height: 350px; /* Augmente la hauteur */
+    background-color: #28a745;
     display: flex;
-    gap: 10px; /* Espace entre les boutons */
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px; /* Augmente la courbure des bords */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ajoute un effet d'ombre pour plus de profondeur */
+}
+
+.profile-image i {
+    font-size: 120px; /* Augmente la taille de l'icône */
+    color: white;
+}
+
+
+/* Carte des informations */
+.info-card {
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    padding: 30px; /* Plus de padding */
+    width: 500px; /* Augmente la largeur */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h3 {
+    font-size: 22px; /* Augmente la taille du texte */
+    margin-bottom: 15px;
+    color: #000;
+    font-weight: bold;
+}
+
+.info-card .info-details {
+    margin-bottom: 25px; /* Ajoute de l'espacement */
+}
+
+.info-card .info-details p {
+    margin: 10px 0; /* Ajoute de l'espacement vertical */
+    font-size: 18px; /* Augmente la taille des paragraphes */
+}
+
+/* Boutons */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Espacement entre les boutons */
 }
 
 .btn {
-    padding: 10px 20px; /* Ajoute du rembourrage */
-    border: none; /* Supprime la bordure par défaut */
-    border-radius: 5px; /* Arrondit les coins */
-    color: white; /* Couleur du texte */
-    cursor: pointer; /* Change le curseur au survol */
-    transition: background-color 0.3s; /* Effet de transition */
+    width: 70px; /* Augmente la largeur */
+    height: 70px; /* Augmente la hauteur */
+    display: flex;
+    align-items: c;
+    justify-content: center;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 24px; /* Augmente la taille du texte dans le bouton */
+    cursor: pointer;
 }
 
-.btn-success {
-    background-color: #28a745; /* Couleur de fond du bouton vert */
+.btn-green {
+    background-color: #20c997;
 }
 
-.btn-success:hover {
-    background-color: #218838; /* Couleur au survol du bouton vert */
+.btn-red {
+    background-color: #dc3545;
 }
 
-.btn-danger {
-    background-color: #dc3545; /* Couleur de fond du bouton rouge */
+/* Conteneur principal */
+.controle-moteur {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 800px; /* Augmente la largeur maximale */
+    margin: auto;
 }
 
-.btn-danger:hover {
-    background-color: #c82333; /* Couleur au survol du bouton rouge */
+/* Titre */
+.controle-moteur h1 {
+    text-align: center;
+    color: #333;
+    font-size: 28px; /* Augmente la taille du titre */
+    margin-bottom: 25px;
+}
+
+/* Message d'erreur */
+.error {
+    color: #dc3545;
+    font-size: 18px; /* Augmente la taille du texte */
+    text-align: center;
+}
+
+.error button {
+    font-size: 16px; /* Augmente la taille du bouton */
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Plus de padding */
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.error button:hover {
+    background-color: #e84141;
+}
+
+/* Conteneur des boutons */
+.buttons-container {
+    display: flex;
+    justify-content: flex-end; /* Aligne les boutons à droite */
+    gap: 15px; /* Espacement entre les boutons */
+}
+
+/* Boutons généraux */
+.btn-control {
+    padding: 15px 30px; /* Plus de padding */
+    font-size: 18px; /* Augmente la taille du texte */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+/* Bouton "Ouvrir" */
+.btn-open {
+    background-color: #28a745;
+}
+
+.btn-open:hover {
+    background-color: #218838;
+}
+
+/* Bouton "Fermer" */
+.btn-close {
+    background-color: #dc3545;
+}
+
+.btn-close:hover {
+    background-color: #c82333;
+}
+
+/* Bouton "Reconnexion" */
+.btn-reconnect {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 25px; /* Augmente le padding */
+    border-radius: 5px;
+    font-size: 16px; /* Augmente la taille du texte */
+    cursor: pointer;
+}
+
+.btn-reconnect:hover {
+    background-color: #0056b3;
+}
+
+/* Style du tableau des étudiants */
+.students-table {
+    width: 50%; /* Occupe toute la largeur */
+    border-collapse: collapse; /* Supprime les espaces entre les cellules */
+    margin-top: 20px; /* Ajoute un espace au-dessus du tableau */
+    background-color: #f9f9f9; /* Fond clair */
+    border-radius: 10px; /* Coins arrondis */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce */
+    margin-left: 500px;
+}
+
+/* Style des en-têtes du tableau */
+.students-table th {
+    padding: 15px; /* Espace interne des cellules d'en-tête */
+    background-color: #28a745; /* Couleur de fond verte */
+    color: white; /* Texte en blanc */
+    text-align: left; /* Aligner le texte à gauche */
+    font-size: 18px; /* Taille du texte */
+    font-weight: bold; /* Met en gras le texte */
+}
+
+/* Style des cellules du tableau */
+.students-table td {
+    padding: 15px; /* Espace interne des cellules */
+    border-bottom: 1px solid #ddd; /* Ligne de séparation entre les lignes */
+    font-size: 16px; /* Taille de la police */
+    color: #333; /* Couleur du texte */
+}
+
+/* Style de la dernière ligne du tableau */
+.students-table tr:last-child td {
+    border-bottom: none; /* Supprime la bordure de la dernière ligne */
+}
+
+/* Effet au survol des lignes */
+.students-table tr:hover {
+    background-color: #f1f1f1; /* Fond gris clair lors du survol */
+}
+
+/* Style du titre du tableau */
+h3 {
+    font-size: 24px; /* Taille du titre */
+    color: #28a745; /* Couleur du texte du titre */
+    margin-bottom: 15px; /* Espace sous le titre */
+}
+
+/* Ajout d'une icône à côté du titre */
+h3 i {
+    margin-right: 10px; /* Espace à droite de l'icône */
+}
+
+h3 em{
+    margin-left: 500px;
 }
