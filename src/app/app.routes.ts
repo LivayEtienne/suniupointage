@@ -19,7 +19,7 @@ import { PointageComponent } from './pointage/pointage.component';
 import { HistoriqueComponent } from './historique/historique.component';
 import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { SidebareComponent } from './sidebare/sidebare.component';
 
 /*  import { DepartementComponent } from './departement/departement.component';  */
 
@@ -52,7 +52,7 @@ export const routes: Routes = [
     },
     {
       path: 'sidebar',
-      component: SidebarComponent,
+      component: SidebareComponent,
     },
     {
       path: 'department',

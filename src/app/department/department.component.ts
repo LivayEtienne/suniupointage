@@ -3,7 +3,7 @@ import { DepartmentService } from '../department.service';
 import { HttpClient } from '@angular/common/http';
 
 import { DasbordComponent } from '../dasbord/dasbord.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
+import { SidebareComponent } from '../sidebare/sidebare.component';
 
 
 import { CommonModule } from '@angular/common';
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-department',
 
     standalone: true, // Utilisation des composants autonomes
-    imports: [CommonModule, FormsModule, DasbordComponent, SidebarComponent], // Modules nécessaires
+    imports: [CommonModule, FormsModule, DasbordComponent, SidebareComponent], // Modules nécessaires
   templateUrl: './department.component.html',
   styleUrls: ['./department.component.css'],
 })

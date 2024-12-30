@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-sidebare',
   imports: [RouterModule],
   templateUrl: './sidebare.component.html',
-  styleUrl: './sidebare.component.css'
+  styleUrls: ['./sidebare.component.css']
 })
 export class SidebareComponent {
 
