@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DepartmentService } from '../department.service';
 import { HttpClient } from '@angular/common/http';
 
-import { DashboardComponent } from '../dashboard/dashboard.component';
+import { DasbordComponent } from '../dasbord/dasbord.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
 
@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-department',
 
     standalone: true, // Utilisation des composants autonomes
-    imports: [CommonModule, FormsModule, DashboardComponent,SidebarComponent], // Modules nécessaires
+    imports: [CommonModule, FormsModule, DasbordComponent, SidebarComponent], // Modules nécessaires
   templateUrl: './department.component.html',
   styleUrls: ['./department.component.css'],
 })

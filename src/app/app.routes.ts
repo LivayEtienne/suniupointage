@@ -14,6 +14,9 @@ export const routes: Routes = [
  */
 
 import { DepartmentComponent } from './department/department.component';
+import { DasbordComponent } from './dasbord/dasbord.component';
+import { PointageComponent } from './pointage/pointage.component';
+import { HistoriqueComponent } from './historique/historique.component';
 
 import { Component } from '@angular/core';
 import { Routes } from '@angular/router';
@@ -57,14 +60,12 @@ export const routes: Routes = [
     {
       path: 'department',
       component: DepartmentComponent
-    }
-];
-import { DasbordComponent } from './dasbord/dasbord.component';
-import { PointageComponent } from './pointage/pointage.component';
-import { HistoriqueComponent } from './historique/historique.component';
-export const routes: Routes = [
+    },
+
     { path: 'dasboard', component: DasbordComponent },
     { path: 'pointage', component: PointageComponent },
     { path: 'historique', component: HistoriqueComponent },
     { path: '', redirectTo: '/dasboard', pathMatch: 'full' }
+
 ];
+
