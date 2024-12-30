@@ -16,9 +16,9 @@ export class HistoriqueComponent implements OnInit {
   historiques: IHistorique[] = [];
   users: IUser[] = [];
   stats = {
-    totalUsers: 0,
-    totalVigiles: 0,
-    totalDepartments: 0
+    totalUsers: 10,
+    totalVigiles: 2,
+    totalDepartments: 7
   };
   currentPage = 1;
   itemsPerPage = 10;
