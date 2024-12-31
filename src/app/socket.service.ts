@@ -20,7 +20,7 @@ export class SocketService {
 
     this.socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      this.messageSubject.next(message);  // Publier le message dans le sujet
+      this.messageSubject.next(message); // Publier le message dans le sujet
     };
 
     this.socket.onerror = (error) => {
@@ -30,6 +30,15 @@ export class SocketService {
     this.socket.onclose = () => {
       console.log('Connexion WebSocket fermée');
     };
+  }
+
+  // Envoyer un message au serveur WebSocket
+  sendMessage(message: any): void {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(JSON.stringify(message));
+    } else {
+      console.error('WebSocket n\'est pas ouvert');
+    }
   }
 
   // Obtenir les messages reçus
