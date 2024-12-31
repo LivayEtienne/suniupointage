@@ -1,1 +1,18 @@
-<p>buttonlecture works!</p>
+<!-- buttonlecture.component.html -->
+
+<div>  
+    <!-- Bouton pour afficher la modal -->
+    <button (click)="openModal()">Voir l'UID de la carte</button>
+  
+    <!-- Modal -->
+    <div *ngIf="isModalVisible" class="modal">
+      <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>UID de la carte</h2>
+        <input [(ngModel)]="message" [placeholder]="placeholder" />
+        <!-- Bouton qui appelle sendMessage et ferme la modal -->
+        <button (click)="sendMessage()">Merci</button>
+      </div>
+    </div>
+  </div>
+  
