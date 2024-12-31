@@ -1,0 +1,313 @@
+/* pointage.component.css */
+
+/* Importation de Font Awesome */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+.container {
+  padding: 30px;
+  background: #f8f9fe;
+  min-height: 100vh;
+  margin-left: 290px;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Premier bloc stats plus grand */
+.stat-item:first-child {
+  flex: 1.2;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 215, 125, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 45px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.stat-label {
+  color: #94a3b8;
+  font-size: 20px;
+}
+
+.content {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.date-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.search input {
+  padding: 10px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  width: 240px;
+  background: #f8fafc;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 24px;
+}
+
+th {
+  padding: 16px;
+  color: #64748b;
+  font-weight: 500;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #2c3e50;
+}
+
+/* Style pour le dropdown des activités */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.status-button {
+  padding: 8px 16px;
+  background: rgba(0, 215, 125, 0.1);
+  color: #00a67e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.arrow-down {
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 1000;
+  min-width: 140px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #2c3e50;
+}
+
+.dropdown-item:hover {
+  background: #f8fafc;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.pagination button.active {
+  background: #6366f1;
+  color: white;
+  border: none;
+}
+
+/* Style pour les status d'activité */
+.status-button.en-activiter {
+  background: rgba(0, 215, 125, 0.1);
+  color: #00a67e;
+}
+
+.status-button.en-conger {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+.status-button.malade {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.status-button.voyage {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+
+/*            suite*/
+
+.container {
+  padding: 30px;
+  background: #f8f9fe;
+  min-height: 100vh;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.stat-item:first-child {
+  flex: 1.2;
+}
+
+.stat-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(0, 215, 125, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00a67e; /* Couleur verte pour les icônes */
+  margin-left: 25px;
+}
+
+/* Style spécifique pour chaque icône */
+.stat-icon.user::before {
+  content: '\f007';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.stat-icon.admin::before {
+  content: '\f509';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.stat-icon.monitor::before {
+  content: '\f108';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 20px;
+}
+
+/* Icône du calendrier */
+.calendar-icon::before {
+  content: '\f133';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  margin-right: 8px;
+  color: #64748b;
+}
+
+/* Icône de recherche dans l'input */
+.search {
+  position: relative;
+}
+
+.search::before {
+  content: '\f002';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  z-index: 1;
+}
+
+.search input {
+  padding: 10px 16px 10px 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  width: 240px;
+  background: #f8fafc;
+}
+
+
+.selected-date {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
