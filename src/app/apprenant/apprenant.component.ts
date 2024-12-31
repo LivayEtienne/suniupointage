@@ -3,6 +3,7 @@ import { UserService } from '../user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
+import { ButtonlectureComponent } from '../buttonlecture/buttonlecture.component';
 
 interface Apprenant {
   id: number;
@@ -21,11 +22,19 @@ interface Apprenant {
 
 @Component({ 
   selector: 'app-apprenant',
-  imports: [FormsModule, CommonModule] ,
+  imports: [FormsModule, CommonModule, ButtonlectureComponent] ,
   templateUrl: './apprenant.component.html',
   styleUrls: ['./apprenant.component.css']
 })
 export class ApprenantComponent implements OnInit {
+
+  // Déclaration de la variable pour l'affichage du placeholder
+  isAffectationVisible: boolean = false;
+
+  // Méthode qui bascule l'affichage du placeholder
+  toggleAffectation() {
+    this.isAffectationVisible = !this.isAffectationVisible;
+  }
   // Variables liées au formulaire
   nom: string = '';
   prenom: string = '';

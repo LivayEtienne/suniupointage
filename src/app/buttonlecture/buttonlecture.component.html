@@ -1,0 +1,22 @@
+<!-- Bouton pour lire la carte -->
+<button (click)="toggleModal()" class="btn btn-info ml-2">Lire carte</button>
+
+<!-- Modal pour afficher l'UID -->
+<div *ngIf="isModalVisible" class="modal" tabindex="-1" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">UID de la carte</h5>
+        <button type="button" class="close" (click)="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>UID scanné : {{ cardUID }}</p>  <!-- Affiche l'UID -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Vous pouvez aussi ajouter ici d'autres éléments comme un bouton de retour -->
