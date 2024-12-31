@@ -77,21 +77,23 @@ export class AuthComponent implements OnInit, OnDestroy {
   
       this.authService.login(email, password).subscribe(
         (response) => {
-          console.log('Connexion réussie', response);
-  
+          console.log('Connexion réussie', response);  // Vérification de la réponse du backend
+          
           if (response && response.token) {
             localStorage.setItem('authToken', response.token);
-  
-            // Logique de redirection basée sur le rôle
-            if (response.role === 'vigile') {
-              setTimeout(() => {
+      
+            // Vérifie le rôle de l'utilisateur dans la réponse
+            console.log('Rôle de l\'utilisateur:', response.user.role);  // Accède au rôle via response.user.role
+      
+            setTimeout(() => {
+              if (response.user.role === 'vigile') {
+                console.log('Redirection vers /pointage pour le vigile');
                 this.router.navigate(['/pointage']);
-              }, 100); // Ajouter un délai pour s'assurer que la redirection se fait après la mise à jour de l'état
-            } else {
-              setTimeout(() => {
+              } else {
+                console.log('Redirection vers /dasbord pour un autre rôle');
                 this.router.navigate(['/dasbord']);
-              }, 100);
-            }
+              }
+            }, 500);  // Attendre 500ms avant la redirection
           } else {
             console.error('Aucun token reçu dans la réponse');
           }
@@ -101,6 +103,7 @@ export class AuthComponent implements OnInit, OnDestroy {
           this.errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
         }
       );
+      
     } else {
       this.errorMessage = 'Veuillez remplir correctement tous les champs.';
     }
