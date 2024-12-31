@@ -1,25 +1,17 @@
-<div class="container">
-    <button (click)="toggleAffectation()">Scanner une carte</button>
+<!-- buttonlecture.component.html -->
+
+<div>  
+    <!-- Bouton pour afficher la modal -->
+    <button (click)="openModal()">Voir l'UID de la carte</button>
   
-    <div *ngIf="isAffectationVisible" class="form">
-      <div class="form-group">
-        <label for="cardUID">UID de la carte :</label>
-        <input
-          type="text"
-          id="cardUID"
-          [placeholder]="cardUID || 'Aucun UID scanné pour l\'instant...'"
-          readonly
-        />
-      </div>
-  
-      <div class="form-group">
-        <label for="cardInfo">Message :</label>
-        <input
-          type="text"
-          id="cardInfo"
-          [placeholder]="cardInfo || 'Aucun message pour l\'instant...'"
-          readonly
-        />
+    <!-- Modal -->
+    <div *ngIf="isModalVisible" class="modal">
+      <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+        <h2>UID de la carte</h2>
+        <input [(ngModel)]="message" [placeholder]="placeholder" />
+        <!-- Bouton qui appelle sendMessage et ferme la modal -->
+        <button (click)="sendMessage()">Merci</button>
       </div>
     </div>
   </div>

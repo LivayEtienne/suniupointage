@@ -6,43 +6,25 @@ import { Subject } from 'rxjs';
 })
 export class SocketService {
   private socket!: WebSocket;
-  private messageSubject: Subject<any> = new Subject();
+  private messagesSubject = new Subject<any>(); // Un Subject pour émettre les messages
+  public messages$ = this.messagesSubject.asObservable(); // Observable à souscrire dans le composant
 
   constructor() { }
 
-  // Connexion au serveur WebSocket
-  connect(url: string): void {
-    this.socket = new WebSocket(url);
+  connect(): void {
+    // Connexion au serveur WebSocket
+    this.socket = new WebSocket('ws://localhost:3000'); // Remplacez par l'URL de votre serveur WebSocket
 
-    this.socket.onopen = () => {
-      console.log('Connexion WebSocket établie');
-    };
-
-    this.socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      this.messageSubject.next(message); // Publier le message dans le sujet
-    };
-
-    this.socket.onerror = (error) => {
-      console.error('Erreur WebSocket:', error);
-    };
-
-    this.socket.onclose = () => {
-      console.log('Connexion WebSocket fermée');
+    this.socket.onmessage = (event: MessageEvent) => {
+      // Lorsque le serveur envoie un message, on l'émet dans le Subject
+      const data = JSON.parse(event.data);
+      this.messagesSubject.next(data);
     };
   }
 
-  // Envoyer un message au serveur WebSocket
   sendMessage(message: any): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(message));
-    } else {
-      console.error('WebSocket n\'est pas ouvert');
     }
-  }
-
-  // Obtenir les messages reçus
-  getMessages() {
-    return this.messageSubject.asObservable();
   }
 }

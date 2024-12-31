@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { SocketService } from '../socket.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { SocketService } from '../socket.service'; // Assurez-vous que le chemin est correct
+import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -9,36 +10,69 @@ import { CommonModule } from '@angular/common';
   templateUrl: './buttonlecture.component.html',
   styleUrls: ['./buttonlecture.component.css']
 })
-export class ButtonlectureComponent {
-  isAffectationVisible: boolean = false;
-  cardUID: string = ''; // Pour afficher l'UID de la carte
-  cardInfo: string = ''; // Pour afficher le message de bienvenue ou l'erreur
+export class ButtonlectureComponent implements OnInit, OnDestroy {
+  message: string = ''; // Variable pour l'UID à envoyer
+  placeholder: string = ''; // Placeholder de l'input
+  status: string = ''; // Pour afficher l'état de la connexion
+  messages: any[] = []; // Pour stocker les messages reçus du WebSocket
+  isModalVisible: boolean = false; // Contrôler la visibilité de la modal
+  private socketSubscription!: Subscription; // Abonnement pour la souscription aux messages WebSocket
 
-  constructor(private websocketService: SocketService) {}
+  constructor(private webSocketService: SocketService) { }
 
-  ngOnInit() {
-    // Se connecter au serveur WebSocket lorsque le composant est initialisé
-    this.websocketService.connect('ws://localhost:3000'); // Remplacez par l'URL de votre WebSocket
+  ngOnInit(): void {
+    this.webSocketService.connect(); // Connecter le WebSocket
 
-    // Souscrire aux messages reçus
-    this.websocketService.getMessages().subscribe((message) => {
-      console.log('Message reçu dans le composant:', message);
+    // Écoutez les messages WebSocket
+    this.socketSubscription = this.webSocketService.messages$.subscribe((msg: any) => {
+      console.log('Message WebSocket reçu :', msg);
 
-      if (message.status === 'connected') {
-        this.cardUID = message.uid || ''; // Vérifiez si l'UID est fourni
-        this.cardInfo = `Bienvenue ${message.name || 'inconnu'}, rôle: ${message.role || 'indéfini'}`;
-        this.isAffectationVisible = true; // Afficher le champ affectation
-      } else if (message.status === 'error') {
-        const match = message.message.match(/UID de la carte : (\w+)/);
-        this.cardUID = match ? match[1] : 'UID non trouvé'; // Extraire l'UID du message d'erreur si disponible
-        this.cardInfo = message.message; // Afficher un message d'erreur si l'utilisateur n'est pas trouvé
-        this.isAffectationVisible = false; // Ne pas afficher le champ affectation
+      // Si le message contient l'UID de la carte, on extrait l'UID et on l'affiche dans le placeholder
+      if (msg.message && msg.message.includes('UID de la carte')) {
+        const uidMatch = msg.message.match(/UID de la carte : (\S+)/); // Expression régulière pour extraire l'UID
+        if (uidMatch) {
+          this.placeholder = uidMatch[1]; // Mettre l'UID extrait dans le placeholder
+        }
+      }
+
+      // Affichage d'autres messages (par exemple, bienvenu)
+      if (msg.message) {
+        this.messages.push(msg);
+      }
+
+      // Mettre à jour le statut
+      if (msg.status) {
+        this.status = msg.status;
       }
     });
   }
 
-  // Méthode pour basculer l'affichage du champ affectation
-  toggleAffectation() {
-    this.isAffectationVisible = !this.isAffectationVisible;
+  ngOnDestroy(): void {
+    // Désabonnez-vous des messages WebSocket pour éviter les fuites de mémoire
+    if (this.socketSubscription) {
+      this.socketSubscription.unsubscribe();
+    }
+  }
+
+  sendMessage(): void {
+    // Vous pouvez envoyer le message via WebSocket ici
+    const message = {
+      type: 'authenticate',
+      uid: this.message,
+    };
+    this.webSocketService.sendMessage(message);
+
+    // Fermer la modal après l'envoi du message
+    this.closeModal();
+  }
+
+  // Ouvrir la modal
+  openModal(): void {
+    this.isModalVisible = true;
+  }
+
+  // Fermer la modal
+  closeModal(): void {
+    this.isModalVisible = false;
   }
 }
