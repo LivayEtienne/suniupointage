@@ -9,10 +9,10 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-authentification',
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './authentification.component.html',
-  styleUrls: ['./authentification.component.css']
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css']
 })
-export class AuthentificationComponent implements OnInit, OnDestroy {
+export class AuthComponent implements OnInit, OnDestroy {
   authForm: FormGroup;  // Formulaire réactif pour l'email et mot de passe
   rfidCode: string = '';  // Code RFID pour l'authentification par RFID
   errorMessage: string = '';  // Message d'erreur générique
@@ -43,9 +43,9 @@ export class AuthentificationComponent implements OnInit, OnDestroy {
 
         // Logique de redirection basée sur le rôle
         if (message.role === 'vigile') {
-          this.router.navigate(['/vigile']); // Redirection spécifique pour les vigiles
+          this.router.navigate(['/pointage']); // Redirection spécifique pour les vigiles
         } else {
-          this.router.navigate(['/reussi']);
+          this.router.navigate(['/dasbord']); // Redirection par défaut
         }
       } else if (message.authenticated === false && message.error) {
         this.authenticationMessage = message.error;
@@ -74,19 +74,23 @@ export class AuthentificationComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.authForm.valid) {
       const { email, password } = this.authForm.value;
-
+  
       this.authService.login(email, password).subscribe(
         (response) => {
           console.log('Connexion réussie', response);
-
+  
           if (response && response.token) {
             localStorage.setItem('authToken', response.token);
-
+  
             // Logique de redirection basée sur le rôle
             if (response.role === 'vigile') {
-              this.router.navigate(['/vigile']);
+              setTimeout(() => {
+                this.router.navigate(['/pointage']);
+              }, 100); // Ajouter un délai pour s'assurer que la redirection se fait après la mise à jour de l'état
             } else {
-              this.router.navigate(['/reussi']);
+              setTimeout(() => {
+                this.router.navigate(['/dasbord']);
+              }, 100);
             }
           } else {
             console.error('Aucun token reçu dans la réponse');
@@ -100,7 +104,7 @@ export class AuthentificationComponent implements OnInit, OnDestroy {
     } else {
       this.errorMessage = 'Veuillez remplir correctement tous les champs.';
     }
-  }
+  } 
 
   // Méthode pour l'authentification par RFID
   onRfidLogin(): void {

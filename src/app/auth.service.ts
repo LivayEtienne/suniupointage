@@ -42,24 +42,26 @@ export class AuthService implements OnDestroy {
 
       this.ws$.subscribe({
         next: (message) => {
-          console.log('Message reçu via WebSocket:', message);
-          
-          // Modification ici pour traiter les messages avec "status" et "role"
+          console.log('Message reçu via WebSocket:', message); // Vérification de la structure du message
+
+          // Traitement du message WebSocket pour l'authentification
           if (message.status === 'connected') {
-            // Utiliser les données envoyées pour l'authentification
             const userMessage = message.message; // Exemple: "Bienvenue John Doe, rôle: admin!"
             const userRole = message.role; // Le rôle de l'utilisateur
 
-            // Émettre un message avec le nom et le rôle de l'utilisateur
+            // Vérification si le message contient un rôle valide
+            console.log(`Utilisateur authentifié avec le rôle : ${userRole}`);
+
+            // Envoi du message avec les informations d'authentification
             this.messagesSubject.next({
               authenticated: true,
               message: userMessage,
-              role: userRole
+              role: userRole, // Le rôle est maintenant émis ici
             });
           } else if (message.status === 'error') {
             this.messagesSubject.next({
               authenticated: false,
-              error: message.message
+              error: message.message,
             });
           } else {
             this.messagesSubject.next(message);
@@ -67,7 +69,7 @@ export class AuthService implements OnDestroy {
         },
         error: (err) => {
           console.error('Erreur de WebSocket:', err.message);
-          setTimeout(() => this.connectWebSocket(), 3000); // Reconnecter après erreur
+          setTimeout(() => this.connectWebSocket(), 3000); // Reconnecter après une erreur
         },
         complete: () => {
           console.log('WebSocket fermé');
@@ -86,7 +88,6 @@ export class AuthService implements OnDestroy {
   }
 
   // Ajout de méthodes pour interagir avec l'API REST pour gérer les utilisateurs
-
   createUser(nom: string, email: string, role: string, matricule: string): Observable<any> {
     const user = { nom, email, role, matricule };
     return this.http.post(`${this.apiUrl}/users`, user);

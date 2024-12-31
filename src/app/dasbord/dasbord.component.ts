@@ -5,10 +5,12 @@ import Chart from 'chart.js/auto';
 import { ApiService } from '../api.service';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SidebareComponent } from '../sidebare/sidebare.component';
+
 @Component({
   selector: 'app-dasbord',
   standalone: true, 
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SidebareComponent],
   templateUrl: './dasbord.component.html',
   styleUrl:'./dasbord.component.css',
 })

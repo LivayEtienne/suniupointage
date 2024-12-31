@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DepartmentService } from '../department.service';
 import { HttpClient } from '@angular/common/http';
+import { SidebareComponent } from '../sidebare/sidebare.component';
 
 
 import { CommonModule } from '@angular/common';
@@ -10,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-department',
 
     standalone: true, // Utilisation des composants autonomes
-    imports: [CommonModule, FormsModule], // Modules nécessaires
+    imports: [CommonModule, FormsModule, SidebareComponent], // Modules nécessaires
   templateUrl: './department.component.html',
   styleUrls: ['./department.component.css'],
 })

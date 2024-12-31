@@ -1,0 +1,129 @@
+/* Container pour le formulaire */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f7fc;
+  }
+  
+  /* Section contenant l'image */
+  .image-section {
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .auth-image {
+    width: 100%;
+    max-width: 500px; /* Augmentation de la taille de l'image */
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  /* Section contenant le formulaire de connexion */
+  .login-section {
+    flex: 1;
+    padding: 40px; /* Augmentation de l'espace autour du formulaire */
+    max-width: 500px; /* Augmentation de la largeur du formulaire */
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style des titres */
+  h2 {
+    font-size: 28px; /* Augmentation de la taille du titre */
+    text-align: center;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .para {
+    text-align: center;
+    color: #666;
+    font-size: 16px; /* Augmentation de la taille du texte */
+    margin-bottom: 25px; /* Augmentation de l'espacement */
+  }
+  
+  /* Style des groupes de formulaires */
+  .form-group {
+    margin-bottom: 25px; /* Augmentation de l'espacement entre les champs */
+  }
+  
+  label {
+    font-size: 16px; /* Augmentation de la taille de la police des labels */
+    color: #333;
+    display: block;
+    margin-bottom: 8px; /* Augmentation de l'espacement entre label et champ */
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px; /* Augmentation de la taille du champ */
+    font-size: 18px; /* Augmentation de la taille du texte */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 8px; /* Augmentation de l'espacement */
+    box-sizing: border-box;
+  }
+  
+  input:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Styles pour les champs invalides */
+  .is-invalid {
+    border-color: #e74c3c;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    font-size: 14px; /* Augmentation de la taille des messages d'erreur */
+    margin-top: 8px;
+  }
+  
+  /* Styles pour le bouton de soumission */
+  button {
+    width: 100%;
+    padding: 14px; /* Augmentation de la taille du bouton */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px; /* Augmentation de la taille du texte */
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  
+  /* Suggestions d'erreurs */
+  p {
+    margin: 0;
+  }
+  
+  /* Responsivité pour les écrans plus petits */
+  @media (max-width: 768px) {
+    .auth-container {
+      flex-direction: column;
+      padding: 20px;
+    }
+  
+    .image-section {
+      margin-bottom: 20px;
+    }
+  
+    .login-section {
+      padding: 25px;
+      width: 100%;
+    }
+  }
+  

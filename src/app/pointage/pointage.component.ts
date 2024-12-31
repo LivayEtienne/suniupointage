@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService, IUser, IHistorique } from '../api.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SidebareComponent } from '../sidebare/sidebare.component';
 
 @Component({
   selector: 'app-pointage',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, SidebareComponent],
   templateUrl: './pointage.component.html',
   styleUrls: ['./pointage.component.css'] // Correction du nom de propriété (styleUrl → styleUrls)
 })

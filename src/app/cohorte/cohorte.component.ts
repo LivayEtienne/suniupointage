@@ -4,11 +4,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CohorteService, Cohorte } from '../cohorte.service';
+import { SidebareComponent } from '../sidebare/sidebare.component';
 
 @Component({
   selector: 'app-cohorte',
   standalone: true, // Utilisation des composants autonomes
-  imports: [CommonModule, FormsModule], // Modules nécessaires
+  imports: [CommonModule, FormsModule, SidebareComponent], // Modules nécessaires
   templateUrl: './cohorte.component.html',
   styleUrls: ['./cohorte.component.css'],
   providers: [CohorteService], // Fournisseur du service
