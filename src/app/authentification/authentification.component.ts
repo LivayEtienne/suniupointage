@@ -36,13 +36,17 @@ export class AuthentificationComponent implements OnInit, OnDestroy {
     // Connexion au WebSocket au démarrage du composant
     this.authService.connectWebSocket();
 
-    // Souscription aux messages du WebSocket
     this.wsSubscription = this.authService.message$.subscribe((message) => {
-      // Vérification de l'authentification via RFID
       if (message.authenticated) {
         this.isAuthenticated = true;
-        console.log(`Utilisateur authentifié avec succès! Rôle : ${message.role}`);  // Affichage du rôle dans la console
-        this.router.navigate(['/reussi']);  // Redirection vers le tableau de bord
+        console.log(`Utilisateur authentifié avec succès! Rôle : ${message.role}`);
+
+        // Logique de redirection basée sur le rôle
+        if (message.role === 'vigile') {
+          this.router.navigate(['/vigile']); // Redirection spécifique pour les vigiles
+        } else {
+          this.router.navigate(['/reussi']);
+        }
       } else if (message.authenticated === false && message.error) {
         this.authenticationMessage = message.error;
       }
@@ -76,19 +80,25 @@ export class AuthentificationComponent implements OnInit, OnDestroy {
           console.log('Connexion réussie', response);
 
           if (response && response.token) {
-            localStorage.setItem('authToken', response.token);  // Stocker le token dans le localStorage
-            this.router.navigate(['/reussi']);  // Rediriger vers le tableau de bord
+            localStorage.setItem('authToken', response.token);
+
+            // Logique de redirection basée sur le rôle
+            if (response.role === 'vigile') {
+              this.router.navigate(['/vigile']);
+            } else {
+              this.router.navigate(['/reussi']);
+            }
           } else {
             console.error('Aucun token reçu dans la réponse');
           }
         },
         (error: any) => {
           console.error('Erreur de connexion', error);
-          this.errorMessage = 'Identifiants incorrects. Veuillez réessayer.';  // Message d'erreur personnalisé
+          this.errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
         }
       );
     } else {
-      this.errorMessage = 'Veuillez remplir correctement tous les champs.';  // Message d'erreur si formulaire invalide
+      this.errorMessage = 'Veuillez remplir correctement tous les champs.';
     }
   }
 
