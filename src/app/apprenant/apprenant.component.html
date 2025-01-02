@@ -1,37 +1,44 @@
-<div class="modal">
-    <div class="modal-content">
-        <span class="close" (click)="closeModal()">&times;</span>
-        <h2>{{ isEditMode ? 'Modifier' : 'Ajouter' }} un apprenant</h2>
-        
-        <input type="text" [(ngModel)]="selectedApprenant.nom" placeholder="Nom de l'apprenant" class="modal-input" />
-        <input type="text" [(ngModel)]="selectedApprenant.prenom" placeholder="Prénom de l'apprenant" class="modal-input" />
-        <input type="text" [(ngModel)]="selectedApprenant.password" placeholder="pasword" class="modal-input" />
-        <input type="email" [(ngModel)]="selectedApprenant.email" placeholder="email@example.com" class="modal-input" />
-        <input type="text" [(ngModel)]="selectedApprenant.adresse" placeholder="Adresse" class="modal-input" />
-        <input type="text" [(ngModel)]="selectedApprenant.telephone" placeholder="123456789" class="modal-input" />
-        <input type="number" [(ngModel)]="selectedApprenant.id_cohorte" placeholder="ID de la cohorte" class="modal-input" />
-
-        <button class="add-apprenant-button" (click)="onSubmit()">
-            {{ isEditMode ? 'Mettre à jour' : 'Ajouter' }} un apprenant
-        </button>
-    </div>
-</div>
-
-
 <div class="container">
     <h2>Liste des Apprenants</h2>
-    <button class="add-apprenant-button" (click)="onSubmit()">Ajouter un apprenant</button>
+    <button class="add-apprenant-button">Ajouter un apprenant</button><br>
+    <input
+    #fileInput
+    type="file"
+    accept=".csv"
+    style="display: none"
+    (change)="onFileSelected($event)"
+/>
+<button id="import-csv-btn" class="import-csv-button" (click)="fileInput.click()">Importer un fichier CSV</button>
+<div class="search-container">
+    <input 
+      type="text" 
+      placeholder="Rechercher par nom, prénom ou email" 
+      [(ngModel)]="searchQuery" 
+      (input)="onSearch()"
+    />
+  </div>
 
     <button class="deleteplusieurs" (click)="deleteSelected()">Supprimer Sélectionnés</button>
+
+   
+      
     
     <table class="table" >
+        
         <thead>
             <tr>
                 <th><input type="checkbox" (change)="selectAll($event)" /></th>
                 <th>Nom</th>
                 <th>Prénom</th>
                 <th>Email</th>
-                <th>Cohorte</th>
+                <th>
+                    <span (click)="sortByCohorte()" style="cursor: pointer;">
+                        Cohorte
+                        <i *ngIf="sortOrder === 'asc'" class="fas fa-sort-up"></i>
+                        <i *ngIf="sortOrder === 'desc'" class="fas fa-sort-down"></i>
+                      </span>
+                </th>
+                
                 <th>Actions</th>
             </tr>
         </thead>
@@ -43,9 +50,9 @@
                 <td>{{ apprenant.user?.email }}</td>
                 <td>{{ apprenant.cohorte?.nom }}</td>
                 <td>
-                    <span (click)="onEditClick(apprenant)" class="icon edit-icon" title="Modifier">
+                    <span class="icon edit-icon" title="Modifier" (click)="onEditClick(apprenant)">
                         <i class="fas fa-edit"></i>
-                    </span>
+                      </span>
                     <span (click)="onDeleteClick(apprenant)" class="icon delete-icon" title="Supprimer">
                         <i class="fas fa-trash-alt"></i>
                     </span>
@@ -87,7 +94,7 @@
     <div class="modal-content">
         <span (click)="closeModal()" class="close">&times;</span>
         
-        <form (ngSubmit)="onSubmit()">
+        <form >
             <label for="prenom">Prénom <span class="required">*</span>:</label>
             <input type="text" [(ngModel)]="selectedApprenant.prenom" name="prenom" required />
 

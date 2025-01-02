@@ -19,6 +19,7 @@ export class ApprenantService {
 
   getApprenants(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
+    
   }
 
   getApprenant(id: number): Observable<any> {
@@ -40,6 +41,11 @@ export class ApprenantService {
   deleteApprenant(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
+
+    // Importer un fichier CSV
+    importApprenants(formData: FormData): Observable<any> {
+      return this.http.post(`${this.apiUrl}/import`, formData);
+    }
 
 
   registerUser(user: any): Observable<any> {
