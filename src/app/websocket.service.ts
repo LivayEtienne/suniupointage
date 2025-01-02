@@ -15,7 +15,7 @@ export class WebsocketService {
   }
 
   private initializeWebSocket() {
-    this.socket$ = new WebSocketSubject('ws://localhost:3000');
+    this.socket$ = new WebSocketSubject('ws://localhost:5000');
 
     this.socket$.subscribe(
       (message) => {

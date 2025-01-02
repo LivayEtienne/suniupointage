@@ -27,6 +27,9 @@ interface Apprenant {
   styleUrls: ['./apprenant.component.css']
 })
 export class ApprenantComponent implements OnInit {
+  isUpdateUidModalOpen = false;
+  matricule: string = '';  // Initialisation avec une valeur par défaut
+  newUid: string = '';     // Initialisation avec une valeur par défaut
 
   // Déclaration de la variable pour l'affichage du placeholder
   isAffectationVisible: boolean = false;
@@ -55,6 +58,8 @@ export class ApprenantComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchApprenants();
+    this.matricule = '';
+    this.newUid = '';
   }
 
   // Ouvrir le modal pour ajouter un utilisateur
@@ -221,6 +226,41 @@ export class ApprenantComponent implements OnInit {
       (error: HttpErrorResponse) => {
         console.error("Erreur lors de la mise à jour du statut :", error);
         this.errorMessage = "Impossible de mettre à jour le statut. Veuillez réessayer.";
+      }
+    );
+  }
+
+
+
+  // Méthode pour ouvrir la modal de mise à jour de l'UID
+  openUpdateUidModal(apprenant: any): void {
+    this.matricule = apprenant.matricule; // Récupérer le matricule de l'apprenant
+    this.newUid = ''; // Réinitialiser le nouveau UID
+    this.isUpdateUidModalOpen = true;
+  }
+
+  // Méthode pour fermer la modal de mise à jour de l'UID
+  closeUpdateUidModal(): void {
+    this.isUpdateUidModalOpen = false;
+  }
+
+  // Méthode pour mettre à jour l'UID d'un utilisateur
+  updateUserUID(matricule: string, newUid: string): void {
+    if (!newUid) {
+      this.errorMessage = 'Veuillez entrer un nouvel UID';
+      return;
+    }
+
+    // Appel de la méthode updateUID du service
+    this.userService.updateUID(matricule, newUid).subscribe(
+      response => {
+        console.log('UID mis à jour avec succès', response);
+        this.successMessage = 'UID mis à jour avec succès'; // Message de succès
+        this.closeUpdateUidModal(); // Fermer la modal après mise à jour
+      },
+      error => {
+        console.error('Erreur lors de la mise à jour de l\'UID', error);
+        this.errorMessage = 'Erreur lors de la mise à jour de l\'UID'; // Message d'erreur
       }
     );
   }

@@ -10,13 +10,13 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Méthode pour récupérer les apprenants avec pagination
-  getApprenants(page: number, pageSize: number): Observable<any[]> {
+  // Méthode pour récupérer les utilisateurs avec pagination
+  getApprenants(page: number, pageSize: number): Observable<any> {
     const params = new HttpParams()
       .set('page', page.toString())
-      .set('pageSize', pageSize.toString());
+      .set('limit', pageSize.toString());  // Remplacer 'pageSize' par 'limit' pour correspondre à l'API Laravel
 
-    return this.http.get<any[]>(this.apiUrl, { params });
+    return this.http.get<any>(this.apiUrl, { params });
   }
 
   // Méthode pour ajouter un utilisateur
@@ -54,6 +54,16 @@ export class UserService {
   // Méthode pour désarchiver un utilisateur
   unarchiveUser(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/unarchive`, {}, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    });
+  }
+
+  // Méthode pour mettre à jour l'UID d'un utilisateur en appelant le service sur le port 4000
+  updateUID(matricule: string, newUid: string): Observable<any> {
+    const url = `http://localhost:4000/api/users/${matricule}/update-uid`;  // URL avec port 4000
+    return this.http.put(url, { newUid }, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       })

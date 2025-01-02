@@ -33,3 +33,17 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+  button {
+    background-color: #4CAF50; /* Vert agréable */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Animation douce pour les changements de style */
+  }
