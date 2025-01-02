@@ -1,0 +1,122 @@
+<div class="container">
+    <h2>Liste des Apprenants</h2>
+    <button class="add-apprenant-button">Ajouter un apprenant</button><br>
+    <input
+    #fileInput
+    type="file"
+    accept=".csv"
+    style="display: none"
+    (change)="onFileSelected($event)"
+/>
+<button id="import-csv-btn" class="import-csv-button" (click)="fileInput.click()">Importer un fichier CSV</button>
+<div class="search-container">
+    <input 
+      type="text" 
+      placeholder="Rechercher par nom, prénom ou email" 
+      [(ngModel)]="searchQuery" 
+      (input)="onSearch()"
+    />
+  </div>
+
+    <button class="deleteplusieurs" (click)="deleteSelected()">Supprimer Sélectionnés</button>
+
+   
+      
+    
+    <table class="table" >
+        
+        <thead>
+            <tr>
+                <th><input type="checkbox" (change)="selectAll($event)" /></th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>
+                    <span (click)="sortByCohorte()" style="cursor: pointer;">
+                        Cohorte
+                        <i *ngIf="sortOrder === 'asc'" class="fas fa-sort-up"></i>
+                        <i *ngIf="sortOrder === 'desc'" class="fas fa-sort-down"></i>
+                      </span>
+                </th>
+                
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let apprenant of apprenants">
+                <td><input type="checkbox" [(ngModel)]="apprenant.selected" /></td>
+                <td>{{ apprenant.user?.nom }}</td>
+                <td>{{ apprenant.user?.prenom }}</td>
+                <td>{{ apprenant.user?.email }}</td>
+                <td>{{ apprenant.cohorte?.nom }}</td>
+                <td>
+                    <span class="icon edit-icon" title="Modifier" (click)="onEditClick(apprenant)">
+                        <i class="fas fa-edit"></i>
+                      </span>
+                    <span (click)="onDeleteClick(apprenant)" class="icon delete-icon" title="Supprimer">
+                        <i class="fas fa-trash-alt"></i>
+                    </span>
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <button 
+            (click)="setPage(currentPage - 1)" 
+            [disabled]="currentPage <= 1" 
+            class="pagination-button">
+            &lt;
+        </button>
+        
+        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+            <button 
+                (click)="setPage(i + 1)" 
+                [ngClass]="{'active': currentPage === (i + 1)}" 
+                class="pagination-button">
+                {{ i + 1 }}
+            </button>
+        </ng-container>
+        
+        <button 
+            (click)="setPage(currentPage + 1)" 
+            [disabled]="currentPage >= totalPages" 
+            class="pagination-button">
+            &gt;
+        </button>
+    </div>
+</div>
+
+<!-- Modal pour l'ajout ou l'édition -->
+<div *ngIf="isModalOpen" class="modal">
+    <div class="modal-content">
+        <span (click)="closeModal()" class="close">&times;</span>
+        
+        <form >
+            <label for="prenom">Prénom <span class="required">*</span>:</label>
+            <input type="text" [(ngModel)]="selectedApprenant.prenom" name="prenom" required />
+
+            <label for="nom">Nom <span class="required">*</span>:</label>
+            <input type="text" [(ngModel)]="selectedApprenant.nom" name="nom" required />
+
+            <label for="email">Email <span class="required">*</span>:</label>
+            <input type="email" [(ngModel)]="selectedApprenant.email" name="email" required />
+
+            <label for="adresse">Adresse:</label>
+            <input type="text" [(ngModel)]="selectedApprenant.adresse" name="adresse" />
+
+            <label for="fonction">Fonction <span class="required">*</span>:</label>
+            <input type="text" [(ngModel)]="selectedApprenant.fonction" name="fonction" required />
+
+            <label for="telephone">Numéro de Téléphone:</label>
+            <input type="text" [(ngModel)]="selectedApprenant.telephone" name="telephone" />
+
+            <label for="cohorte">Cohorte <span class="required">*</span>:</label>
+            <input type="text" [(ngModel)]="selectedApprenant.id_cohorte" name="id_cohorte" required />
+
+            <button type="submit">{{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}</button>
+        </form>
+    </div>
+</div>
