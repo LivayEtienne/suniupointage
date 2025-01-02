@@ -4,6 +4,7 @@ import { DepartmentComponent } from './department/department.component';
 import { DasbordComponent } from './dasbord/dasbord.component';
 import { PointageComponent } from './pointage/pointage.component';
 import { HistoriqueComponent } from './historique/historique.component';
+import { ApprenantComponent } from './apprenant/apprenant.component';
 import { Component } from '@angular/core';
 import { ButtonlectureComponent } from './buttonlecture/buttonlecture.component';
 
@@ -18,7 +19,9 @@ export const routes: Routes = [
   { path: 'pointage', component: PointageComponent },  // Page de pointage
   { path: 'cohorte', component: CohorteComponent},
   { path: 'department', component: DepartmentComponent},
+  { path: 'apprenant', component: ApprenantComponent },
   { path: 'historique', component: HistoriqueComponent },
+  
   { path: 'buttonlecture', component: ButtonlectureComponent },
   { path: '**', redirectTo: '/' } , // Redirection par défaut pour les URL non valide
 

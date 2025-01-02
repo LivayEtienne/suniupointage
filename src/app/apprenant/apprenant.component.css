@@ -412,7 +412,7 @@ button:hover {
     padding: 10px 20px;          /* Espacement interne */
     font-size: 16px;             /* Taille du texte */
     cursor: pointer;  
-    margin-left: 1500px;
+    margin-left: 1100px;
 
   }
   .deleteplusieurs:hover {
@@ -559,5 +559,5 @@ h2 {
   .search-container{
     width: 250px;
     border-radius: 5px;
-    margin-left: 1500px;
+    margin-left: 1100px;
   }
