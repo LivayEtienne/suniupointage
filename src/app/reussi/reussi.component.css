@@ -1,14 +1,40 @@
+/* Conteneur du bouton de déconnexion */
 .logout-button {
-    background-color: red; /* Couleur rouge */
-    color: white; /* Couleur du texte en blanc */
-    font-size: 1.5rem; /* Augmente la taille du texte */
-    padding: 10px 20px; /* Ajoute de l'espace autour du texte */
-    border: none; /* Supprime les bordures par défaut */
-    border-radius: 5px; /* Ajoute des coins arrondis */
-    cursor: pointer; /* Change le curseur au survol */
-  }
-  
-  .logout-button {
-    background-color: darkred; /* Couleur légèrement plus sombre au survol */
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Espace entre l'icône et le texte */
+  background-color: #ff6b6b; /* Rouge doux */
+  color: white; /* Texte en blanc */
+  border: none; /* Supprime les bordures */
+  border-radius: 8px; /* Coins arrondis */
+  padding: 10px 20px; /* Espacement interne */
+  font-size: 16px; /* Taille de la police */
+  font-weight: bold;
+  margin-left: 40px;
+  margin-top: 20px;
+  cursor: pointer; /* Curseur en mode "pointer" */
+  transition: background-color 0.3s, transform 0.2s; /* Animation douce */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+
+/* Icône du bouton */
+.logout-icon {
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M10 17v-2h4v2h5V7h-5v2h-4V7a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2zm-1.293-6.707l-1.414 1.414L10.586 14H3v2h7.586l-2.293 2.293 1.414 1.414L13.414 14l-4.707-4.707z"/></svg>');
+  background-size: cover; /* Adapte l'image à la taille */
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+/* Effet au survol */
+.logout-button:hover {
+  background-color: #ff5252; /* Couleur plus vive */
+  transform: translateY(-2px); /* Légère élévation */
+}
+
+
+.logout-button:active {
+  transform: translateY(0); 
+}

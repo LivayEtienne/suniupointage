@@ -55,14 +55,19 @@ export class DepartmentComponent implements OnInit {
 
   // Ajouter un département
   addDepartment(): void {
+    console.log('Tentative d\'ajout d\'un département'); // Log initial
+  
     if (!this.newDepartment.nom || !this.newDepartment.code || !this.newDepartment.date_de_creation) {
+      console.error('Formulaire invalide. Champs requis manquants.', this.newDepartment);
       alert('Veuillez remplir tous les champs');
       return;
     }
-
+  
+    console.log('Données envoyées pour ajout :', this.newDepartment);
+  
     this.departmentService.createDepartment(this.newDepartment).subscribe(
       (response) => {
-        console.log('Département ajouté :', response);
+        console.log('Département ajouté avec succès :', response);
         this.getDepartments(); // Recharger la liste des départements
         this.cancelAddDepartment(); // Fermer le formulaire
       },
@@ -71,4 +76,5 @@ export class DepartmentComponent implements OnInit {
       }
     );
   }
+  
 }

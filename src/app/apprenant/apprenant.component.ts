@@ -3,12 +3,12 @@ import { ApprenantService } from '../apprenant.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-
+import { SidebareComponent } from '../sidebare/sidebare.component';
 
 @Component({
   selector: 'app-apprenant',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SidebareComponent],
   templateUrl: './apprenant.component.html',
   styleUrls: ['./apprenant.component.css'],
 })

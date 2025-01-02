@@ -1,23 +1,30 @@
-
 .dashboard-container {
     padding: 24px;
-    background-color: #f9fafb;
+    background-color: #f1f5f9;
     margin-left: 290px;
+    border-radius: 12px; /* Ajout d'une légère courbure pour plus de douceur */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajout d'une ombre subtile */
 }
 
 .search-container {
     position: relative;
-   
     max-width: 500px;
+    margin-bottom: 20px;
 }
 
 .search-input {
     width: 100%;
     padding: 12px 16px;
     border: none;
-    border-radius: 8px;
-    background-color: #EEEEEE;
+    border-radius: 50px; /* Forme plus arrondie pour le champ de recherche */
+    background-color: #E5E7EB; /* Couleur plus claire pour plus de douceur */
     font-size: 14px;
+    transition: all 0.3s ease; /* Transition douce au focus */
+}
+
+.search-input:focus {
+    background-color: #D1D5DB; /* Changement de couleur au focus */
+    outline: none;
 }
 
 .search-button {
@@ -28,6 +35,11 @@
     background: none;
     border: none;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-button:hover {
+    transform: scale(1.1); /* Agrandissement au survol */
 }
 
 .search-icon {
@@ -49,25 +61,31 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-bottom: 40px;
-
 }
 
 .stat-card {
-    background: white;
+    background: #ffffff;
     border-radius: 16px;
     padding: 20px;
     display: flex;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* Ombre douce pour un effet plus moderne */
+    transition: transform 0.3s ease; /* Ajout de transition sur le hover */
+}
+
+.stat-card:hover {
+    transform: translateY(-10px); /* Effet de survol qui soulève la carte */
 }
 
 .custom-icon {
-    width: 120px;  /* Taille par défaut de l'icône */
+    width: 120px;
     height: 120px;
     object-fit: contain;
-  margin-left: 80px;
+    margin-left: 80px;
+    transition: transform 0.3s ease; /* Transition pour l'animation de l'icône */
 }
+
 .stat-icon {
     padding: 12px;
     border-radius: 12px;
@@ -76,13 +94,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #6EE7B7; /* Couleur plus pétillante pour les icônes */
+    transition: transform 0.3s ease;
 }
 
 .stat-icon svg {
     width: 24px;
     height: 24px;
 }
-
 
 .stat-content {
     display: flex;
@@ -91,16 +110,21 @@
 
 .stat-value {
     font-size: 40px;
-    font-weight:bolder;
+    font-weight: bolder;
     color: #464255;
     margin-left: 100px;
-   
+    transition: color 0.3s ease;
+}
+
+.stat-value:hover {
+    color: #34D399; /* Changement de couleur au survol */
 }
 
 .stat-label {
     color: #6b7280;
     font-size: 30px;
     margin-left: 90px;
+    font-weight: 600;
 }
 
 .charts-section {
@@ -110,14 +134,19 @@
 }
 
 .chart-card {
-    background: white;
+    background: #ffffff;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-10px); /* Effet de soulèvement */
 }
 
 .chart-card h3 {
-    color: #6b7280;
+    color: #4B5563;
     font-size: 25px;
     margin-bottom: 16px;
 }
@@ -125,23 +154,26 @@
 canvas {
     width: 100% !important;
     height: 300px !important;
+    border-radius: 12px; /* Arrondi des coins */
 }
-
 
 .date-selector {
     margin-bottom: 20px;
     text-align: right;
     margin-right: 550px;
-  }
-  
-  .date-selector input {
+}
+
+.date-selector input {
     padding: 8px;
     border-radius: 4px;
     border: 1px solid #818cf8;
     margin-left: -200px;
-  }
-  
+    transition: all 0.3s ease;
+}
 
+.date-selector input:focus {
+    border-color: #4F46E5; /* Couleur de bordure plus dynamique au focus */
+}
 
 .user-profile {
     display: flex;
@@ -150,11 +182,16 @@ canvas {
 }
 
 .profile-pic {
-    width: 80px; /* Taille de l'image */
+    width: 80px;
     height: 80px;
-    border-radius: 50%; /* Rend l'image circulaire */
+    border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #ccc; /* Optionnel, ajoute une bordure */
+    border: 3px solid #4F46E5; /* Bordure dynamique */
     margin-top: -80px;
     margin-left: 1200px;
+    transition: transform 0.3s ease; /* Animation de la photo de profil */
+}
+
+.profile-pic:hover {
+    transform: scale(1.1); /* Effet d'agrandissement au survol */
 }

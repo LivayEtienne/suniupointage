@@ -13,7 +13,12 @@
       <input type="date" [(ngModel)]="newDepartment.date_de_creation" placeholder="Date de création" />
   
       <div class="button-container">
-        <button class="validate-btn" (click)="addDepartment()">Valider</button>
+      <button 
+        class="validate-btn" 
+        (click)="addDepartment(); console.log('Bouton Valider cliqué');">
+        Valider
+    </button>
+
         <button class="cancel-btn" (click)="cancelAddDepartment()">Annuler</button>
       </div>
     </div>

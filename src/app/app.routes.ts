@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'dasbord', component: DasbordComponent },  // Page du tableau de bord
   { path: 'pointage', component: PointageComponent },  // Page de pointage
   { path: 'cohorte', component: CohorteComponent},
-  { path: 'department', component: DepartmentComponent},
+  { path: 'departement', component: DepartmentComponent},
   { path: 'apprenant', component: ApprenantComponent },
   { path: 'historique', component: HistoriqueComponent },
   

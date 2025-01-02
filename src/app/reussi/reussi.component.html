@@ -1,8 +1,10 @@
 <!-- reussi.component.html -->
 <div *ngIf="message" class="message">
-    <p>{{ message }}</p>
-  </div>
-  
-  <!-- Le bouton de déconnexion -->
-  <button (click)="logout()">Se déconnecter</button>
-  
+  <p>{{ message }}</p>
+</div>
+
+<!-- Le bouton de déconnexion avec une icône -->
+<button class="logout-button" (click)="logout()">
+  <i class="logout-icon"></i>
+  Se déconnecter
+</button>
