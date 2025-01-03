@@ -25,6 +25,9 @@ export class DepartmentComponent implements OnInit {
     code: '',
     date_de_creation: ''
   };
+  editingDepartmentId: number | null = null; // ID du département en cours d'édition
+updatedDepartmentName: string = ''; // Nouveau nom du département
+
 
   constructor(private departmentService: DepartmentService) {}
 
@@ -73,4 +76,36 @@ export class DepartmentComponent implements OnInit {
       }
     );
   }
+
+  enableEditing(department: any): void {
+    this.editingDepartmentId = department.id; // Enregistre l'ID du département en cours d'édition
+    this.updatedDepartmentName = department.nom; // Pré-remplit le champ avec le nom existant
+  }
+  
+
+  updateDepartmentName(department: any): void {
+    if (!this.updatedDepartmentName.trim()) {
+      alert('Le nom du département ne peut pas être vide.');
+      return;
+    }
+  
+    const updatedDepartment = { ...department, nom: this.updatedDepartmentName };
+  
+    this.departmentService.updateDepartment(department.id, updatedDepartment).subscribe(
+      (response) => {
+        console.log('Département mis à jour :', response);
+        this.getDepartments(); // Recharge les départements après la mise à jour
+        this.editingDepartmentId = null; // Désactive le mode édition
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour du département :', error);
+      }
+    );
+  }
+  cancelEditing(): void {
+    this.editingDepartmentId = null;
+    this.updatedDepartmentName = '';
+  }
+  
+  
 }

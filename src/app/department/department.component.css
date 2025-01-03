@@ -94,3 +94,11 @@ input[type="text"], input[type="date"] {
     margin-top: 15px;
     font-size: 14px; /* Taille de police ajustée pour une meilleure lisibilité */
 }
+
+.edit-input {
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    padding: 5px;
+    margin-right: 10px;
+  }
+  

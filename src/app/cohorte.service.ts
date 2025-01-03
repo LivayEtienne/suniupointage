@@ -9,6 +9,7 @@ export interface Cohorte {
   nom: string;
   code: string;
   date_de_creation: string;
+  
 }
 
 @Injectable({
@@ -25,7 +26,13 @@ export class CohorteService {
   getCohortes(): Observable<Cohorte[]> {
     return this.http.get<Cohorte[]>(this.apiUrl);
   }
+  getApprenantsByCohorte(cohorteId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${cohorteId}/apprenants`);
+  }
 
+  getCohorteWithStudents(id: number): Observable<Cohorte> {
+    return this.http.get<Cohorte>(`${this.apiUrl}/${id}`);
+  }
   /**
    * Ajoute une nouvelle cohorte.
    * @param cohorte Les données de la cohorte à créer.
@@ -49,5 +56,9 @@ export class CohorteService {
    */
   deleteCohorte(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  getApprenants(cohorteId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${cohorteId}/apprenants`);
   }
 }
