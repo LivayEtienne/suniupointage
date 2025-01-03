@@ -7,6 +7,7 @@ import { HistoriqueComponent } from './historique/historique.component';
 import { ApprenantComponent } from './apprenant/apprenant.component';
 import { Component } from '@angular/core';
 import { ButtonlectureComponent } from './buttonlecture/buttonlecture.component';
+import { Auth1Component } from './auth1/auth1.component';
 
 /*  import { DepartementComponent } from './departement/departement.component';  */
 
@@ -21,6 +22,8 @@ export const routes: Routes = [
   { path: 'departement', component: DepartmentComponent},
   { path: 'apprenant', component: ApprenantComponent },
   { path: 'historique', component: HistoriqueComponent },
+  { path: 'auth1', component: Auth1Component },
+  
   
   { path: 'buttonlecture', component: ButtonlectureComponent },
   { path: '**', redirectTo: '/' } , // Redirection par défaut pour les URL non valide

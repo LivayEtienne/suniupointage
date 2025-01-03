@@ -35,23 +35,32 @@ export class AuthComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Connexion au WebSocket au démarrage du composant
     this.authService.connectWebSocket();
-
+  
     this.wsSubscription = this.authService.message$.subscribe((message) => {
-      if (message.authenticated) {
-        this.isAuthenticated = true;
+      console.log('Message reçu:', message);
+  
+      // Vérifiez si le message contient le rôle et la redirection doit avoir lieu
+      if (message && message.role) {
         console.log(`Utilisateur authentifié avec succès! Rôle : ${message.role}`);
-
+  
         // Logique de redirection basée sur le rôle
-        if (message.role === 'vigile') {
-          this.router.navigate(['/pointage']); // Redirection spécifique pour les vigiles
+        if (message.role === 'admin') {
+          console.log('Redirection vers /dashboard');
+          this.router.navigate(['/dasbord']); // Redirection vers le tableau de bord
+        } else if (message.role === 'vigile') {
+          console.log('Redirection vers /pointage');
+          this.router.navigate(['/pointage']); // Redirection vers pointage
         } else {
-          this.router.navigate(['/dasbord']); // Redirection par défaut
+          console.log('Redirection par défaut');
+          this.router.navigate(['/']); // Redirection par défaut
         }
-      } else if (message.authenticated === false && message.error) {
-        this.authenticationMessage = message.error;
+      } else {
+        console.log('Aucun rôle détecté dans le message.');
       }
     });
   }
+  
+  
 
   // Fonction de validation personnalisée pour l'email
   customEmailValidator(control: AbstractControl): ValidationErrors | null {
@@ -78,22 +87,24 @@ export class AuthComponent implements OnInit, OnDestroy {
       this.authService.login(email, password).subscribe(
         (response) => {
           console.log('Connexion réussie', response);  // Vérification de la réponse du backend
-          
+  
           if (response && response.token) {
             localStorage.setItem('authToken', response.token);
-      
+  
             // Vérifie le rôle de l'utilisateur dans la réponse
             console.log('Rôle de l\'utilisateur:', response.user.role);  // Accède au rôle via response.user.role
-      
-            setTimeout(() => {
-              if (response.user.role === 'vigile') {
-                console.log('Redirection vers /pointage pour le vigile');
-                this.router.navigate(['/pointage']);
-              } else {
-                console.log('Redirection vers /dasbord pour un autre rôle');
-                this.router.navigate(['/dasbord']);
-              }
-            }, 500);  // Attendre 500ms avant la redirection
+  
+            // Redirection en fonction du rôle
+            if (response.user.role === 'admin') {
+              console.log('Redirection vers /dashboard pour admin');
+              this.router.navigate(['/dasbord']);
+            } else if (response.user.role === 'vigile') {
+              console.log('Redirection vers /pointage pour vigile');
+              this.router.navigate(['/pointage']);
+            } else {
+              console.log('Rôle non reconnu. Redirection vers la page par défaut');
+              this.router.navigate(['/default']);
+            }
           } else {
             console.error('Aucun token reçu dans la réponse');
           }
@@ -103,11 +114,11 @@ export class AuthComponent implements OnInit, OnDestroy {
           this.errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
         }
       );
-      
     } else {
       this.errorMessage = 'Veuillez remplir correctement tous les champs.';
     }
-  } 
+  }
+  
 
   // Méthode pour l'authentification par RFID
   onRfidLogin(): void {

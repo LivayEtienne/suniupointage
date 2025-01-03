@@ -1,0 +1,18 @@
+<div>
+    <h2>Authentification par UID</h2>
+    <input type="text" [(ngModel)]="uid" placeholder="Entrez l'UID" />
+    <button (click)="sendUidToServer()">Envoyer UID</button>
+  
+    <div *ngIf="userInfo">
+      <h3>Informations utilisateur :</h3>
+      <p><strong>Nom:</strong> {{ userInfo.nom }}</p>
+      <p><strong>Matricule:</strong> {{ userInfo.matricule }}</p>
+      <p><strong>Email:</strong> {{ userInfo.email }}</p>
+      <p><strong>Rôle:</strong> {{ userInfo.role }}</p>
+    </div>
+  
+    <div *ngIf="!userInfo && uid">
+      <p>Aucun utilisateur trouvé pour cet UID.</p>
+    </div>
+  </div>
+  
