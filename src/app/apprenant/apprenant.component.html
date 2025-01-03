@@ -1,0 +1,92 @@
+
+<div class="main-container">
+
+ 
+  <!-- Main Content -->
+  <div class="content-section">
+    <div class="header">
+      <h2 class="title"><button class="action-btn" >
+        <i class="fas fa-plus"></i> Ajouter Utilisateur
+      </button>
+      <input
+    #fileInput
+    type="file"
+    accept=".csv"
+    style="display: none"
+    
+/>
+      </h2>
+      <div class="header-actions">
+        <div class="search-box">
+         
+          <i class="fas fa-search search-icon"></i>
+        </div>
+        <button class="action-btn"  ><i class="fas fa-trash"></i> Supprimer plusieurs</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="action-btn"><i class="fas fa-upload"></i> Uploader un fichier</button>
+     
+    </div>
+
+    <!-- Table -->
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox"  ></th>
+          <th>Nom Prenom</th>
+          <th>Role</th>
+          <th>Departement</th>
+          <th>Telephone</th>
+          <th>Email</th>
+          
+          <th>Action</th>
+          <th>Etat</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of paginatedUsers">
+          <td><input type="checkbox"  ></td>
+          <td>{{ user.nom }} {{ user.prenom }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{(user.cohorte_id) }}</td>
+          <td>{{ user.telephone }}</td>
+          <td>{{ user.email }}</td>
+          
+          <td>
+            <div class="action-icons">
+              <button class="edit-icon"  ><i class="fas fa-edit"></i></button>
+              <button class="delete-icon" ><i class="fas fa-trash"></i></button>
+              <button class="profile-icon" 
+            
+            >
+      <!-- Si l'utilisateur est admin, changer l'icône -->
+      <i class="fas"></i>
+    </button>
+            </div>
+          </td>
+          <td>
+            
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    
+    
+  </div>
+</div>
+
+
+
+
+<!--modale pour changement de role -->
+
+
+<!--modal de cofirmation supprimer plusieur-->
+
+
+
