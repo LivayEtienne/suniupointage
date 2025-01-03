@@ -34,4 +34,12 @@ export class DepartmentService {
   deleteDepartment(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  checkCohorteNameExists(nom: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/check-name-exists/${nom}`);
+  }
+
+  checkDepartmentNameExists(nom: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/check-name-exists/${nom}`);
+  }
 }

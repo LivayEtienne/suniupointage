@@ -1,92 +1,156 @@
+<div class="container">
+  <h1>Gestion des Apprenants</h1>
 
-<div class="main-container">
+  <!-- Bouton pour ouvrir le modal d'ajout d'un apprenant -->
+  <button (click)="openModal()" class="btn btn-primary">Ajouter un Apprenant</button> 
 
- 
-  <!-- Main Content -->
-  <div class="content-section">
-    <div class="header">
-      <h2 class="title"><button class="action-btn" >
-        <i class="fas fa-plus"></i> Ajouter Utilisateur
-      </button>
-      <input
-    #fileInput
-    type="file"
-    accept=".csv"
-    style="display: none"
-    
+  <input
+  
+  type="file"
+  accept=".csv"
+  style="display: none"
+  (change)="onFileSelected($event)"
 />
-      </h2>
-      <div class="header-actions">
-        <div class="search-box">
-         
-          <i class="fas fa-search search-icon"></i>
+  <button (click)="bulkDelete()" class="btn btn-danger">
+    Supprimer les utilisateurs sélectionnés
+  </button>
+  
+  
+  <input type="file" accept=".csv" (change)="onFileSelected($event)" />
+ 
+  <!-- Liste des apprenants -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>
+          <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
+        </th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Email</th>
+        <th>Adresse</th>
+        <th>Téléphone</th>
+        <th>Statut</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let apprenant of apprenants">
+        <td>
+          <input type="checkbox" [(ngModel)]="apprenant.selected" />
+        </td>
+        <td>{{ apprenant.nom }}</td>
+        <td>{{ apprenant.prenom }}</td>
+        <td>{{ apprenant.email }}</td>
+        <td>{{ apprenant.adresse }}</td>
+        <td>{{ apprenant.telephone }}</td>
+        <td>{{ apprenant.statut }}</td>
+        <td>
+          <button (click)="openEditModal(apprenant)" class="btn btn-warning btn-sm">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button (click)="toggleStatus(apprenant)" class="btn btn-secondary btn-sm">
+            <i class="fa fa-archive" *ngIf="apprenant.statut === 'active'"></i>
+            <i class="fa fa-box-open" *ngIf="apprenant.statut !== 'active'"></i>
+          </button>
+          <button (click)="deleteApprenant(apprenant.id)" class="btn btn-danger btn-sm">
+            <i class="fa fa-trash-alt"></i>
+          </button>
+          <!-- Bouton pour mettre à jour l'UID -->
+          <button (click)="openUpdateUidModal(apprenant)" class="btn btn-info btn-sm">
+            Mettre à jour l'UID
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  <nav *ngIf="totalPages > 1">
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="setPage(currentPage - 1)">Précédent</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1">
+        <a class="page-link" (click)="setPage(i + 1)">{{ i + 1 }}</a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" (click)="setPage(currentPage + 1)">Suivant</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Modal pour ajouter/éditer un apprenant -->
+  <div class="modal" [ngClass]="{'show': isModalOpen}" *ngIf="isModalOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditMode ? 'Éditer Apprenant' : 'Ajouter Apprenant' }}</h5>
+          <button type="button" class="close" (click)="closeModal()">&times;</button>
         </div>
-        <button class="action-btn"  ><i class="fas fa-trash"></i> Supprimer plusieurs</button>
+        <div class="modal-body">
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="nom">Nom</label>
+              <input type="text" id="nom" [(ngModel)]="nom" name="nom" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="prenom">Prénom</label>
+              <input type="text" id="prenom" [(ngModel)]="prenom" name="prenom" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="adresse">Adresse</label>
+              <input type="text" id="adresse" [(ngModel)]="adresse" name="adresse" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="telephone">Téléphone</label>
+              <input type="text" id="telephone" [(ngModel)]="telephone" name="telephone" class="form-control" required>
+            </div>
+            <div class="form-group" *ngIf="!isEditMode">
+              <label for="password">Mot de passe</label>
+              <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="role">Rôle</label>
+              <select id="role" [(ngModel)]="role" name="role" class="form-control" required>
+                <option value="apprenant">Apprenant</option>
+                <!-- Ajoutez d'autres rôles si nécessaire -->
+              </select>
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+            <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}</button>
+          </form>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="actions">
-      <button class="action-btn"><i class="fas fa-upload"></i> Uploader un fichier</button>
-     
-    </div>
-
-    <!-- Table -->
-    <table>
-      <thead>
-        <tr>
-          <th><input type="checkbox"  ></th>
-          <th>Nom Prenom</th>
-          <th>Role</th>
-          <th>Departement</th>
-          <th>Telephone</th>
-          <th>Email</th>
-          
-          <th>Action</th>
-          <th>Etat</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of paginatedUsers">
-          <td><input type="checkbox"  ></td>
-          <td>{{ user.nom }} {{ user.prenom }}</td>
-          <td>{{ user.role }}</td>
-          <td>{{(user.cohorte_id) }}</td>
-          <td>{{ user.telephone }}</td>
-          <td>{{ user.email }}</td>
-          
-          <td>
-            <div class="action-icons">
-              <button class="edit-icon"  ><i class="fas fa-edit"></i></button>
-              <button class="delete-icon" ><i class="fas fa-trash"></i></button>
-              <button class="profile-icon" 
-            
-            >
-      <!-- Si l'utilisateur est admin, changer l'icône -->
-      <i class="fas"></i>
-    </button>
+  <!-- Modal pour mettre à jour l'UID -->
+  <div class="modal" [ngClass]="{'show': isUpdateUidModalOpen}" *ngIf="isUpdateUidModalOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Mettre à jour l'UID de l'Apprenant</h5>
+          <button type="button" class="close" (click)="closeUpdateUidModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updateUserUID(matricule, newUid)">
+            <div class="form-group">
+              <label for="matricule">Matricule</label>
+              <input type="text" id="matricule" [(ngModel)]="matricule" name="matricule" class="form-control" [readonly]="true" required>
             </div>
-          </td>
-          <td>
-            
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Pagination -->
-    
-    
+            <div class="form-group">
+              <label for="newUid">Nouvel UID</label>
+              <input type="text" id="newUid" [(ngModel)]="newUid" name="newUid" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Mettre à jour l'UID</button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-
-
-
-<!--modale pour changement de role -->
-
-
-<!--modal de cofirmation supprimer plusieur-->
-
-
-

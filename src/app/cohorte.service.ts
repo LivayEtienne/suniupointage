@@ -61,4 +61,8 @@ export class CohorteService {
   getApprenants(cohorteId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${cohorteId}/apprenants`);
   }
+   // Méthode pour vérifier si une cohorte avec le même nom existe
+   checkCohorteNameExists(nom: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/check-name-exists/${nom}`);
+  }
 }

@@ -24,6 +24,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 /*  import { DepartementComponent } from './departement/departement.component';  */
 
 import { CohorteComponent } from './cohorte/cohorte.component';
+import { ApprenantComponent } from './apprenant/apprenant.component';
 
 export const routes: Routes = [
     
@@ -55,7 +56,12 @@ export const routes: Routes = [
       component: SidebarComponent,
     },
     {
-      path: 'department',
+      path: 'departement',
       component: DepartmentComponent
-    }
+    },
+    {
+      path: 'apprenant',
+      component: ApprenantComponent
+     }
+
 ];

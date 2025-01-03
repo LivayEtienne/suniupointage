@@ -73,6 +73,7 @@ input[type="text"], input[type="date"] {
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 20px; /* Ajusté pour ne pas trop décaler */
+    margin-left: 115px;
 }
 
 .department-card {
