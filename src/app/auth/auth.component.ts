@@ -13,12 +13,14 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit, OnDestroy {
+  showErrorModal: boolean = false;  // Gérer l'affichage du modal
   authForm: FormGroup;  // Formulaire réactif pour l'email et mot de passe
   rfidCode: string = '';  // Code RFID pour l'authentification par RFID
   errorMessage: string = '';  // Message d'erreur générique
   authenticationMessage: string = '';  // Message d'authentification via RFID
   isAuthenticated: boolean = false;  // Statut d'authentification
   wsSubscription: Subscription | undefined;  // Pour stocker la souscription au WebSocket
+  isCardInvalid: boolean = false;  // Variable pour afficher si la carte est invalide
 
   constructor(
     private authService: AuthService,  // Service pour l'authentification
@@ -39,11 +41,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.wsSubscription = this.authService.message$.subscribe((message) => {
       console.log('Message reçu:', message);
   
-      // Vérifiez si le message contient le rôle et la redirection doit avoir lieu
+      // Vérifiez si le message contient le rôle et effectuez la redirection
       if (message && message.role) {
         console.log(`Utilisateur authentifié avec succès! Rôle : ${message.role}`);
   
-        // Logique de redirection basée sur le rôle
         if (message.role === 'admin') {
           console.log('Redirection vers /dashboard');
           this.router.navigate(['/dasbord']); // Redirection vers le tableau de bord
@@ -56,12 +57,17 @@ export class AuthComponent implements OnInit, OnDestroy {
         }
       } else {
         console.log('Aucun rôle détecté dans le message.');
+  
+        // Afficher le modal d'erreur
+        this.errorMessage = message === 'Utilisateur non trouvé.' 
+          ? 'Utilisateur non trouvé. Veuillez réessayer.' 
+          : 'Erreur : Aucun rôle détecté. Contactez l\'administrateur.';
+        this.showErrorModal = true;
       }
     });
   }
   
   
-
   // Fonction de validation personnalisée pour l'email
   customEmailValidator(control: AbstractControl): ValidationErrors | null {
     const email = control.value;
@@ -122,13 +128,27 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   // Méthode pour l'authentification par RFID
   onRfidLogin(): void {
+    console.log('Tentative d\'authentification RFID');
     if (this.rfidCode.trim()) {
-      this.authService.authenticateWithRFID(this.rfidCode);  // Appeler le service pour authentification RFID
+      console.log('Code RFID:', this.rfidCode);
+  
+      if (this.rfidCode !== 'D3C1BC2E') {
+        this.isCardInvalid = true;
+        this.authenticationMessage = 'Carte invalide. Veuillez essayer à nouveau.';
+        console.log('Carte invalide');
+        return;
+      }
+  
+      console.log('Carte valide. Authentification en cours...');
+      this.authService.authenticateWithRFID(this.rfidCode);
+      this.isCardInvalid = false;
+      this.authenticationMessage = '';
     } else {
       this.authenticationMessage = 'Veuillez scanner une carte RFID';
     }
   }
-
+  
+  
   // Méthode pour vérifier si un champ est valide
   isFieldInvalid(field: string): boolean {
     const control = this.authForm.get(field);

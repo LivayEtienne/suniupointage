@@ -35,35 +35,39 @@ export class AuthService implements OnDestroy {
     return this.http.post(`${this.apiUrl}/logout`, {}, { headers });
   }
 
-  // WebSocket Methods
   connectWebSocket(): void {
     if (!this.ws$ || this.ws$.closed) {
       this.ws$ = webSocket(this.WS_URL);
-
+  
       this.ws$.subscribe({
         next: (message) => {
-          console.log('Message reçu via WebSocket:', message); // Vérification de la structure du message
-
-          // Traitement du message WebSocket pour l'authentification
-          if (message.status === 'connected') {
-            const userMessage = message.message; // Exemple: "Bienvenue John Doe, rôle: admin!"
-            const userRole = message.role; // Le rôle de l'utilisateur
-
-            // Vérification si le message contient un rôle valide
-            console.log(`Utilisateur authentifié avec le rôle : ${userRole}`);
-
-            // Envoi du message avec les informations d'authentification
-            this.messagesSubject.next({
-              authenticated: true,
-              message: userMessage,
-              role: userRole, // Le rôle est maintenant émis ici
-            });
-          } else if (message.status === 'error') {
+          console.log('Message reçu via WebSocket:', message);
+  
+          // Si le message contient une erreur d'UID
+          if (message.status === 'error' && message.type === 'uid') {
+            console.error('Erreur UID:', message.message);
+            // Transmettre l'erreur au sujet observable
             this.messagesSubject.next({
               authenticated: false,
               error: message.message,
+              type: 'uid',
             });
-          } else {
+          } 
+          // Si le message contient des informations d'authentification réussie
+          else if (message.status === 'connected') {
+            const userMessage = message.message;
+            const userRole = message.role;
+  
+            console.log(`Utilisateur authentifié avec le rôle : ${userRole}`);
+  
+            this.messagesSubject.next({
+              authenticated: true,
+              message: userMessage,
+              role: userRole,
+            });
+          } 
+          // Autres messages
+          else {
             this.messagesSubject.next(message);
           }
         },
@@ -78,7 +82,7 @@ export class AuthService implements OnDestroy {
       });
     }
   }
-
+  
   authenticateWithRFID(uid: string): void {
     if (this.ws$) {
       const message = { type: 'authenticate', uid };
