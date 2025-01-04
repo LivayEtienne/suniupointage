@@ -89,15 +89,24 @@ prepareLineChartData() {
 
   // Préparer les données pour le graphique en barres (jours de la semaine)
   prepareBarChartData() {
-    const joursPresence = [0, 0, 0, 0, 0, 0, 0]; // Compteur des présences pour chaque jour de la semaine
+    const joursPresence = [0, 0, 0, 0, 0, 0, 0];
+    const aujourdhui = new Date();
+    const uneSemaineAvant = new Date(aujourdhui);
+    uneSemaineAvant.setDate(aujourdhui.getDate() - 7);
 
     this.historiqueData.forEach((item: any) => {
       const heureEntree = new Date(item.heure_entree);
-      const jourSemaine = heureEntree.getDay(); // 0 = Dimanche, 1 = Lundi, ..., 6 = Samedi
-      joursPresence[jourSemaine] += 1; // Incrémenter le compteur pour ce jour de la semaine
+      
+      // Vérifier si la date est dans la dernière semaine
+      if (heureEntree >= uneSemaineAvant && heureEntree <= aujourdhui) {
+        // Ajuster l'index pour que Lundi soit 0
+        let jourSemaine = heureEntree.getDay();
+        jourSemaine = jourSemaine === 0 ? 6 : jourSemaine - 1;
+        joursPresence[jourSemaine] += 1;
+      }
     });
 
-    this.barChartData = joursPresence; // Données pour le graphique en barres
+    this.barChartData = joursPresence;
   }
 
 
@@ -215,6 +224,7 @@ prepareLineChartData() {
         this.prepareBarChartData(); // Mettre à jour les données du graphique en barres
         this.initializeLineChart(); // Réinitialiser le graphique linéaire avec les nouvelles données
         this.initializeBarChart(); // Réinitialiser le graphique en barres
+        this.loadHistoriqueData();
       },
       error: (error) => {
         console.error('Erreur lors du chargement des historiques pour la date sélectionnée:', error);

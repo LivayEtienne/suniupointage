@@ -16,7 +16,9 @@ export class PointageComponent implements OnInit {
   stats = {
     totalUsers: 0,
     totalVigiles: 0,
-    totalDepartments: 0
+    totalDepartments: 0,
+   totalAdmins: 0,
+  totalEmployees: 0,
   };
   currentPage = 1;
   itemsPerPage = 8;

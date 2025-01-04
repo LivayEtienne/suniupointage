@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
 import { HistoriqueComponent } from './app/historique/historique.component';
 import { PointageComponent } from './app/pointage/pointage.component';
 import { DasbordComponent } from './app/dasbord/dasbord.component';
-
+import { EmployerComponent } from './app/employer/employer.component';
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
