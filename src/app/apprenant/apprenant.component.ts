@@ -95,6 +95,7 @@ export class ApprenantComponent implements OnInit {
     this.role = apprenant.role || 'apprenant';
   }
 
+  
   // Réinitialiser le formulaire
   clearForm(): void {
     this.nom = '';
@@ -108,7 +109,7 @@ export class ApprenantComponent implements OnInit {
   }
 
   // Soumettre le formulaire
-  onSubmit(): void {
+  /* onSubmit(): void {
     const userData = {
       nom: this.nom,
       prenom: this.prenom,
@@ -138,10 +139,225 @@ export class ApprenantComponent implements OnInit {
         }
       );
     }
-  }
+  } */
+
+
+/* 
+    onSubmit(): void {
+      const userData = {
+        nom: this.nom,
+        prenom: this.prenom,
+        email: this.email,
+        adresse: this.adresse,
+        telephone: this.telephone,
+        password: this.password,
+        role: this.role,
+      };
+    
+      if (this.isEditMode) {
+        // Assurez-vous que l'ID est correctement passé
+        const apprenantId = this.apprenants.find(apprenant => apprenant.nom === this.nom)?.id;
+    
+        if (apprenantId) {
+          this.userService.updateUser(apprenantId, userData).subscribe(
+            (response) => {
+              console.log('Utilisateur mis à jour avec succès:', response);
+              this.successMessage = 'Utilisateur mis à jour avec succès.';
+              this.fetchApprenants(); // Recharger la liste
+              this.closeModal(); // Fermer le modal
+              Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
+            },
+            (error) => {
+              console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+              this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
+              Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
+            }
+          );
+        } else {
+          console.error('ID de l\'utilisateur non trouvé.');
+        }
+      } else {
+        // Ajout d'un nouvel utilisateur
+        this.userService.addUser(userData).subscribe(
+          (response) => {
+            console.log('Utilisateur ajouté avec succès:', response);
+            this.successMessage = 'Utilisateur ajouté avec succès.';
+            this.fetchApprenants();
+            this.closeModal();
+            Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
+          },
+          (error) => {
+            console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
+            this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
+            Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
+          }
+        );
+      }
+      
+    } */
+
+     /*  onSubmit(): void {
+        const userData = {
+          nom: this.nom,
+          prenom: this.prenom,
+          email: this.email,
+          adresse: this.adresse,
+          telephone: this.telephone,
+          password: this.password,
+          role: this.role,
+        };
+      
+        if (this.isEditMode) {
+          // Utilise directement l'ID de l'apprenant si possible
+          const apprenantId = this.apprenants.find(apprenant => apprenant.nom === this.nom)?.id;
+      
+          if (apprenantId) {
+            this.userService.updateUser(apprenantId, userData).subscribe(
+              (response) => {
+                console.log('Utilisateur mis à jour avec succès:', response);
+                this.successMessage = 'Utilisateur mis à jour avec succès.';
+                this.fetchApprenants(); // Recharger la liste
+                this.closeModal(); // Fermer le modal
+                Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
+              },
+              (error) => {
+                console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+                this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
+                Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
+              }
+            );
+          } else {
+            console.error('ID de l\'utilisateur non trouvé.');
+          }
+        } else {
+          // Ajout d'un nouvel utilisateur
+          this.userService.addUser(userData).subscribe(
+            (response) => {
+              console.log('Utilisateur ajouté avec succès:', response);
+              this.successMessage = 'Utilisateur ajouté avec succès.';
+              this.fetchApprenants();
+              this.closeModal();
+              Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
+            },
+            (error) => {
+              console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
+              this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
+              Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
+            }
+          );
+        }
+      } */
+      
+        /* onSubmit(): void {
+          const userData = {
+            nom: this.nom,
+            prenom: this.prenom,
+            email: this.email,
+            adresse: this.adresse,
+            telephone: this.telephone,
+            password: this.password,
+            role: this.role,
+          };
+        
+          if (this.isEditMode) {
+            // Trouver l'ID de l'apprenant en utilisant un critère unique, comme l'email
+            const apprenantId = this.apprenants.find(apprenant => apprenant.email === this.email)?.id;
+        
+            if (apprenantId) {
+              this.userService.updateUser(apprenantId, userData).subscribe(
+                (response) => {
+                  console.log('Utilisateur mis à jour avec succès:', response);
+                  this.successMessage = 'Utilisateur mis à jour avec succès.';
+                  this.fetchApprenants(); // Recharger la liste
+                  this.closeModal(); // Fermer le modal
+                  Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
+                },
+                (error) => {
+                  console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+                  this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
+                  Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
+                }
+              );
+            } else {
+              console.error('ID de l\'utilisateur non trouvé.');
+              this.errorMessage = 'ID de l\'utilisateur non trouvé.';
+              Swal.fire('Erreur', 'L\'ID de l\'utilisateur est introuvable.', 'error');
+            }
+          } else {
+            // Ajout d'un nouvel utilisateur
+            this.userService.addUser(userData).subscribe(
+              (response) => {
+                console.log('Utilisateur ajouté avec succès:', response);
+                this.successMessage = 'Utilisateur ajouté avec succès.';
+                this.fetchApprenants();
+                this.closeModal();
+                Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
+              },
+              (error) => {
+                console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
+                this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
+                Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
+              }
+            );
+          }
+        }
+         */
+    
+        onSubmit(): void {
+          const userData = {
+            nom: this.nom,
+            prenom: this.prenom,
+            email: this.email,
+            adresse: this.adresse,
+            telephone: this.telephone,
+            password: this.password,
+            role: this.role,
+          };
+        
+          if (this.isEditMode) {
+            const apprenantId = this.apprenants.find(apprenant => apprenant.email === this.email)?.id;
+        
+            if (apprenantId) {
+              this.userService.updateUser(apprenantId, userData).subscribe(
+                (response) => {
+                  console.log('Utilisateur mis à jour avec succès:', response);
+                  this.successMessage = 'Utilisateur mis à jour avec succès.';
+                  this.fetchApprenants();
+                  this.closeModal();
+                  Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
+                },
+                (error: HttpErrorResponse) => {  // Explicit type for the error
+                  console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+                  this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
+                  Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
+                }
+              );
+            } else {
+              console.error('ID de l\'utilisateur non trouvé.');
+              this.errorMessage = 'ID de l\'utilisateur non trouvé.';
+              Swal.fire('Erreur', 'L\'ID de l\'utilisateur est introuvable.', 'error');
+            }
+          } else {
+            this.userService.addUser(userData).subscribe(
+              (response) => {
+                console.log('Utilisateur ajouté avec succès:', response);
+                this.successMessage = 'Utilisateur ajouté avec succès.';
+                this.fetchApprenants();
+                this.closeModal();
+                Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
+              },
+              (error: HttpErrorResponse) => {  // Explicit type for the error
+                console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
+                this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
+                Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
+              }
+            );
+          }
+        }
+        
 
   // Charger la liste des apprenants
-  fetchApprenants(): void {
+  /* fetchApprenants(): void {
     this.userService.getApprenants(this.currentPage, 10).subscribe(
       (data) => {
         this.apprenants = data; // Assigner la liste des apprenants récupérée depuis le backend
@@ -152,7 +368,22 @@ export class ApprenantComponent implements OnInit {
         Swal.fire('error, une erreur s est pruduite lors de la récupération des apprenants')
       }
     );
-  }
+  } */
+
+    fetchApprenants(): void {
+      this.userService.getApprenants(this.currentPage, 10).subscribe(
+        (data) => {
+          console.log('Données récupérées:', data);  // Vérifiez si les données sont bien récupérées
+          this.apprenants = data;
+          this.totalPages = Math.ceil(this.apprenants.length / 10);
+        },
+        (error) => {
+          console.error('Erreur lors de la récupération des apprenants:', error);
+          Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
+        }
+      );
+    }
+    
 
   // Gérer la pagination
   setPage(page: number): void {

@@ -82,5 +82,15 @@ deleteUsers(ids: number[]) {
 importApprenants(data: any): Observable<any> {
   return this.http.post('http://localhost:8000/api/users/import', data); // Modifiez l'endpoint selon votre API
 }
-  
+
+
+updateUser(id: number, userData: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/${id}`, userData, {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
+  });
+}
+
+
 }
