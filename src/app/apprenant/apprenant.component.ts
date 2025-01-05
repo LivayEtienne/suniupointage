@@ -39,6 +39,14 @@ export class ApprenantComponent implements OnInit {
   selectAll: boolean = false;
   
 
+  searchQuery: string = '';  // Variable liée à l'input de recherche
+  currentPage: number = 1;
+  totalPages: number = 1;
+
+ /*  filteredApprenants: Apprenant[] = []; // Add this line
+ */
+
+
   // Méthode qui bascule l'affichage du placeholder
   toggleAffectation() {
     this.isAffectationVisible = !this.isAffectationVisible;
@@ -56,16 +64,19 @@ export class ApprenantComponent implements OnInit {
   errorMessage: string | null = null;
   successMessage: string | null = null; // Variable pour le message de succès
   apprenants: Apprenant[] = []; // Liste des apprenants
-  currentPage: number = 1;
-  totalPages: number = 1;
   
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+        // Par défaut, afficher tous les apprenants
+    this.filteredApprenants = [...this.apprenants];
+
+  }
 
   ngOnInit(): void {
     this.fetchApprenants();
     this.matricule = '';
     this.newUid = '';
+    this.fetchApprenants();
   }
 
   // Ouvrir le modal pour ajouter un utilisateur
@@ -581,5 +592,31 @@ importCSV(file: File): void {
 
 
   
-  
+onSearch(): void {
+  if (this.searchQuery) {
+    this.filteredApprenants = this.apprenants.filter(apprenant =>
+      apprenant.nom.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+      apprenant.prenom.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+      apprenant.email.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+  } else {
+    this.filteredApprenants = this.apprenants;
+    this.fetchApprenants()
+  }
+}
+
+searchTerm: string = '';  // Variable pour stocker le terme de recherche
+filteredApprenants = this.apprenants;  // Par défaut, affiche tous les apprenants
+
+applyFilter() {
+  if (this.searchTerm) {
+    this.filteredApprenants = this.apprenants.filter(apprenant =>
+      apprenant.nom.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      apprenant.prenom.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      apprenant.email.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  } else {
+    this.filteredApprenants = this.apprenants;
+  }
+}
 }
