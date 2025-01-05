@@ -8,6 +8,7 @@ export class Auth1Service {
   private socket: WebSocket;
   private userInfoSubject: Subject<any> = new Subject<any>();  // Subject pour envoyer les infos utilisateur
   userInfo$ = this.userInfoSubject.asObservable(); // Observable pour s'abonner aux infos utilisateur
+  private messageSubject: Subject<any> = new Subject<any>(); // Subject pour envoyer les messages
 
   constructor() {
     // Connexion WebSocket au serveur
@@ -24,6 +25,11 @@ export class Auth1Service {
           this.userInfoSubject.next(data);
         } else if (data.message) {
           console.error(data.message);  // Affiche l'erreur si l'utilisateur n'est pas trouvé
+        }
+
+        // Envoi des messages via le messageSubject
+        if (data.message) {
+          this.messageSubject.next(data);
         }
       } catch (error) {
         console.error('Erreur lors de la réception des données du serveur:', error);
@@ -50,10 +56,26 @@ export class Auth1Service {
   }
 
   // Méthode pour fermer la connexion WebSocket
-  closeSocket(): void {
+  fermerConnexion(): void {
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.close();
       console.log('Connexion WebSocket fermée manuellement');
     }
   }
-}
+
+   // Méthode pour envoyer l'UID (ajoutée pour corriger l'erreur)
+  envoyerMessage(uid: string): void {
+    if (this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(uid);  // Envoi de l'UID au serveur
+      console.log('UID envoyé au serveur:', uid);
+    } else {
+      console.error('La connexion WebSocket n\'est pas ouverte');
+    }
+  }
+
+  // Méthode pour obtenir les messages reçus via WebSocket
+  obtenirMessages() {
+    return this.messageSubject.asObservable(); // Renvoie l'Observable des messages reçus
+  }
+
+  }
