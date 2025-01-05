@@ -4,6 +4,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import Swal from 'sweetalert2';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 interface Apprenant {
   id: number;
@@ -24,7 +26,7 @@ interface Apprenant {
 
 @Component({ 
   selector: 'app-apprenant',
-  imports: [FormsModule, CommonModule, ] ,
+  imports: [FormsModule, CommonModule, SidebarComponent, DashboardComponent] ,
   templateUrl: './apprenant.component.html',
   styleUrls: ['./apprenant.component.css']
 })
@@ -52,6 +54,8 @@ export class ApprenantComponent implements OnInit {
     this.isAffectationVisible = !this.isAffectationVisible;
   }
   // Variables liées au formulaire
+  photo: File | null = null;
+  selectedFile: File | null = null;
   nom: string = '';
   prenom: string = '';
   email: string = '';
@@ -313,59 +317,51 @@ export class ApprenantComponent implements OnInit {
           }
         }
          */
-    
-        onSubmit(): void {
-          const userData = {
-            nom: this.nom,
-            prenom: this.prenom,
-            email: this.email,
-            adresse: this.adresse,
-            telephone: this.telephone,
-            password: this.password,
-            role: this.role,
-          };
-        
-          if (this.isEditMode) {
-            const apprenantId = this.apprenants.find(apprenant => apprenant.email === this.email)?.id;
-        
-            if (apprenantId) {
-              this.userService.updateUser(apprenantId, userData).subscribe(
-                (response) => {
-                  console.log('Utilisateur mis à jour avec succès:', response);
-                  this.successMessage = 'Utilisateur mis à jour avec succès.';
-                  this.fetchApprenants();
-                  this.closeModal();
-                  Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
-                },
-                (error: HttpErrorResponse) => {  // Explicit type for the error
-                  console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
-                  this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
-                  Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
-                }
-              );
-            } else {
-              console.error('ID de l\'utilisateur non trouvé.');
-              this.errorMessage = 'ID de l\'utilisateur non trouvé.';
-              Swal.fire('Erreur', 'L\'ID de l\'utilisateur est introuvable.', 'error');
-            }
-          } else {
-            this.userService.addUser(userData).subscribe(
-              (response) => {
-                console.log('Utilisateur ajouté avec succès:', response);
-                this.successMessage = 'Utilisateur ajouté avec succès.';
-                this.fetchApprenants();
-                this.closeModal();
-                Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
-              },
-              (error: HttpErrorResponse) => {  // Explicit type for the error
-                console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
-                this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
-                Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
-              }
-            );
-          }
-        }
-        
+// Méthode pour gérer la sélection de fichier
+onFileSelected1(event: any): void {
+  const file = event.target.files[0];
+  if (file) {
+    this.selectedFile = file;  // Stocker le fichier sélectionné
+  }
+}
+
+// Méthode pour soumettre le formulaire
+onSubmit(): void {
+  if (this.selectedFile) {  // Vérifie si un fichier a été sélectionné
+    const formData = new FormData();
+    formData.append('nom', this.nom);
+    formData.append('prenom', this.prenom);
+    formData.append('email', this.email);
+    formData.append('adresse', this.adresse);
+    formData.append('telephone', this.telephone);
+    formData.append('role', this.role);
+
+    // Ajouter le mot de passe uniquement si ce n'est pas un mode édition
+    if (!this.isEditMode) {
+      formData.append('password', this.password);
+    }
+
+    // Ajouter le fichier photo
+    formData.append('photo', this.selectedFile, this.selectedFile.name);
+
+    // Appel à la méthode d'enregistrement utilisateur
+    this.userService.addUser(formData).subscribe({
+      next: (response) => {
+        console.log('Utilisateur ajouté avec succès !', response);
+        this.closeModal();  // Fermer le modal ou autre action après succès
+      },
+      error: (err) => {
+        console.error('Erreur lors de l\'ajout de l\'utilisateur', err);
+        this.errorMessage = 'Une erreur est survenue.';  // Afficher l'erreur à l'utilisateur
+      }
+    });
+  } else {
+    // Si aucun fichier n'est sélectionné
+    this.errorMessage = 'Veuillez sélectionner une photo.';
+  }
+}
+       
+
 
   // Charger la liste des apprenants
   /* fetchApprenants(): void {
@@ -542,27 +538,52 @@ export class ApprenantComponent implements OnInit {
     this.apprenants.forEach(apprenant => apprenant.selected = this.selectAll);
   }
 
-
   bulkDelete(): void {
-  const selectedIds = this.apprenants.filter(apprenant => apprenant.selected).map(apprenant => apprenant.id);
-
-  if (selectedIds.length === 0) {
-    this.errorMessage = 'Aucun utilisateur sélectionné';
-    return;
-  }
-
-  this.userService.bulkDelete(selectedIds).subscribe(
-    (response) => {
-      console.log('Utilisateurs supprimés avec succès:', response);
-      this.successMessage = 'Utilisateurs supprimés avec succès.'; // Message de succès
-      this.fetchApprenants(); // Recharger la liste après suppression
-    },
-    (error) => {
-      console.error('Erreur lors de la suppression des utilisateurs:', error);
-      this.errorMessage = 'Une erreur est survenue lors de la suppression des utilisateurs.';
+    const selectedIds = this.apprenants.filter(apprenant => apprenant.selected).map(apprenant => apprenant.id);
+  
+    if (selectedIds.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Aucun utilisateur sélectionné',
+        text: 'Veuillez sélectionner au moins un utilisateur pour continuer.',
+      });
+      return;
     }
-  );
-}
+  
+    // Boîte de confirmation avant suppression
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Cette action supprimera les utilisateurs sélectionnés définitivement.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Oui, supprimer',
+      cancelButtonText: 'Annuler',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Appel au service pour supprimer les utilisateurs
+        this.userService.bulkDelete(selectedIds).subscribe(
+          (response) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Succès',
+              text: 'Les utilisateurs ont été supprimés avec succès.',
+            });
+            this.fetchApprenants(); // Recharger la liste après suppression
+          },
+          (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: 'Une erreur est survenue lors de la suppression des utilisateurs.',
+            });
+          }
+        );
+      }
+    });
+  }
+  
 
 
 // Méthode appelée lorsque l'utilisateur sélectionne un fichier

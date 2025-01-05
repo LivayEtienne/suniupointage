@@ -3,6 +3,7 @@
   
   margin: 0 auto;
   padding: 30px;
+  margin-left: 225px;
   font-family: 'Arial', sans-serif;
   background-color: #f8f9fa;
   border-radius: 8px;
@@ -23,8 +24,8 @@
 }
 
 .table th {
-  background-color: #007bff;
-  color: white;
+  /* background-color: #007bff; */
+  color: black;
   font-weight: 600;
 }
 
@@ -288,4 +289,17 @@ a:hover {
   margin-left: 1200px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+.supprimer {
+  background-color: #fff;
+  color: #00bf8f;
+  border: #fff;
+}
+.ajout{
+  background-color: #00bf8f;
+  border: #fff;
+  width: 175px;
+  height: 35px;
+  color: #ffff;
+  border-radius: 15px;
 }

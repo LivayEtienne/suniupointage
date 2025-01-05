@@ -1,8 +1,10 @@
+<app-sidebar></app-sidebar>
+<app-dashboard></app-dashboard>
 <div class="container">
   <h1>Gestion des Apprenants</h1>
 
   <!-- Bouton pour ouvrir le modal d'ajout d'un apprenant -->
-  <button (click)="openModal()" class="btn btn-primary">Ajouter un Apprenant</button> 
+  <button (click)="openModal()" class="ajout">Ajouter un Apprenant</button> <br>
 
   <input
   
@@ -11,7 +13,7 @@
   style="display: none"
   (change)="onFileSelected($event)"
 />
-  <button (click)="bulkDelete()" class="btn btn-danger">
+  <button (click)="bulkDelete()" class="supprimer">
     Supprimer les utilisateurs sélectionnés
   </button>
   
@@ -34,6 +36,7 @@
       <th>
         <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
       </th>
+      
       <th>Nom</th>
       <th>Prénom</th>
       <th>Email</th>
@@ -48,6 +51,7 @@
       <td>
         <input type="checkbox" [(ngModel)]="apprenant.selected" />
       </td>
+      
       <td>{{ apprenant.nom }}</td>
       <td>{{ apprenant.prenom }}</td>
       <td>{{ apprenant.email }}</td>
@@ -58,10 +62,10 @@
         <button (click)="openEditModal(apprenant)" class="btn btn-warning btn-sm">
           <i class="fa fa-edit"></i>
         </button>
-        <button (click)="toggleStatus(apprenant)" class="btn btn-secondary btn-sm">
+        <!-- <button (click)="toggleStatus(apprenant)" class="btn btn-secondary btn-sm">
           <i class="fa fa-archive" *ngIf="apprenant.statut === 'active'"></i>
           <i class="fa fa-box-open" *ngIf="apprenant.statut !== 'active'"></i>
-        </button>
+        </button> -->
         <button (click)="deleteApprenant(apprenant.id)" class="btn btn-danger btn-sm">
           <i class="fa fa-trash-alt"></i>
         </button>
@@ -80,6 +84,7 @@
       <th>
         <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
       </th>
+      <th>photo</th>
       <th>Nom</th>
       <th>Prénom</th>
       <th>Email</th>
@@ -94,6 +99,7 @@
       <td>
         <input type="checkbox" [(ngModel)]="apprenant.selected" />
       </td>
+      
       <td>{{ apprenant.nom }}</td>
       <td>{{ apprenant.prenom }}</td>
       <td>{{ apprenant.email }}</td>
@@ -155,6 +161,11 @@
               <label for="prenom">Prénom</label>
               <input type="text" id="prenom" [(ngModel)]="prenom" name="prenom" class="form-control" required>
             </div>
+            <div class="form-group">
+              <label for="photo">Photo</label>
+              <input type="file" id="photo" (change)="onFileSelected1($event)" class="form-control" />
+            </div>
+            
             <div class="form-group">
               <label for="email">Email</label>
               <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required>

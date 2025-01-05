@@ -20,13 +20,17 @@ export class UserService {
   }
 
   // Méthode pour ajouter un utilisateur
-  addUser(userData: any): Observable<any> {
+  /* addUser(userData: any): Observable<any> {
     return this.http.post(this.apiUrl, userData, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       })
     });
-  }
+  } */
+    addUser(userData: FormData): Observable<any> {
+      return this.http.post(this.apiUrl, userData);
+    }
+    
 
   // Méthode pour supprimer un utilisateur
   deleteUser(id: number): Observable<any> {
