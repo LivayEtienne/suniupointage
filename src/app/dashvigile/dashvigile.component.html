@@ -1,1 +1,64 @@
 <p>dashvigile works!</p>
+<div class="container">
+    <!-- Message d'erreur affiché directement -->
+    <div *ngIf="modalMessage !== '' && modalMessage !== null" class="error-message">
+      <i class="fas fa-exclamation-triangle"></i> {{ modalMessage }}
+    </div>
+  
+    <!-- Modal affiché lors d'une erreur -->
+    <div *ngIf="modalVisible" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Erreur de scan</h3>
+          <button (click)="closeModal()" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>{{ modalMessage }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Image de l'utilisateur -->
+    <div class="profile-image">
+      <img src="image.avif" alt="Image de l'utilisateur" class="user-image">
+    </div>
+  
+    <!-- Informations utilisateur -->
+    <div class="info-card">
+      <h3><i class="fas fa-info-circle"></i> Informations</h3>
+      <div class="info-details">
+        <p><strong>PRENOM :</strong> {{ userInfo.prenom }}</p>
+        <p><strong>NOM :</strong> {{ userInfo.nom }}</p>
+        <p><strong>Matricule :</strong> {{ userInfo.matricule }}</p>
+      </div>
+  
+      <!-- Boutons -->
+      <div class="button-group">
+        <button class="btn btn-green" (click)="showMessage('Vous avez validé l\'étudiant!')">
+          <i class="fas fa-user-check"></i>
+        </button>
+        <button class="btn btn-red" (click)="showMessage('L\'étudiant a été rejeté.')">
+          <i class="fas fa-user-slash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <h3><em class="fas fa-table"></em> Tableau des Étudiants</h3>
+  <table class="students-table">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Matricule</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ userInfo.nom }}</td>
+        <td>{{ userInfo.prenom }}</td>
+        <td>{{ userInfo.matricule }}</td>
+      </tr>
+    </tbody>
+  </table>
+  
