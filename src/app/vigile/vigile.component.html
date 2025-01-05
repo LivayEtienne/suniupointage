@@ -1,1 +1,63 @@
 <p>vigile works!</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+<div class="controle-moteur">
+  
+    <p *ngIf="!connectionStatus" class="error">
+      Connexion au serveur WebSocket perdue.
+      <button class="btn-reconnect" (click)="reconnecter()">Reconnexion</button>
+    </p>
+  
+    <div *ngIf="connectionStatus" class="buttons-container">
+      <button class="btn-control btn-open" (click)="ouvrir()">Ouvrir</button>
+      <button class="btn-control btn-close" (click)="fermer()">Fermer</button>
+    </div>
+  
+    <p>{{ statusMessage }}</p>
+  </div>
+  
+
+<div class="container">
+    <!-- Image de l'utilisateur -->
+    <div class="profile-image">
+      <img src="image.avif" alt="Image de l'utilisateur" class="user-image">
+    </div>
+  
+    <!-- Informations utilisateur -->
+    <div class="info-card">
+      <h3><i class="fas fa-info-circle"></i> Informations</h3>
+      <div class="info-details">
+        <p><strong>PRENOM :</strong></p>
+        <p><strong>NOM :</strong></p>
+        <p><strong>matricule :</strong></p>
+      </div>
+      <!-- Boutons -->
+      <div class="button-group">
+        <button class="btn btn-green">
+          <i class="fas fa-user-check"></i>
+        </button>
+        <button class="btn btn-red">
+          <i class="fas fa-user-slash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <h3><em class="fas fa-table"></em> Tableau des Étudiants</h3>
+<table class="students-table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Matricule</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Dupont</td>
+      <td>Jean</td>
+      <td>12345</td>
+    </tr>
+  </tbody>
+</table>
