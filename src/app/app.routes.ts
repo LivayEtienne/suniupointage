@@ -7,6 +7,8 @@ import { HistoriqueComponent } from './historique/historique.component';
 import { ApprenantComponent } from './apprenant/apprenant.component';
 import { Component } from '@angular/core';
 import { ButtonlectureComponent } from './buttonlecture/buttonlecture.component';
+import { DashvigileComponent } from './dashvigile/dashvigile.component';
+import { VigileComponent } from './vigile/vigile.component';
 import { Auth1Component } from './auth1/auth1.component';
 
 /*  import { DepartementComponent } from './departement/departement.component';  */
@@ -23,6 +25,8 @@ export const routes: Routes = [
   { path: 'apprenant', component: ApprenantComponent },
   { path: 'historique', component: HistoriqueComponent },
   { path: 'auth1', component: Auth1Component },
+  { path: 'dashvigile', component: DashvigileComponent},
+  { path: 'vigile', component: VigileComponent},
   
   
   { path: 'buttonlecture', component: ButtonlectureComponent },

@@ -2,6 +2,8 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { catchError } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +13,12 @@ export class AuthService implements OnDestroy {
   private readonly WS_URL = 'ws://localhost:3000';  // URL du WebSocket
 
   private ws$: WebSocketSubject<any> | undefined;
+  private socket!: WebSocket;
+  private sendInterval: any; // Intervalle d'envoi des informations
   private messagesSubject = new Subject<any>();
-  public message$: Observable<any> = this.messagesSubject.asObservable();
+  public messages$: Observable<any> = this.messagesSubject.asObservable();
+  private scanning = false;  // Variable pour suivre l'état du scanning
+  
   
   private isWebSocketConnected = false;
   private isAttemptingReconnect = false; // Flag pour éviter les tentatives de reconnexion multiples
@@ -24,14 +30,33 @@ export class AuthService implements OnDestroy {
   // Méthodes API REST
   login(email: string, password: string): Observable<any> {
     const credentials = { email, password };
-    return this.http.post(`${this.apiUrl}/login`, credentials);
+    return this.http.post(`${this.apiUrl}/login`, credentials)
+      .pipe(
+        // En cas d'erreur lors de l'authentification, on transmet l'erreur via le Subject
+        catchError(error => {
+          this.messagesSubject.next({
+            status: 'error',
+            message: `Erreur lors de l'authentification : ${error.message}`
+          });
+          throw error; // Relancer l'erreur pour qu'elle soit gérée ailleurs si nécessaire
+        })
+      );
   }
 
   logout(token: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,  // Ajouter le token dans les en-têtes
     });
-    return this.http.post(`${this.apiUrl}/logout`, {}, { headers });
+    return this.http.post(`${this.apiUrl}/logout`, {}, { headers })
+      .pipe(
+        catchError(error => {
+          this.messagesSubject.next({
+            status: 'error',
+            message: `Erreur lors de la déconnexion : ${error.message}`
+          });
+          throw error; // Relancer l'erreur
+        })
+      );
   }
 
   // Méthode pour se connecter au WebSocket
@@ -77,12 +102,20 @@ export class AuthService implements OnDestroy {
           console.error('Erreur WebSocket:', err.message);
           this.isWebSocketConnected = false;  // Réinitialiser l'état de la connexion
           this.isAttemptingReconnect = false;  // Terminer la tentative de reconnexion
+          this.messagesSubject.next({
+            status: 'error',
+            message: `Erreur de connexion WebSocket : ${err.message}`,
+          });
           this.attemptReconnect();  // Tentative de reconnexion
         },
         complete: () => {
           console.log('WebSocket fermé');
           this.isWebSocketConnected = false;  // Réinitialiser l'état de la connexion
           this.isAttemptingReconnect = false;  // Terminer la tentative de reconnexion
+          this.messagesSubject.next({
+            status: 'error',
+            message: 'La connexion WebSocket a été fermée.',
+          });
           this.attemptReconnect();  // Tentative de reconnexion
         },
       });
@@ -107,6 +140,10 @@ export class AuthService implements OnDestroy {
       console.log('UID envoyé pour authentification:', message);
     } else {
       console.error('La connexion WebSocket est fermée. Tentative de reconnexion...');
+      this.messagesSubject.next({
+        status: 'error',
+        message: 'Connexion WebSocket fermée, tentative de reconnexion...',
+      });
       this.connectWebSocket();  // Reconnecter si la connexion est fermée
       // Une fois la reconnexion réussie, tenter d'envoyer le message à nouveau
       setTimeout(() => this.authenticateWithRFID(uid), 2000);  // Retry après 2 secondes
@@ -116,20 +153,56 @@ export class AuthService implements OnDestroy {
   // Ajout de méthodes pour interagir avec l'API REST pour gérer les utilisateurs
   createUser(nom: string, email: string, role: string, matricule: string): Observable<any> {
     const user = { nom, email, role, matricule };
-    return this.http.post(`${this.apiUrl}/users`, user);
+    return this.http.post(`${this.apiUrl}/users`, user)
+      .pipe(
+        catchError(error => {
+          this.messagesSubject.next({
+            status: 'error',
+            message: `Erreur lors de la création de l'utilisateur : ${error.message}`
+          });
+          throw error; // Relancer l'erreur
+        })
+      );
   }
 
   getAllUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/users`);
+    return this.http.get(`${this.apiUrl}/users`)
+      .pipe(
+        catchError(error => {
+          this.messagesSubject.next({
+            status: 'error',
+            message: `Erreur lors de la récupération des utilisateurs : ${error.message}`
+          });
+          throw error;
+        })
+      );
   }
 
   updateUser(matricule: string, nom: string, email: string, role: string, status: string): Observable<any> {
     const userData = { nom, email, role, status };
-    return this.http.put(`${this.apiUrl}/users/${matricule}`, userData);
+    return this.http.put(`${this.apiUrl}/users/${matricule}`, userData)
+      .pipe(
+        catchError(error => {
+          this.messagesSubject.next({
+            status: 'error',
+            message: `Erreur lors de la mise à jour de l'utilisateur : ${error.message}`
+          });
+          throw error; // Relancer l'erreur
+        })
+      );
   }
 
   deleteUser(userId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/users/${userId}`);
+    return this.http.delete(`${this.apiUrl}/users/${userId}`)
+      .pipe(
+        catchError(error => {
+          this.messagesSubject.next({
+            status: 'error',
+            message: `Erreur lors de la suppression de l'utilisateur : ${error.message}`
+          });
+          throw error; // Relancer l'erreur
+        })
+      );
   }
 
   // Déconnexion WebSocket
@@ -143,5 +216,26 @@ export class AuthService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.disconnectWebSocket();  // Assurez-vous que WebSocket est fermé lors de la destruction du service
+  }
+
+   // Méthode pour indiquer que le scanning est en cours
+   startScanning(): void {
+    this.scanning = true;
+  }
+
+  // Méthode pour arrêter le scanning
+  stopScanning(): void {
+    this.scanning = false;
+    if (this.sendInterval) {
+      clearInterval(this.sendInterval); // Arrêter l'envoi en boucle
+    }
+  }
+
+  sendMessage(message: string): void {
+    if (this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(message);
+    } else {
+      console.log('WebSocket non connecté');
+    }
   }
 }

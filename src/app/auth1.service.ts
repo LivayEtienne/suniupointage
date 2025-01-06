@@ -78,4 +78,11 @@ export class Auth1Service {
     return this.messageSubject.asObservable(); // Renvoie l'Observable des messages reçus
   }
 
+  closeSocket(): void {
+    if (this.socket) {
+      this.socket.close();
+      console.log('WebSocket fermé manuellement.');
+    }
   }
+
+}

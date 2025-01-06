@@ -52,5 +52,15 @@
         <button type="submit" [disabled]="authForm.invalid">Connexion</button>
       </form>
     </div>
+
+    <!-- Modal d'erreur (apparaît quand la carte RFID est invalide) -->
+<div *ngIf="showErrorModal" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2>Erreur de Carte RFID</h2>
+    <p>{{ errorMessage }}</p>
+  </div>
+</div>
+
   </div>
   

@@ -21,6 +21,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;  // Statut d'authentification
   wsSubscription: Subscription | undefined;  // Pour stocker la souscription au WebSocket
   isCardInvalid: boolean = false;  // Variable pour afficher si la carte est invalide
+  isScanning: boolean = false;  // Suivi de l'état de scanning
 
   constructor(
     private authService: AuthService,  // Service pour l'authentification
@@ -38,12 +39,14 @@ export class AuthComponent implements OnInit, OnDestroy {
     // Connexion au WebSocket au démarrage du composant
     this.authService.connectWebSocket();
   
-    this.wsSubscription = this.authService.message$.subscribe((message) => {
+    // Abonnement aux messages WebSocket pour traiter les erreurs liées à l'UID ou aux cartes invalides
+    this.wsSubscription = this.authService.messages$.subscribe((message: any) => {
       console.log('Message reçu:', message);
   
-      // Vérifiez si le message contient le rôle et la redirection doit avoir lieu
-      if (message && message.role) {
-        console.log(`Utilisateur authentifié avec succès! Rôle : ${message.role}`);
+      // Vérifiez si le message contient un statut d'erreur pour l'UID mal formé ou des données invalides
+      if (message.status === 'error' && message.message === 'UID mal formé ou données invalides.') {
+        console.log('Erreur: UID mal formé ou données invalides');
+        this.handleScanError(message);
   
         // Logique de redirection basée sur le rôle
         if (message.role === 'admin') {
@@ -56,28 +59,41 @@ export class AuthComponent implements OnInit, OnDestroy {
           console.log('Redirection par défaut');
           this.router.navigate(['/']); // Redirection par défaut
         }
+      }
+      // Vérification des erreurs liées au numéro de carte invalide
+      else if (message.status === 'error' && message.message === 'Numéro de carte invalides ou est déjà scanné.') {
+        console.log('⚠️ Erreur détectée, appel de handleScanError()');
+        this.handleScanError(message);  // Appeler handleScanError pour afficher l'erreur sous forme de modal
       } else {
         console.log('Aucun rôle détecté dans le message.');
       }
     });
+  
+    // Démarrer le scanning lorsque le composant est initialisé
+    this.startScanning();
   }
   
-  // Fonction de validation personnalisée pour l'email
-  customEmailValidator(control: AbstractControl): ValidationErrors | null {
-    const email = control.value;
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const validEmail = email && emailPattern.test(email);
-    
-    if (validEmail) {
-      const domain = email.split('@')[1];
-      const tld = domain.split('.').pop();
-      if (tld && tld.length < 2) {
-        return { 'invalidTLD': true };
-      }
-    }
-
-    return validEmail ? null : { 'invalidEmail': true };
+  handleScanError(message: any): void {
+    console.log('🚨 handleScanError() appelé avec message:', message);
+  
+    // Affichage du modal avec le message d'erreur
+    this.showErrorModal = true;  // Affiche le modal
+  
+    // Vous pouvez également personnaliser le message d'erreur affiché ici
+    this.errorMessage = message.message || 'Erreur inconnue lors du scan de la carte.';
+  
+    // Si vous avez besoin d'un délai avant de masquer à nouveau le modal, vous pouvez ajouter un délai ici
+    setTimeout(() => {
+      this.showErrorModal = false;  // Ferme le modal après un certain temps (par exemple 5 secondes)
+    }, 5000);  // 5 secondes pour afficher l'erreur avant de fermer le modal
   }
+
+  startScanning(): void {
+    this.isScanning = true;  // Définir l'état de scanning sur true
+    this.authService.startScanning();  // Appeler le service pour démarrer l'envoi des informations en boucle
+  }
+  
+  
 
   // Méthode pour gérer la soumission du formulaire (email + mot de passe)
   onSubmit(): void {
@@ -119,6 +135,17 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
   }
   
+ // Arrêter le scanning
+ stopScanning(): void {
+  this.isScanning = false;
+  this.authService.stopScanning();  // Arrêter l'envoi des informations
+}
+
+// Méthode pour envoyer un message au serveur
+sendMessage(): void {
+  const message = 'Message depuis le client Angular';
+  this.authService.sendMessage(message);
+}
 
   // Méthode pour l'authentification par RFID
 onRfidLogin(): void {
@@ -191,11 +218,34 @@ onRfidLogin(): void {
     return 'Utilisez un mot de passe complexe (minimum 6 caractères).';
   }
 
+   // Méthode pour fermer le modal
+   closeModal(): void {
+    this.showErrorModal = false;  // Cacher le modal
+  }
+
+
   ngOnDestroy(): void {
     // Déconnexion de WebSocket et nettoyage des abonnements lorsque le composant est détruit
     if (this.wsSubscription) {
       this.wsSubscription.unsubscribe();
     }
     this.authService.disconnectWebSocket();
+  }
+
+   // Méthode pour valider un email
+   customEmailValidator(control: AbstractControl): ValidationErrors | null {
+    const email = control.value;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const validEmail = email && emailPattern.test(email);
+
+    if (validEmail) {
+      const domain = email.split('@')[1];
+      const tld = domain.split('.').pop();
+      if (tld && tld.length < 2) {
+        return { 'invalidTLD': true }; // Retourne une erreur si le TLD est trop court
+      }
+    }
+
+    return validEmail ? null : { 'invalidEmail': true }; // Retourne null si l'email est valide, sinon retourne une erreur
   }
 }
