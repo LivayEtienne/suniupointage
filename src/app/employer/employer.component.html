@@ -1,1 +1,216 @@
-<p>employer works!</p>
+
+<div class="main-container">
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-label">Nombre Utilisateur</div>
+        <div class="stat-value">{{stats.totalUsers}}</div>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-user-shield"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-label">Nombre Admin</div>
+        <div class="stat-value">{{stats.totalAdmins}}</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-desktop"></i>
+      </div>
+      <div class="stat-info">
+        <div class="stat-label">Vigile</div>
+        <div class="stat-value">{{stats.totalVigiles}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-section">
+    <div class="header">
+      <h2 class="title"><button class="action-btn" (click)="showAddUserModal = true">
+        <i class="fas fa-plus"></i> Ajouter Utilisateur
+      </button>
+      </h2>
+      <div class="header-actions">
+        <div class="search-box">
+          <input
+          type="text"
+          class="search-input"
+          placeholder="Rechercher"
+          [(ngModel)]="searchQuery"
+          (input)="searchUsers()"
+        />
+          <i class="fas fa-search search-icon"></i>
+        </div>
+        <button class="action-btn"  (click)="deleteSelectedUsers()"><i class="fas fa-trash"></i> Supprimer plusieurs</button>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="file-upload-container">
+        <!-- Input file caché -->
+        <input 
+          #fileInput 
+          type="file" 
+          accept=".csv" 
+          (change)="onFileSelected($event)" 
+          style="display: none" 
+          id="fileUpload"
+        />
+        
+        <!-- Bouton stylisé -->
+        <button 
+          class="action-btn" 
+          (click)="fileInput.click()"
+          [disabled]="false"
+        >
+          <i class="fas fa-upload"></i> Uploader un fichier CSV
+        </button>
+      </div>
+      
+    </div>
+
+
+  <!-- Message de confirmation -->
+  <div *ngIf="confirmationMessage" class="alert" [ngClass]="messageType">
+    {{ confirmationMessage }}
+  </div>
+
+    <!-- Table -->
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox"  (change)="selectAllUsers($event)" [checked]="isAllSelected()"></th>
+          <th>Nom Prenom</th>
+          <th>Role</th>
+          <th>Departement</th>
+          <th>Telephone</th>
+          <th>Email</th>
+          
+          <th>Action</th>
+          <th>Etat</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of paginatedUsers">
+          <td><input type="checkbox"  [(ngModel)]="user.isSelected"></td>
+          <td>{{ user.nom }} {{ user.prenom }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ getDepartmentName(user.departement_id) }}</td>
+          <td>{{ user.telephone }}</td>
+          <td>{{ user.email }}</td>
+          
+          <td>
+            <div class="action-icons">
+              <button class="edit-icon"  (click)="openModifierModal(user)"><i class="fas fa-edit"></i></button>
+              <button class="delete-icon"  (click)="confirmDelete(user.id)"><i class="fas fa-trash"></i></button>
+              <button class="profile-icon" 
+            (click)="openPasswordModal(user.id)"
+            [disabled]="user.role === 'admin'">
+      <!-- Si l'utilisateur est admin, changer l'icône -->
+      <i class="fas" [ngClass]="user.role === 'admin' ? 'fa-user-check' : 'fa-user'"></i>
+    </button>
+            </div>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="{
+              'status-active': user.statut === 'actif',
+              'status-blocked': user.statut === 'bloquer'
+            }">
+              {{ user.statut }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span>Page {{ currentPage }} sur {{ totalPages() }}</span>
+      <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+    
+  </div>
+</div>
+
+<!-- Modal de confirmation de suppression -->
+<div class="modal" *ngIf="showDeleteModal">
+  <div class="modal-content">
+    <h3>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</h3>
+    <div class="modal-actions">
+      <button (click)="cancelDelete()">Annuler</button>
+      <button (click)="deleteUser()">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+
+<!--modale pour changement de role -->
+
+<!-- Modal de modification du mot de passe -->
+<div class="modal-backdrop" *ngIf="showPasswordModal">
+  <div class="modalrole">
+    <div class="modal-headerrole">
+      <h3>Assigner un mot de passe   pour le faire admin</h3>
+      <button class="close-btnrole" (click)="closePasswordModal()">✖</button>
+    </div>
+    <div class="modal-bodyrole">
+      <!-- Formulaire pour modifier le mot de passe -->
+      <form (ngSubmit)="updatePassword()">
+        <div class="form-grouprole">
+          <label for="password">Mot de passe</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            [(ngModel)]="newPassword"
+            required
+          />
+        </div>
+
+        <button type="submit" [disabled]="!newPassword ">Mettre à jour</button>
+      </form>
+    </div>
+  </div>
+</div>
+<!--modal de cofirmation supprimer plusieur-->
+
+<!-- Modal de confirmation de suppression multiple -->
+<div class="modal" *ngIf="showMultipleDeleteModal">
+  <div class="modal-content">
+    <h3>Êtes-vous sûr de vouloir supprimer {{ selectedUsers.length }} utilisateurs ?</h3>
+    <div class="modal-actions">
+      <button (click)="cancelMultipleDelete()">Annuler</button>
+      <button (click)="confirmMultipleDelete()">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!--modal ajouter utilsateur -->
+<app-ajouteremployer  *ngIf="showAddUserModal"
+(closeModal)="onModalClose()"></app-ajouteremployer>
+
+
+<!--modal pour modifier-->
+<app-modifieremployer  *ngIf="showModifierModal && selectedUser"
+[selectedUser]="selectedUser"
+(closeModal)="showModifierModal = false"
+(userUpdated)="onUserUpdated($event)"
+></app-modifieremployer>
+<!--message de confirmation-->
+
