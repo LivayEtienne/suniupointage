@@ -59,24 +59,7 @@ updatedDepartmentName: string = ''; // Nouveau nom du département
     this.isAddDepartmentFormVisible = false;
   }
 
-  // Ajouter un département
-  /* addDepartment(): void {
-    if (!this.newDepartment.nom || !this.newDepartment.code || !this.newDepartment.date_de_creation) {
-      alert('Veuillez remplir tous les champs');
-      return;
-    }
-
-    this.departmentService.createDepartment(this.newDepartment).subscribe(
-      (response) => {
-        console.log('Département ajouté :', response);
-        this.getDepartments(); // Recharger la liste des départements
-        this.cancelAddDepartment(); // Fermer le formulaire
-      },
-      (error) => {
-        console.error('Erreur lors de l\'ajout du département :', error);
-      }
-    );
-  } */
+ 
 
 
   // Vérifier que la date de création est antérieure ou égale à la date actuelle
@@ -86,38 +69,7 @@ updatedDepartmentName: string = ''; // Nouveau nom du département
     return inputDate <= currentDate;
   }
 
-   /*  addDepartment(): void {
-      if (!this.newDepartment.nom || !this.newDepartment.code || !this.newDepartment.date_de_creation) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Veuillez remplir tous les champs'
-        });
-        return;
-      }
-    
-      this.departmentService.createDepartment(this.newDepartment).subscribe(
-        (response) => {
-          console.log('Département ajouté :', response);
-          this.getDepartments(); // Recharger la liste des départements
-          this.cancelAddDepartment(); // Fermer le formulaire
-          Swal.fire({
-            icon: 'success',
-            title: 'Département ajouté',
-            text: 'Le département a été ajouté avec succès'
-          });
-        },
-        (error) => {
-          console.error('Erreur lors de l\'ajout du département :', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Erreur',
-            text: 'Une erreur est survenue lors de l\'ajout du département'
-          });
-        }
-      );
-    } */
-
+   
       // Ajouter un département
   addDepartment(): void {
     if (!this.newDepartment.nom || !this.newDepartment.code || !this.newDepartment.date_de_creation) {
