@@ -34,7 +34,7 @@ export class ApprenantComponent implements OnInit {
   isUpdateUidModalOpen = false;
   matricule: string = '';  // Initialisation avec une valeur par défaut
   newUid: string = '';     // Initialisation avec une valeur par défaut
-
+  apprenant: any;
   // Déclaration de la variable pour l'affichage du placeholder
   isAffectationVisible: boolean = false;
   selected?: boolean;
@@ -123,200 +123,7 @@ export class ApprenantComponent implements OnInit {
     this.successMessage = null; // Réinitialiser le message de succès
   }
 
-  // Soumettre le formulaire
-  /* onSubmit(): void {
-    const userData = {
-      nom: this.nom,
-      prenom: this.prenom,
-      email: this.email,
-      adresse: this.adresse,
-      telephone: this.telephone,
-      password: this.password,
-      role: this.role
-    };
 
-    if (this.isEditMode) {
-      // Logique d'édition de l'apprenant si nécessaire
-      // Exemple : userService.updateUser(id, userData);
-    } else {
-      this.userService.addUser(userData).subscribe(
-        (response) => {
-          console.log('Utilisateur ajouté avec succès:', response);
-          this.successMessage = 'Utilisateur ajouté avec succès.';
-          this.fetchApprenants();
-          this.closeModal();
-          Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');  // Affichage de la SweetAlert pour succès
-        },
-        (error) => {
-          console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
-          this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
-          Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');  // Affichage de la SweetAlert pour erreur
-        }
-      );
-    }
-  } */
-
-
-/* 
-    onSubmit(): void {
-      const userData = {
-        nom: this.nom,
-        prenom: this.prenom,
-        email: this.email,
-        adresse: this.adresse,
-        telephone: this.telephone,
-        password: this.password,
-        role: this.role,
-      };
-    
-      if (this.isEditMode) {
-        // Assurez-vous que l'ID est correctement passé
-        const apprenantId = this.apprenants.find(apprenant => apprenant.nom === this.nom)?.id;
-    
-        if (apprenantId) {
-          this.userService.updateUser(apprenantId, userData).subscribe(
-            (response) => {
-              console.log('Utilisateur mis à jour avec succès:', response);
-              this.successMessage = 'Utilisateur mis à jour avec succès.';
-              this.fetchApprenants(); // Recharger la liste
-              this.closeModal(); // Fermer le modal
-              Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
-            },
-            (error) => {
-              console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
-              this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
-              Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
-            }
-          );
-        } else {
-          console.error('ID de l\'utilisateur non trouvé.');
-        }
-      } else {
-        // Ajout d'un nouvel utilisateur
-        this.userService.addUser(userData).subscribe(
-          (response) => {
-            console.log('Utilisateur ajouté avec succès:', response);
-            this.successMessage = 'Utilisateur ajouté avec succès.';
-            this.fetchApprenants();
-            this.closeModal();
-            Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
-          },
-          (error) => {
-            console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
-            this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
-            Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
-          }
-        );
-      }
-      
-    } */
-
-     /*  onSubmit(): void {
-        const userData = {
-          nom: this.nom,
-          prenom: this.prenom,
-          email: this.email,
-          adresse: this.adresse,
-          telephone: this.telephone,
-          password: this.password,
-          role: this.role,
-        };
-      
-        if (this.isEditMode) {
-          // Utilise directement l'ID de l'apprenant si possible
-          const apprenantId = this.apprenants.find(apprenant => apprenant.nom === this.nom)?.id;
-      
-          if (apprenantId) {
-            this.userService.updateUser(apprenantId, userData).subscribe(
-              (response) => {
-                console.log('Utilisateur mis à jour avec succès:', response);
-                this.successMessage = 'Utilisateur mis à jour avec succès.';
-                this.fetchApprenants(); // Recharger la liste
-                this.closeModal(); // Fermer le modal
-                Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
-              },
-              (error) => {
-                console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
-                this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
-                Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
-              }
-            );
-          } else {
-            console.error('ID de l\'utilisateur non trouvé.');
-          }
-        } else {
-          // Ajout d'un nouvel utilisateur
-          this.userService.addUser(userData).subscribe(
-            (response) => {
-              console.log('Utilisateur ajouté avec succès:', response);
-              this.successMessage = 'Utilisateur ajouté avec succès.';
-              this.fetchApprenants();
-              this.closeModal();
-              Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
-            },
-            (error) => {
-              console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
-              this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
-              Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
-            }
-          );
-        }
-      } */
-      
-        /* onSubmit(): void {
-          const userData = {
-            nom: this.nom,
-            prenom: this.prenom,
-            email: this.email,
-            adresse: this.adresse,
-            telephone: this.telephone,
-            password: this.password,
-            role: this.role,
-          };
-        
-          if (this.isEditMode) {
-            // Trouver l'ID de l'apprenant en utilisant un critère unique, comme l'email
-            const apprenantId = this.apprenants.find(apprenant => apprenant.email === this.email)?.id;
-        
-            if (apprenantId) {
-              this.userService.updateUser(apprenantId, userData).subscribe(
-                (response) => {
-                  console.log('Utilisateur mis à jour avec succès:', response);
-                  this.successMessage = 'Utilisateur mis à jour avec succès.';
-                  this.fetchApprenants(); // Recharger la liste
-                  this.closeModal(); // Fermer le modal
-                  Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
-                },
-                (error) => {
-                  console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
-                  this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
-                  Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
-                }
-              );
-            } else {
-              console.error('ID de l\'utilisateur non trouvé.');
-              this.errorMessage = 'ID de l\'utilisateur non trouvé.';
-              Swal.fire('Erreur', 'L\'ID de l\'utilisateur est introuvable.', 'error');
-            }
-          } else {
-            // Ajout d'un nouvel utilisateur
-            this.userService.addUser(userData).subscribe(
-              (response) => {
-                console.log('Utilisateur ajouté avec succès:', response);
-                this.successMessage = 'Utilisateur ajouté avec succès.';
-                this.fetchApprenants();
-                this.closeModal();
-                Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
-              },
-              (error) => {
-                console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
-                this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
-                Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
-              }
-            );
-          }
-        }
-         */
 // Méthode pour gérer la sélection de fichier
 onFileSelected1(event: any): void {
   const file = event.target.files[0];
@@ -327,55 +134,62 @@ onFileSelected1(event: any): void {
 
 // Méthode pour soumettre le formulaire
 onSubmit(): void {
-  if (this.selectedFile) {  // Vérifie si un fichier a été sélectionné
-    const formData = new FormData();
-    formData.append('nom', this.nom);
-    formData.append('prenom', this.prenom);
-    formData.append('email', this.email);
-    formData.append('adresse', this.adresse);
-    formData.append('telephone', this.telephone);
-    formData.append('role', this.role);
+  const userData: any = {
+    nom: this.nom,
+    prenom: this.prenom,
+    email: this.email,
+    adresse: this.adresse,
+    telephone: this.telephone,
+    password: this.password,
+    role: this.role,
+  };
 
-    // Ajouter le mot de passe uniquement si ce n'est pas un mode édition
-    if (!this.isEditMode) {
-      formData.append('password', this.password);
+  // Ajouter la photo si elle est sélectionnée
+  if (this.photo) {
+    userData.photo = this.photo;
+  }
+
+  if (this.isEditMode) {
+    const apprenantId = this.apprenants.find(apprenant => apprenant.email === this.email)?.id;
+
+    if (apprenantId) {
+      this.userService.updateUser(apprenantId, userData).subscribe(
+        (response) => {
+          console.log('Utilisateur mis à jour avec succès:', response);
+          this.successMessage = 'Utilisateur mis à jour avec succès.';
+          this.fetchApprenants();
+          this.closeModal();
+          Swal.fire('Succès', 'L\'utilisateur a été mis à jour avec succès.', 'success');
+        },
+        (error) => {
+          console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+          this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
+          Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
+        }
+      );
     }
-
-    // Ajouter le fichier photo
-    formData.append('photo', this.selectedFile, this.selectedFile.name);
-
-    // Appel à la méthode d'enregistrement utilisateur
-    this.userService.addUser(formData).subscribe({
-      next: (response) => {
-        console.log('Utilisateur ajouté avec succès !', response);
-        this.closeModal();  // Fermer le modal ou autre action après succès
-      },
-      error: (err) => {
-        console.error('Erreur lors de l\'ajout de l\'utilisateur', err);
-        this.errorMessage = 'Une erreur est survenue.';  // Afficher l'erreur à l'utilisateur
-      }
-    });
   } else {
-    // Si aucun fichier n'est sélectionné
-    this.errorMessage = 'Veuillez sélectionner une photo.';
+    this.userService.addUser(userData).subscribe(
+      (response) => {
+        console.log('Utilisateur ajouté avec succès:', response);
+        this.successMessage = 'Utilisateur ajouté avec succès.';
+        this.fetchApprenants();
+        this.closeModal();
+        Swal.fire('Succès', 'L\'utilisateur a été ajouté avec succès.', 'success');
+      },
+      (error) => {
+        console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
+        this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
+        Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
+      }
+    );
   }
 }
+
        
 
 
-  // Charger la liste des apprenants
-  /* fetchApprenants(): void {
-    this.userService.getApprenants(this.currentPage, 10).subscribe(
-      (data) => {
-        this.apprenants = data; // Assigner la liste des apprenants récupérée depuis le backend
-        this.totalPages = Math.ceil(this.apprenants.length / 10); // Exemple de calcul du nombre total de pages
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération des apprenants:', error);
-        Swal.fire('error, une erreur s est pruduite lors de la récupération des apprenants')
-      }
-    );
-  } */
+ 
 
     fetchApprenants(): void {
       this.userService.getApprenants(this.currentPage, 10).subscribe(
@@ -500,38 +314,13 @@ onSubmit(): void {
 
 
 
-  // Méthode pour ouvrir la modal de mise à jour de l'UID
-  openUpdateUidModal(apprenant: any): void {
-    this.matricule = apprenant.matricule; // Récupérer le matricule de l'apprenant
-    this.newUid = ''; // Réinitialiser le nouveau UID
-    this.isUpdateUidModalOpen = true;
-  }
+ 
 
   // Méthode pour fermer la modal de mise à jour de l'UID
   closeUpdateUidModal(): void {
     this.isUpdateUidModalOpen = false;
   }
 
-  // Méthode pour mettre à jour l'UID d'un utilisateur
-  updateUserUID(matricule: string, newUid: string): void {
-    if (!newUid) {
-      this.errorMessage = 'Veuillez entrer un nouvel UID';
-      return;
-    }
-
-    // Appel de la méthode updateUID du service
-    this.userService.updateUID(matricule, newUid).subscribe(
-      response => {
-        console.log('UID mis à jour avec succès', response);
-        this.successMessage = 'UID mis à jour avec succès'; // Message de succès
-        this.closeUpdateUidModal(); // Fermer la modal après mise à jour
-      },
-      error => {
-        console.error('Erreur lors de la mise à jour de l\'UID', error);
-        this.errorMessage = 'Erreur lors de la mise à jour de l\'UID'; // Message d'erreur
-      }
-    );
-  }
 
   // Sélectionner/désélectionner tous les apprenants
   toggleSelectAll(): void {
@@ -640,4 +429,93 @@ applyFilter() {
     this.filteredApprenants = this.apprenants;
   }
 }
+
+
+
+openUpdateUidModal(apprenant: any) {
+  this.matricule = apprenant.nom; // Récupérer le matricule de l'apprenant
+    this.newUid = ''; // Réinitialiser le nouveau UID
+    this.isUpdateUidModalOpen = true;
+  // Vérifier si l'apprenant est bien passé
+  console.log("Ouvrir modal pour l'apprenant:", apprenant);
+
+  // Si apprenant est bien défini, on l'assigne à this.apprenant
+  if (apprenant) {
+    this.apprenant = apprenant;
+    this.newUid = ''; // Réinitialiser l'UID
+    this.isUpdateUidModalOpen = true; // Ouvrir le modal
+  } else {
+    console.log("L'apprenant n'est pas défini.");
+  }
+}
+
+
+// Mettre à jour l'UID
+/* updateUid() {
+  console.log("Matricule:", this.matricule, "New UID:", this.newUid);
+  if (this.newUid && this.apprenant) {
+    this.userService.updateUID(this.apprenant.id, this.newUid).subscribe(
+      (response) => {
+        console.log("Réponse du serveur:", response);
+        alert('UID mis à jour avec succès!');
+        this.closeUpdateUidModal();
+        this.newUid = '';
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour de l\'UID', error);
+        alert('Une erreur est survenue.');
+      }
+    );
+  } else {
+    console.log("Les données sont manquantes : newUid:", this.newUid, "apprenant:", this.apprenant);
+  }
+} */
+
+  updateUid() {
+    console.log("Matricule:", this.matricule, "New UID:", this.newUid);
+  
+    // Vérifiez si l'UID et l'apprenant sont définis
+    if (this.newUid && this.apprenant) {
+      // Appeler le service pour mettre à jour l'UID
+      this.userService.updateUID(this.apprenant.id, this.newUid).subscribe(
+        (response) => {
+          console.log("Réponse du serveur:", response);
+          
+          // Afficher une alerte de succès avec SweetAlert
+          Swal.fire({
+            title: 'Succès!',
+            text: 'L\'UID a été mis à jour avec succès.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+  
+          this.closeUpdateUidModal();  // Fermer le modal
+          this.newUid = '';  // Réinitialiser le champ UID
+        },
+        (error) => {
+          console.error('Erreur lors de la mise à jour de l\'UID', error);
+          
+          // Afficher une alerte d'erreur avec SweetAlert
+          Swal.fire({
+            title: 'Erreur!',
+            text: 'Une erreur est survenue lors de la mise à jour de l\'UID.',
+            icon: 'error',
+            confirmButtonText: 'Réessayer'
+          });
+        }
+      );
+    } else {
+      console.log("Les données sont manquantes : newUid:", this.newUid, "apprenant:", this.apprenant);
+  
+      // Afficher une alerte pour les données manquantes avec SweetAlert
+      Swal.fire({
+        title: 'Erreur!',
+        text: 'Les données nécessaires sont manquantes. Veuillez vérifier.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+    }
+  }
+  
+
 }

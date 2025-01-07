@@ -3,7 +3,7 @@
   
   margin: 0 auto;
   padding: 30px;
-  margin-left: 225px;
+  margin-left: 240px;
   font-family: 'Arial', sans-serif;
   background-color: #f8f9fa;
   border-radius: 8px;
@@ -190,12 +190,13 @@
   font-size: 1rem;
 }
 
+
 .form-group {
   margin-bottom: 20px;
 }
 
 .form-group label {
-  display: block;
+  display: flex;
   margin-bottom: 8px;
   font-weight: 600;
 }

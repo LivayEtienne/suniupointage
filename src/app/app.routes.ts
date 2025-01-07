@@ -25,6 +25,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 
 import { CohorteComponent } from './cohorte/cohorte.component';
 import { ApprenantComponent } from './apprenant/apprenant.component';
+import { ModifierUtilisateurComponent } from './modifier-utilisateur/modifier-utilisateur.component';
 
 export const routes: Routes = [
     
@@ -62,6 +63,7 @@ export const routes: Routes = [
     {
       path: 'apprenant',
       component: ApprenantComponent
-     }
+     },
 
+     { path: 'modif', component: ModifierUtilisateurComponent }
 ];

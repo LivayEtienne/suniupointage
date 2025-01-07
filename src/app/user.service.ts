@@ -12,10 +12,10 @@ export class UserService {
 
   // Méthode pour récupérer les utilisateurs avec pagination
   getApprenants(page: number, pageSize: number): Observable<any> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', pageSize.toString());  // Remplacer 'pageSize' par 'limit' pour correspondre à l'API Laravel
-
+    const params = {
+      page: page.toString(),
+      pageSize: pageSize.toString(),
+    };
     return this.http.get<any>(this.apiUrl, { params });
   }
 
@@ -64,15 +64,7 @@ export class UserService {
     });
   }
 
-  // Méthode pour mettre à jour l'UID d'un utilisateur en appelant le service sur le port 4000
-  updateUID(matricule: string, newUid: string): Observable<any> {
-    const url = `http://localhost:4000/api/users/${matricule}/update-uid`;  // URL avec port 4000
-    return this.http.put(url, { newUid }, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    });
-  }
+
 
   bulkDelete(ids: number[]) {
     return this.http.post('http://localhost:8000/api/users/bulk-delete', { ids });
@@ -99,6 +91,17 @@ updateUser(id: number, userData: any): Observable<any> {
   updateUser(id: number, userData: any): Observable<any> {
     console.log('Updating user with data:', userData); // Vérifiez les données envoyées
     return this.http.put(`${this.apiUrl}/${id}`, userData, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
+  }
+  
+
+
+  updateUID(id: number, newUid: string): Observable<any> {
+    const url = `http://localhost:8000/api/users/${id}/update-uid`;  // URL avec le port 8000
+    return this.http.put(url, { cardId: newUid }, {  // Utilisez `cardId` au lieu de `newUid` pour correspondre à votre API
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),

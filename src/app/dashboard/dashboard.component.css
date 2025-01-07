@@ -1,7 +1,7 @@
 .dashboard-container {
     padding: 30px;
     background-color: #FAFBFF;
-    margin-left: 225px;
+    margin-left: 240px;
 }
 
 .search-container {
@@ -59,7 +59,8 @@
 
 .stat-card {
     background: white;
-    background-color: #FAFBFF;
+    background-color: #ffffffff;
+    height: 130px;
     border-radius: 16px;
     padding: 0px;
     display: flex;
