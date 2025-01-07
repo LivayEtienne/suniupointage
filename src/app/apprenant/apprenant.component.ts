@@ -239,6 +239,21 @@ openEditModal(apprenant: Apprenant): void {
 }
 
 
+fetchApprenants(): void {
+  this.userService.getApprenants(this.currentPage, 10).subscribe(
+    (data) => {
+      console.log('Données récupérées:', data);  // Vérifiez si les données sont bien récupérées
+      this.apprenants = data;
+      this.totalPages = Math.ceil(this.apprenants.length / 10);
+    },
+    (error) => {
+      console.error('Erreur lors de la récupération des apprenants:', error);
+      Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
+    }
+  );
+}
+
+
   // Réinitialiser le formulaire
   clearForm(): void {
     this.nom = '';
@@ -310,19 +325,6 @@ onSubmit(): void {
     );
   } */
 
-    fetchApprenants(): void {
-      this.userService.getApprenants(this.currentPage, 10).subscribe(
-        (data) => {
-          console.log('Données récupérées:', data);  // Vérifiez si les données sont bien récupérées
-          this.apprenants = data;
-          this.totalPages = Math.ceil(this.apprenants.length / 10);
-        },
-        (error) => {
-          console.error('Erreur lors de la récupération des apprenants:', error);
-          Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
-        }
-      );
-    }
     
 
   // Gérer la pagination
