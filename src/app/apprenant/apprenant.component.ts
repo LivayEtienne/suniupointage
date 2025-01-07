@@ -156,14 +156,10 @@ filteredUsers: IUser[] = []; // Liste des utilisateurs filtrés
     this.matricule = '';
     this.newUid = '';
     this.fetchApprenants();
-    this.loadEmployes();
+  
   this.loadStats();
     
   }
-
-
-
-
   
   loadStats(): void {
     this.apiService.getUserStats().subscribe({
@@ -175,18 +171,30 @@ filteredUsers: IUser[] = []; // Liste des utilisateurs filtrés
       }
     });
   }
-  
-  
-  loadEmployes(): void {
-    this.apiService.getUsersByRole(['admin', 'vigile', 'employe']).subscribe({
-      next: (data: IUser[]) => {
-        this.users = data;
-        this.filteredUsers = data; 
-       
+
+
+
+
+  fetchApprenants(): void {
+    this.userService.getAllUsers(this.currentPage, 10).subscribe({
+      next: (response) => {
+        console.log('Réponse brute de l\'API:', response);
+        
+        const allUsers = response.data || response;
+        console.log('Tous les utilisateurs:', allUsers);
+        
+        this.apprenants = allUsers.filter((user: any) => {
+          console.log('Rôle de l\'utilisateur:', user.role);
+          return user.role === 'apprenant';
+        });
+        
+        console.log('Apprenants filtrés:', this.apprenants);
+        this.totalPages = Math.ceil(this.apprenants.length / 10);
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des employés:', error);
-      },
+        console.error('Erreur complète:', error);
+        Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
+      }
     });
   }
   
@@ -239,21 +247,6 @@ openEditModal(apprenant: Apprenant): void {
 }
 
 
-fetchApprenants(): void {
-  this.userService.getApprenants(this.currentPage, 10).subscribe(
-    (data) => {
-      console.log('Données récupérées:', data);  // Vérifiez si les données sont bien récupérées
-      this.apprenants = data;
-      this.totalPages = Math.ceil(this.apprenants.length / 10);
-    },
-    (error) => {
-      console.error('Erreur lors de la récupération des apprenants:', error);
-      Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
-    }
-  );
-}
-
-
   // Réinitialiser le formulaire
   clearForm(): void {
     this.nom = '';
@@ -272,6 +265,7 @@ onFileSelected1(event: any): void {
     this.selectedFile = file;  // Stocker le fichier sélectionné
   }
 }
+
 
 // Méthode pour soumettre le formulaire
 onSubmit(): void {

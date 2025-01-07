@@ -10,15 +10,14 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Méthode pour récupérer les utilisateurs avec pagination
-  getApprenants(page: number, pageSize: number): Observable<any> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', pageSize.toString());  // Remplacer 'pageSize' par 'limit' pour correspondre à l'API Laravel
 
-    return this.http.get<any>(this.apiUrl, { params });
+  getApprenants(page: number, pageSize: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?page=${page}&limit=${pageSize}&role=apprenant`);
   }
 
+  getAllUsers(page: number, pageSize: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?page=${page}&limit=${pageSize}`);
+  }
   // Méthode pour ajouter un utilisateur
   /* addUser(userData: any): Observable<any> {
     return this.http.post(this.apiUrl, userData, {
