@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DashVigileService } from '../dashvigile.service';
+import { DashvigileService } from '../dashvigile.service';
 import { Router } from '@angular/router'; // Importation du router Angular
 import { FormsModule } from '@angular/forms';  // Importez FormsModule pour les formulaires template-driven 
 import { CommonModule } from '@angular/common';  // Importez CommonModule pour les directives communes  
@@ -21,9 +21,10 @@ export class DashvigileComponent implements OnInit, OnDestroy {
   isCooldownActive: boolean = false; // Si le cooldown est actif
   modalVisible: boolean = false;  // Renommé en modalVisible
   modalMessage: string = ''; // Message à afficher dans la modal
+  message: string | null = null;  // Renommé en message
 
   constructor(
-    private dashVigileService: DashVigileService,
+    private dashVigileService: DashvigileService, // Injection du service Dashvigile
     private router: Router, // Injection du service Router
     private cdr: ChangeDetectorRef
   ) {}
@@ -38,6 +39,8 @@ export class DashvigileComponent implements OnInit, OnDestroy {
     // S'abonner aux messages WebSocket
     this.dashVigileService.messages$.subscribe((message: any) => {
       console.log('Message reçu dans le composant:', message);
+
+      
 
       if (message.status === 'error' && message.message === 'UID mal formé ou données invalides.') {
         this.handleScanError(message);
