@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';  // Importer HttpClient depuis Angular
+import { Observable } from 'rxjs';  // Importer Observable depuis rxjs
+import { tap, catchError } from 'rxjs/operators';  // Importer les opérateurs 'tap' et 'catchError'
+import { throwError } from 'rxjs';  // Importer 'throwError' pour gérer les erreurs
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -9,10 +15,12 @@ export class Auth1Service {
   private userInfoSubject: Subject<any> = new Subject<any>();  // Subject pour envoyer les infos utilisateur
   userInfo$ = this.userInfoSubject.asObservable(); // Observable pour s'abonner aux infos utilisateur
   private messageSubject: Subject<any> = new Subject<any>(); // Subject pour envoyer les messages
+  private apiUrl = 'http://localhost:3000';  // Définir l'URL de l'API de votre backend
 
-  constructor() {
+  constructor(private http: HttpClient) {  // Injection de HttpClient dans le service pour les requêtes HTTP) {
     // Connexion WebSocket au serveur
     this.socket = new WebSocket('ws://localhost:3000');  // Assurez-vous que le port correspond à celui de votre WebSocket
+    
 
     // Écouter les messages reçus du serveur WebSocket
     this.socket.onmessage = (event) => {
@@ -85,4 +93,37 @@ export class Auth1Service {
     }
   }
 
-}
+  updateCheckStatus(userId: string, checkStatus: string): Observable<any> {
+    const url = `http://localhost:3000/users/updateCheck/${userId}`;  // L'URL avec l'ID de l'utilisateur
+    const body = { check: checkStatus };  // Le corps de la requête avec la nouvelle valeur de "check"
+  
+    return this.http.put(url, body).pipe(
+      tap(response => {
+        console.log('Réponse reçue du backend:', response);
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la mise à jour:', error);
+        return throwError(error);  // Propager l'erreur
+      })
+    );
+  }
+  
+  
+   // Méthode pour récupérer tous les utilisateurs
+   getAllUsers(): Observable<any> {
+    const url = `${this.apiUrl}/users/all`;  // URL pour récupérer les utilisateurs
+    return this.http.get(url).pipe(
+      tap(response => {
+        console.log('Liste des utilisateurs reçue du backend:', response);
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
+        return throwError(error);  // Propager l'erreur
+      })
+    );
+  }
+
+  
+  }
+
+

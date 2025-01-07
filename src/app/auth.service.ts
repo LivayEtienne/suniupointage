@@ -3,6 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+
 
 
 @Injectable({
@@ -12,6 +15,7 @@ export class AuthService implements OnDestroy {
   private readonly apiUrl = 'http://localhost:8000/api';  // URL de l'API REST
   private readonly WS_URL = 'ws://localhost:3000';  // URL du WebSocket
 
+  public errorMessage: string = '';
   private ws$: WebSocketSubject<any> | undefined;
   private socket!: WebSocket;
   private sendInterval: any; // Intervalle d'envoi des informations
@@ -23,7 +27,11 @@ export class AuthService implements OnDestroy {
   private isWebSocketConnected = false;
   private isAttemptingReconnect = false; // Flag pour éviter les tentatives de reconnexion multiples
 
-  constructor(private http: HttpClient) {
+   // Variable d'état pour stocker l'erreur
+   private errorMessageSubject = new BehaviorSubject<string>('');
+   errorMessage$ = this.errorMessageSubject.asObservable();
+
+  constructor(private http: HttpClient, private router: Router) {
     this.connectWebSocket();  // Connexion WebSocket lors de l'initialisation
   }
 
@@ -59,7 +67,6 @@ export class AuthService implements OnDestroy {
       );
   }
 
-  // Méthode pour se connecter au WebSocket
   connectWebSocket(): void {
     if (!this.isWebSocketConnected && !this.isAttemptingReconnect) {
       this.isAttemptingReconnect = true;
@@ -70,59 +77,44 @@ export class AuthService implements OnDestroy {
         next: (message) => {
           console.log('Message reçu via WebSocket:', message);
 
-          // Vérification de l'état de la connexion WebSocket
-          if (message.status === 'connected') {
-            const userMessage = message.message;
+          // Vérification si le message contient un status 'error'
+          if (message.status === 'error' && message.message) {
+            this.errorMessageSubject.next(message.message); // Met à jour l'erreur
+          }
+
+          // Vérification si le message contient les informations de l'utilisateur
+          if (message.role) {
             const userRole = message.role;
+            console.log(`Rôle de l'utilisateur : ${userRole}`);
 
-            console.log(`Utilisateur authentifié avec le rôle : ${userRole}`);
-
-            // Envoi du message avec les informations d'authentification
-            this.messagesSubject.next({
-              authenticated: true,
-              message: userMessage,
-              role: userRole,
-            });
+            // Si le rôle est 'admin', on redirige vers le dashboard
+            if (userRole === 'admin') {
+              console.log('Redirection vers le tableau de bord');
+              this.router.navigate(['/dasbord']);
+            }
 
             // Marquer la connexion comme établie
             this.isWebSocketConnected = true;
-
-            // Fermer la connexion WebSocket après authentification réussie
-            this.disconnectWebSocket();
-          } else if (message.status === 'error') {
-            this.messagesSubject.next({
-              authenticated: false,
-              error: message.message,
-            });
           } else {
-            this.messagesSubject.next(message);
+            console.error('Message WebSocket sans rôle');
           }
         },
         error: (err) => {
           console.error('Erreur WebSocket:', err.message);
-          this.isWebSocketConnected = false;  // Réinitialiser l'état de la connexion
-          this.isAttemptingReconnect = false;  // Terminer la tentative de reconnexion
-          this.messagesSubject.next({
-            status: 'error',
-            message: `Erreur de connexion WebSocket : ${err.message}`,
-          });
-          this.attemptReconnect();  // Tentative de reconnexion
+          this.isWebSocketConnected = false;
+          this.isAttemptingReconnect = false;
         },
         complete: () => {
           console.log('WebSocket fermé');
-          this.isWebSocketConnected = false;  // Réinitialiser l'état de la connexion
-          this.isAttemptingReconnect = false;  // Terminer la tentative de reconnexion
-          this.messagesSubject.next({
-            status: 'error',
-            message: 'La connexion WebSocket a été fermée.',
-          });
-          this.attemptReconnect();  // Tentative de reconnexion
+          this.isWebSocketConnected = false;
+          this.isAttemptingReconnect = false;
+          this.attemptReconnect(); // Tentative de reconnexion si nécessaire
         },
       });
-    } else {
-      console.log('Connexion WebSocket déjà établie ou reconnexion en cours');
     }
   }
+  
+
 
   // Tentative de reconnexion WebSocket
   private attemptReconnect(): void {

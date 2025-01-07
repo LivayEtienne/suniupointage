@@ -1,5 +1,5 @@
 
-
+import { SidebareComponent } from '../sidebare/sidebare.component';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {ModifieremployerComponent} from '../modifieremployer/modifieremployer.component';
 import { AjouteremployerComponent } from '../ajouteremployer/ajouteremployer.component';
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-employer',
   standalone: true,
-  imports: [CommonModule,FormsModule,AjouteremployerComponent,ModifieremployerComponent,  ],
+  imports: [CommonModule,FormsModule,AjouteremployerComponent,ModifieremployerComponent, SidebareComponent],
   templateUrl: './employer.component.html',
   styleUrl: './employer.component.css'
 })

@@ -39,28 +39,31 @@
           </div>
         </div>
   
-        <!-- Error message for the whole form -->
         <div *ngIf="errorMessage" class="error-message">
-          <p>{{ errorMessage }}</p>
+          {{ errorMessage }}
         </div>
+        
   
         <!-- Authentication success message -->
-        <div *ngIf="authenticationMessage" class="alert alert-info">
-          {{ authenticationMessage }}
-        </div>
   
         <button type="submit" [disabled]="authForm.invalid">Connexion</button>
       </form>
     </div>
-
-    <!-- Modal d'erreur (apparaît quand la carte RFID est invalide) -->
-<div *ngIf="showErrorModal" class="modal">
-  <div class="modal-content">
-    <span class="close" (click)="closeModal()">&times;</span>
-    <h2>Erreur de Carte RFID</h2>
-    <p>{{ errorMessage }}</p>
+  </div>
+  <!-- Modal d'erreur -->
+<div *ngIf="errorMessage" class="modal-overlay" (click)="closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Erreur</h3>
+      <button (click)="closeModal()" class="close-button">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>{{ errorMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button (click)="closeModal()">Fermer</button>
+    </div>
   </div>
 </div>
 
-  </div>
   

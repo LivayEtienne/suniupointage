@@ -18,6 +18,10 @@ export class VigileComponent implements OnInit, OnDestroy {
   listeEtudiants: any[] = []; // Initialise avec un tableau vide
   matricule: string = ''; // Ajouter une propriété pour stocker le matricule
   avatarUrl: string | ArrayBuffer | null = null; // Pour stocker l'URL de l'image de l'avatar
+  userId: string = ''; // ID de l'utilisateur
+  checkStatus: string = ''; // Statut de check
+  users: any[] = [];  // Déclarez un tableau pour stocker les utilisateurs
+
 
   constructor(
     private websocketService: WebsocketService, 
@@ -26,6 +30,8 @@ export class VigileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Écoute les messages provenant du serveur WebSocket
+    this.fetchUsers();  // Appeler la méthode pour récupérer les utilisateurs
+
     this.websocketService.listenMessages().subscribe({
       next: (message) => {
         if (message && message.message) {
@@ -143,4 +149,63 @@ export class VigileComponent implements OnInit, OnDestroy {
       reader.readAsDataURL(file);  // Lit le fichier en tant qu'URL de données (base64)
     }
   }
+
+  updateCheck() {
+    this.auth1Service.updateCheckStatus(this.userId, this.checkStatus).subscribe(
+      (response) => {
+        // Gérer la réponse en cas de succès
+        this.statusMessage = 'Statut mis à jour avec succès !';
+        console.log('Réponse serveur:', response);
+      },
+      (error) => {
+        // Gérer les erreurs
+        this.statusMessage = 'Erreur lors de la mise à jour du statut.';
+        console.error('Erreur:', error);
+      }
+    );
+  }
+
+   // Définissez la méthode onCheckStatus
+  // Assurez-vous que cette méthode existe
+  onCheckStatus(userId: string, checkStatus: string): void {
+    this.auth1Service.updateCheckStatus(userId, checkStatus).subscribe(
+      (response) => {
+        console.log('Utilisateur mis à jour:', response);
+        // Vous pouvez éventuellement appeler fetchUsers() ici pour rafraîchir la liste des utilisateurs
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour:', error);
+        // Afficher un message d'erreur plus explicite à l'utilisateur
+        alert('Erreur lors de la mise à jour du statut');
+      }
+    );
+  }
+  
+  
+   // Méthode pour récupérer les utilisateurs
+  fetchUsers(): void {
+    this.auth1Service.getAllUsers().subscribe(
+      (response) => {
+        this.users = response.users;  // Stocker les utilisateurs reçus
+        console.log('Utilisateurs:', this.users);
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
+      }
+    );
+  }
+
+  updateUserCheck(userId: string, checkStatus: string): void {
+    this.auth1Service.updateCheckStatus(userId, checkStatus).subscribe(
+      (response) => {
+        console.log('Utilisateur mis à jour:', response);
+        this.fetchUsers();  // Actualiser la liste des utilisateurs après la mise à jour
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour:', error);
+      }
+    );
+  }
+  
+  
 }
