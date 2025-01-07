@@ -1,0 +1,144 @@
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal {
+    background: #fff;
+    border-radius: 8px; /* Arrondi comme dans "ajouter" */
+    width: 90%;
+    max-width: 700px; /* Largeur maximale pour correspondre au style d'ajout */
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .modal-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+   
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0; /* Définir une bordure de séparation */
+  }
+  
+  .header-icon {
+    width: 150px;
+    height: 150px;
+    margin-top: -20px; /* Espacement entre le titre et l'icône */
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 20px;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: red;
+    position: absolute;
+    top: 10px; /* Position fixe dans le coin supérieur droit */
+    right: 10px;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes, comme dans le modal d'ajout */
+    gap: 15px; /* Espacement entre les champs */
+    padding: 15px 0;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 5px;
+    color: #666;
+  }
+  
+  .required {
+    color: red;
+  }
+  
+  input, select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+  }
+  
+  input:focus, select:focus {
+    border-color: #31ca97; /* Bordure verte lors du focus */
+  }
+  
+  .file-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .browse-btn {
+    padding: 10px 20px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .form-footer {
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .error-message {
+    color: red;
+    margin-bottom: 15px;
+  }
+  
+  .submit-btn {
+    background: #00A551;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+  
+
+
+
+
+
+  
+  .submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .submit-btn:hover:not(:disabled) {
+    background: #10B981; /* Couleur au survol */
+  }
+  #phot{
+    width: 800px;
+  }

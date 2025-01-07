@@ -1,17 +1,19 @@
 
+
 import { Component,Input, Output, EventEmitter } from '@angular/core';
 
 import { ApiService,IUser,IDepartment } from '../api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 @Component({
-  selector: 'app-modifieremployer',
+  selector: 'app-modifier-apprenant',
   imports: [CommonModule,
     FormsModule],
-  templateUrl: './modifieremployer.component.html',
-  styleUrl: './modifieremployer.component.css'
+  templateUrl: './modifier-apprenant.component.html',
+  styleUrl: './modifier-apprenant.component.css'
 })
-export class ModifieremployerComponent {
+export class ModifierApprenantComponent {
+
   @Input() selectedUser!: IUser;  // ID de l'utilisateur à modifier
   @Output() closeModal = new EventEmitter<void>();  // Evénement pour fermer le modal
   @Output() userUpdated = new EventEmitter<IUser>();  // Événement pour signaler la mise à jour
@@ -21,6 +23,7 @@ export class ModifieremployerComponent {
   
 
   userData: Partial<IUser> = {};  // Données de l'utilisateur à modifier
+  
   departments: IDepartment[] = [];  // Liste des départements
   isSubmitting = false;  // Pour gérer l'état du formulaire (envoi)
   errorMessage = '';  // Pour afficher des messages d'erreur
@@ -29,8 +32,6 @@ export class ModifieremployerComponent {
     if (this.selectedUser) {  // Utilisation de selectedUser au lieu de user
       this.userData = { ...this.selectedUser };
     }
-    
-    
     this.loadDepartments();
   }
 
@@ -58,61 +59,23 @@ export class ModifieremployerComponent {
     });
   }
 
-
-  //pour la gestion de la photo pour modifier
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.photoFile = input.files[0];  // Récupérer le fichier sélectionné
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.photoPreview = reader.result as string;  // Générer la prévisualisation
-      };
-      reader.readAsDataURL(this.photoFile);
-    }
-  }
-
-
   // Soumettre le formulaire
-
   
   onSubmit() {
-
-  console.log('Données utilisateur:', this.userData);
-  console.log('Photo fichier:', this.photoFile);
-
     this.isSubmitting = true;
-    
-    if (this.photoFile) {
-      // Utilisation de FormData pour inclure la photo
-      this.apiService.updateUserWithPhoto(this.userData.id!, this.userData, this.photoFile).subscribe({
-        next: (updatedUser) => {
-          this.isSubmitting = false;
-          this.userUpdated.emit(updatedUser);
-          this.closeModal.emit(); // Fermer le modal
-        },
-        error: (error) => {
-          this.isSubmitting = false;
-          this.errorMessage = error.error?.message || 'Erreur lors de la mise à jour';
-        }
-      });
-    } else {
-      // Si aucune photo n'est incluse, envoyer les données sans fichier
-      this.apiService.updateUser(this.userData.id!, this.userData).subscribe({
-        next: (updatedUser) => {
-          this.isSubmitting = false;
-          this.userUpdated.emit(updatedUser);
-          this.closeModal.emit(); // Fermer le modal
-        },
-        error: (error) => {
-          this.isSubmitting = false;
-          this.errorMessage = error.error?.message || 'Erreur lors de la mise à jour';
-        }
-      });
-    }
+    this.apiService.updateUser(this.userData.id!, this.userData).subscribe({
+      next: (updatedUser) => {
+        this.isSubmitting = false;
+        this.userUpdated.emit(updatedUser); 
+        this.closeModal.emit();  // Fermer le modal après la mise à jour
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        this.errorMessage = error.error?.message || 'Erreur lors de la mise à jour';
+      }
+    });
   }
-  
+
   //controle de saisi
 
 
@@ -160,8 +123,19 @@ export class ModifieremployerComponent {
   onClose() {
     this.closeModal.emit();
   }
-  
-  
+  //pour la gestion de la photo pour modifier
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.photoFile = input.files[0];  // Récupérer le fichier sélectionné
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.photoPreview = reader.result as string;  // Générer la prévisualisation
+      };
+      reader.readAsDataURL(this.photoFile);
+    }
+  }
   //valider si ya pas erreur
 
   hasErrors(): boolean {
@@ -173,5 +147,4 @@ export class ModifieremployerComponent {
     );
   }
   
-
 }

@@ -6,12 +6,12 @@ import { AjouteremployerComponent } from '../ajouteremployer/ajouteremployer.com
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService, IUser,IDepartment } from '../api.service';
-
+import {FilterPipe} from '../filter.pipe'
 import Swal from 'sweetalert2';
 @Component({
   selector: 'app-employer',
   standalone: true,
-  imports: [CommonModule,FormsModule,AjouteremployerComponent,ModifieremployerComponent,  ],
+  imports: [CommonModule,FormsModule,AjouteremployerComponent,ModifieremployerComponent, FilterPipe ],
   templateUrl: './employer.component.html',
   styleUrl: './employer.component.css'
 })
@@ -98,18 +98,32 @@ selectedUser: IUser | null = null;
 
 
   loadEmployes(): void {
-    this.apiService.getUsersByRole(['admin', 'vigile', 'employe']).subscribe({
+    this.apiService.getUsersByRole(['admin', 'vigile', 'employer']).subscribe({
       next: (data: IUser[]) => {
-        this.users = data;
-        this.filteredUsers = data; 
-        this.updatePaginatedUsers(); // Mettre à jour les utilisateurs paginés
+        // Séparer les utilisateurs en deux groupes : apprenants et autres
+        this.users = data.filter(user => ['admin', 'vigile', 'employer'].includes(user.role));
+       
+        // Mettre à jour la liste paginée
+        this.filteredUsers = this.users;
+        this.updatePaginatedUsers();
+        
+        // Mettre à jour les statistiques
+        this.updateStats(data);
       },
       error: (error) => {
         console.error('Erreur lors du chargement des employés:', error);
       },
     });
   }
-  
+
+  updateStats(data: IUser[]): void {
+    this.stats.totalUsers = data.length;
+    this.stats.totalAdmins = data.filter(user => user.role === 'admin').length;
+    this.stats.totalVigiles = data.filter(user => user.role === 'vigile').length;
+    this.stats.totalVigiles = data.filter(user => user.role === 'employer').length;
+    this.stats.totalDepartments = new Set(data.map(user => user.departement_id)).size;  // Nombre de départements distincts
+  }
+
   // Charger les départements
 
   private departmentMap: { [key: number]: string } = {};
@@ -229,6 +243,7 @@ selectedUser: IUser | null = null;
           console.log('Mot de passe et rôle mis à jour avec succès', response);
           this.afficherMessage('Role changer avec succès', 'success');
           this.loadEmployes(); // Recharger la liste des utilisateurs
+          this.loadStats();
           this.closePasswordModal(); // Fermer le modal
           
           this.loadUsers(); // Recharger la liste
@@ -313,7 +328,10 @@ onModalClose() {
   this.showAddUserModal = false;
   // Rafraîchir la liste des utilisateurs si nécessaire
   this.loadUsers();
+  this.loadEmployes();
+  this.loadStats();
 }
+
 
 //  fonction pour ouvririr modal pour modification
 openModifierModal(user: IUser) {

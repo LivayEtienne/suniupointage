@@ -139,3 +139,47 @@ input:focus, select:focus {
   font-size: 0.9em;
   margin-top: 4px;
 }
+
+/* Styles du message de succès */
+.success-message {
+  position: fixed;
+  top: 20px;
+  margin-left: 400px;
+  transform: translateX(-50%);
+  background-color: #d4edda; /* Fond vert clair */
+  border: 1px solid #c3e6cb; /* Bordure douce */
+  color: #155724; /* Texte vert */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1001; /* Assurez-vous qu'il soit au-dessus des autres éléments */
+  width: auto;
+  max-width: 500px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.success-message-content {
+  display: flex;
+  align-items: center;
+}
+
+.success-message h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.success-message button {
+  background: none;
+  border: none;
+  color: #155724;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 20px;
+}
+
+.success-message button:hover {
+  color: #0c2f0c; /* Couleur légèrement plus foncée au survol */
+}

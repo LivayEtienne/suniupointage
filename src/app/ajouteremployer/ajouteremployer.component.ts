@@ -14,7 +14,7 @@ import { FormsModule, FormBuilder, FormControl, Validators, AbstractControl, For
 export class AjouteremployerComponent  implements OnInit{
   
   @Output() closeModal = new EventEmitter<void>();
-  
+  showSuccessMessage: boolean = false;
   userData: Partial<IUser> = {
     nom: '',
     prenom: '',
@@ -88,9 +88,7 @@ filteredUsers: IUser[] = []; // Liste des utilisateurs filtrés
         this.users = data;
         this.filteredUsers = data; 
         this.updatePaginatedUsers(); // Mettre à jour les utilisateurs paginés
-        this.loadEmployes();  // Recharger les utilisateurs
-          
-          this.loadStats();
+        
       },
       error: (error) => {
         console.error('Erreur lors du chargement des employés:', error);
@@ -118,46 +116,66 @@ updatePaginatedUsers(): void {
   const endIndex = startIndex + this.itemsPerPage;
   this.paginatedUsers = this.filteredUsers.slice(startIndex, endIndex);
 }
+onSubmit() {
+  if (!this.isFormValid()) return;
+  this.isSubmitting = true;
 
-  onSubmit() {
-    if (!this.isFormValid()) return;
+  const formData = new FormData();
+  formData.append('nom', this.userData.nom || '');
+  formData.append('prenom', this.userData.prenom || '');
+  formData.append('email', this.userData.email || '');
+  formData.append('adresse', this.userData.adresse || '');
+  formData.append('telephone', this.userData.telephone || '');
+  formData.append('role', this.userData.role || '');
+  formData.append('statut', this.userData.statut || 'actif');
+  formData.append('departement_id', this.selectedDepartmentId || '');
   
-    this.isSubmitting = true;
-  
-    const formData = new FormData();
-    formData.append('nom', this.userData.nom || '');
-    formData.append('prenom', this.userData.prenom || '');
-    formData.append('email', this.userData.email || '');
-    formData.append('adresse', this.userData.adresse || '');
-    formData.append('telephone', this.userData.telephone || '');
-    formData.append('role', this.userData.role || '');
-    formData.append('statut', this.userData.statut || 'actif');
-    formData.append('departement_id', this.selectedDepartmentId || '');
-    if (this.userData.photo instanceof File) {
-      formData.append('photo', this.userData.photo); // Ajouter le fichier
-    }
-    if (this.userData.password) {
-      formData.append('mot_de_passe', this.userData.password);
-    }
-  
-    this.apiService.registerUser(formData).subscribe({
-      next: (response: IUser) => {
-        console.log('Succès:', response);
-        this.users.push(response); // Ajouter le nouvel utilisateur à la liste
-        this.filteredUsers.push(response); // Mettre à jour les utilisateurs filtrés
-        this.updatePaginatedUsers(); // Mettre à jour la pagination
-        
-        this.closeModal.emit();
-        this.resetForm();
-        this.loadStats(); // Recharger les statistiques
-      },
-      error: (error) => {
-        console.error('Erreur:', error);
-        this.errorMessage = error.error?.message || 'Erreur lors de la création';
-        this.isSubmitting = false;
-      },
-    });
+  if (this.userData.photo instanceof File) {
+    formData.append('photo', this.userData.photo);
   }
+  if (this.userData.password) {
+    formData.append('mot_de_passe', this.userData.password);
+  }
+
+  this.apiService.registerUser(formData).subscribe({
+    next: (response: IUser) => {
+      // Mettre à jour les données immédiatement
+      this.users = [...this.users, response];
+      this.filteredUsers = [...this.filteredUsers, response];
+      this.updatePaginatedUsers();
+
+      // Recharger les données du serveur
+      this.apiService.getUsersByRole(['admin', 'vigile', 'employe']).subscribe({
+        next: (users: IUser[]) => {
+          this.users = users;
+          this.filteredUsers = users;
+          this.updatePaginatedUsers();
+          
+          // Charger les stats après la mise à jour des utilisateurs
+          this.apiService.getUserStats().subscribe({
+            next: (stats) => {
+              this.stats = stats;
+              this.closeModal.emit();
+              this.resetForm();
+              this.isSubmitting = false;
+              this.showSuccessMessage = true; 
+            }
+          });
+        }
+      });
+    },
+    error: (error) => {
+      console.error('Erreur:', error);
+      this.errorMessage = error.error?.message || 'Erreur lors de la création';
+      this.isSubmitting = false;
+    },
+  });
+}
+
+
+onCloseSuccessMessage() {
+  this.showSuccessMessage = false;
+}
 
   isPrenomValid(): boolean {
     if (!this.userData.prenom) {

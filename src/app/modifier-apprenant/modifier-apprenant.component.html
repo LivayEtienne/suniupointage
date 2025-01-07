@@ -1,0 +1,82 @@
+<div class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <img src="pointe.png" alt="logo" class="header-icon">
+        <h2>Formulaire de Modification</h2>
+        <button class="close-btn" (click)="closeModal.emit()">✖</button>
+      </div>
+  
+      <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Prenom <span class="required">*</span></label>
+            <input type="text" [(ngModel)]="userData.prenom" name="prenom" required>
+            <p class="error-message" *ngIf="userData.prenom && userData.prenom.length > 0 && !isPrenomValid()">
+              Le prénom doit contenir au moins 2 caractères et ne pas inclure de chiffres.
+            </p>
+          </div>
+  
+          <div class="form-group">
+            <label>Nom <span class="required">*</span></label>
+            <input type="text" [(ngModel)]="userData.nom" name="nom" required>
+            <p class="error-message" *ngIf="userData.nom && userData.nom.length > 0 && !isNomValid()">
+              Le nom doit contenir au moins 2 caractères et ne pas inclure de chiffres.
+            </p>
+          </div>
+  
+          <div class="form-group">
+            <label>Email <span class="required">*</span></label>
+            <input type="email" [(ngModel)]="userData.email" name="email" required>
+            <p class="error-message" *ngIf="userData.email && userData.email.length > 0 && !isEmailValid()">
+              Entrez une adresse email valide.
+            </p>
+          </div>
+  
+          <div class="form-group">
+            <label>Photo <span class="required"></span></label>
+            <input 
+            type="file" 
+            accept="image/*" 
+            (change)="onFileSelected($event)" 
+          >
+          <div *ngIf="userData.photo" class="preview">
+            <img *ngIf="photoPreview" [src]="photoPreview" alt="Photo actuelle" class="photo-preview">
+            <p *ngIf="!photoPreview">Aucune photo disponible</p>
+          </div>
+          </div>
+  
+          <div class="form-group">
+            <label>Adresse <span class="required">*</span></label>
+            <input type="text" [(ngModel)]="userData.adresse" name="adresse" required>
+          </div>
+  
+          <div class="form-group">
+            <label>Numero Telephone <span class="required">*</span></label>
+            <input type="text" [(ngModel)]="userData.telephone" name="cardId"  required>
+            <p class="error-message" *ngIf="userData.telephone && userData.telephone.length > 0 && !isPhoneValid()">
+              Le numéro doit commencer par 75, 76, 77, 78 ou 70, suivi de 7 chiffres.
+            </p>
+          </div>
+  
+          <div class="form-group">
+            <label>Fonction <span class="required">*</span></label>
+            <select [(ngModel)]="userData.role" name="role" required>
+              <option value="employer">Employer</option>
+              <option value="vigile">Vigile</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+  
+          
+        </div>
+  
+        <div class="form-footer">
+          <p class="error-message" *ngIf="errorMessage">{{errorMessage}}</p>
+          <button type="submit" [disabled]="!userForm.valid || isSubmitting || hasErrors()">
+            {{isSubmitting ? 'Modification...' : 'Modifier'}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

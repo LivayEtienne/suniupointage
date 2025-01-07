@@ -102,7 +102,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of paginatedUsers">
+        
+        <tr *ngFor="let user of paginatedUsers  " >
           <td><input type="checkbox"  [(ngModel)]="user.isSelected"></td>
           <td>{{ user.nom }} {{ user.prenom }}</td>
           <td>{{ user.role }}</td>

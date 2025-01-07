@@ -141,3 +141,10 @@
       </div>
     </div>
   </div>
+<!-- Message de succès -->
+<div *ngIf="showSuccessMessage" class="success-message">
+  <div class="success-message-content">
+    <h3>Utilisateur ajouté avec succès !</h3>
+    <button (click)="onCloseSuccessMessage()">Fermer</button>
+  </div>
+</div>

@@ -1,0 +1,210 @@
+
+<div class="container">
+  <h1>Gestion des Apprenants</h1>
+
+  <!-- Bouton pour ouvrir le modal d'ajout d'un apprenant -->
+  <button (click)="openModal()" class="ajout">Ajouter un Apprenant</button> <br>
+
+  <input
+  
+  type="file"
+  accept=".csv"
+  style="display: none"
+  (change)="onFileSelected($event)"
+/>
+  <button (click)="bulkDelete()" class="supprimer">
+    Supprimer les utilisateurs sélectionnés
+  </button>
+  
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Rechercher par nom, prénom ou email"
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+    />
+  </div>
+  
+  
+  <input type="file" accept=".csv" (change)="onFileSelected($event)" />
+ 
+  <!-- Table avec tous les apprenants (visible par défaut) -->
+<table class="table" *ngIf="!searchQuery.trim()">
+  <thead>
+    <tr>
+      <th>
+        <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
+      </th>
+      
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Email</th>
+      <th>Adresse</th>
+      <th>Téléphone</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let apprenant of apprenants">
+      <td>
+        <input type="checkbox" [(ngModel)]="apprenant.selected" />
+      </td>
+      
+      <td>{{ apprenant.nom }}</td>
+      <td>{{ apprenant.prenom }}</td>
+      <td>{{ apprenant.email }}</td>
+      <td>{{ apprenant.adresse }}</td>
+      <td>{{ apprenant.telephone }}</td>
+      <td>{{ apprenant.statut }}</td>
+      <td>
+        <button (click)="openModifierModal(user)" class="btn btn-warning btn-sm">
+            <i class="fa fa-edit"></i>
+          </button>
+          
+        <!-- <button (click)="toggleStatus(apprenant)" class="btn btn-secondary btn-sm">
+          <i class="fa fa-archive" *ngIf="apprenant.statut === 'active'"></i>
+          <i class="fa fa-box-open" *ngIf="apprenant.statut !== 'active'"></i>
+        </button> -->
+        <button (click)="deleteApprenant(apprenant.id)" class="btn btn-danger btn-sm">
+          <i class="fa fa-trash-alt"></i>
+        </button>
+       
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Table avec les apprenants filtrés (visible uniquement quand une recherche est effectuée) -->
+<table class="table" *ngIf="searchQuery.trim()">
+  <thead>
+    <tr>
+      <th>
+        <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
+      </th>
+      <th>photo</th>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Email</th>
+      <th>Adresse</th>
+      <th>Téléphone</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let apprenant of filteredApprenants">
+      <td>
+        <input type="checkbox" [(ngModel)]="apprenant.selected" />
+      </td>
+      
+      <td>{{ apprenant.nom }}</td>
+      <td>{{ apprenant.prenom }}</td>
+      <td>{{ apprenant.email }}</td>
+      <td>{{ apprenant.adresse }}</td>
+      <td>{{ apprenant.telephone }}</td>
+      <td>{{ apprenant.statut }}</td>
+      <td>
+        <button (click)="openEditModal(apprenant)" class="btn btn-warning btn-sm">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button (click)="toggleStatus(apprenant)" class="btn btn-secondary btn-sm">
+          <i class="fa fa-archive" *ngIf="apprenant.statut === 'active'"></i>
+          <i class="fa fa-box-open" *ngIf="apprenant.statut !== 'active'"></i>
+        </button>
+        <button (click)="deleteApprenant(apprenant.id)" class="btn btn-danger btn-sm">
+          <i class="fa fa-trash-alt"></i>
+        </button>
+        <button (click)="openUpdateUidModal(apprenant)" class="btn btn-info btn-sm">
+          Mettre à jour l'UID
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  <!-- Modal pour ajouter/éditer un apprenant -->
+  <div class="modal" [ngClass]="{'show': isModalOpen}" *ngIf="isModalOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditMode ? 'Éditer Apprenant' : 'Ajouter Apprenant' }}</h5>
+          <button type="button" class="close" (click)="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="nom">Nom</label>
+              <input type="text" id="nom" [(ngModel)]="nom" name="nom" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="prenom">Prénom</label>
+              <input type="text" id="prenom" [(ngModel)]="prenom" name="prenom" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="photo">Photo</label>
+              <input type="file" id="photo" (change)="onFileSelected1($event)" class="form-control" />
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="adresse">Adresse</label>
+              <input type="text" id="adresse" [(ngModel)]="adresse" name="adresse" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="telephone">Téléphone</label>
+              <input type="text" id="telephone" [(ngModel)]="telephone" name="telephone" class="form-control" required>
+            </div>
+            <div class="form-group" *ngIf="!isEditMode">
+              <label for="password">Mot de passe</label>
+              <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" >
+            </div>
+            <div class="form-group">
+              <label for="role">Rôle</label>
+              <select id="role" [(ngModel)]="role" name="role" class="form-control" >
+                <option value="apprenant">Apprenant</option>
+                <!-- Ajoutez d'autres rôles si nécessaire -->
+              </select>
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+            <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour mettre à jour l'UID -->
+  <div class="modal" [ngClass]="{'show': isUpdateUidModalOpen}" *ngIf="isUpdateUidModalOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Mettre à jour l'UID de l'Apprenant</h5>
+          <button type="button" class="close" (click)="closeUpdateUidModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updateUserUID(matricule, newUid)">
+            <div class="form-group">
+              <label for="matricule">Matricule</label>
+              <input type="text" id="matricule" [(ngModel)]="matricule" name="matricule" class="form-control" [readonly]="true" required>
+            </div>
+            <div class="form-group">
+              <label for="newUid">Nouvel UID</label>
+              <input type="text" id="newUid" [(ngModel)]="newUid" name="newUid" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Mettre à jour l'UID</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-modifier-apprenant *ngIf="showModifierModal && selectedUser"
+  [selectedUser]="selectedUser"
+  (closeModal)="showModifierModal = false"
+  (userUpdated)="onUserUpdated($event)"
+ ></app-modifier-apprenant>
+
+ 

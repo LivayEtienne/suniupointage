@@ -32,6 +32,7 @@ export interface IUser {
   email: string;
   adresse: string;
   telephone: string;
+  fonction?: string,
   matricule: string;
   cardId: string;
   role: string;
@@ -92,11 +93,6 @@ addApprenant(apprenant: any): Observable<any> {
   return this.http.post(this.apiUrl, apprenant);
 }
 
-// Récupérer tous les apprenants
-
-getApprenants(): Observable<any[]> {
-  return this.http.get<any[]>(this.apiUrl);
-}
 
 
 
@@ -118,6 +114,7 @@ registerUser(user: any): Observable<any> {
 // recupere tout les employer
 getUsersByRole(roles: string[]): Observable<IUser[]> {
   const params = new HttpParams().set('role', roles.join(','));
+  
   return this.http.get<IUser[]>(`${this.apiUrl}/users`, { params });
 }
 
@@ -172,6 +169,7 @@ getUsersByRole(roles: string[]): Observable<IUser[]> {
     formData.append('email', userData.email || '');
     formData.append('adresse', userData.adresse || '');
     formData.append('role', userData.role || '');
+    formData.append('telephone', userData.telephone || '');  // Ajout du téléphone
     formData.append('departement_id', userData.departement_id?.toString() || '');
     
     // Ajout de la photo uniquement si elle est sélectionnée
