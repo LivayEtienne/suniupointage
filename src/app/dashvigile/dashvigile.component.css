@@ -264,4 +264,32 @@ h3 em{
     border-radius: 5px;
     margin-bottom: 20px;
   }
+
+  .vigile-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    color: #ffffff; /* Texte blanc */
+    background: linear-gradient(90deg, #007bff, #00d4ff); /* Dégradé bleu */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: fit-content;
+    margin: 20px auto;
+    letter-spacing: 2px;
+    animation: glow 1.5s infinite alternate;
+  }
+  
+  /* Animation de glow */
+  @keyframes glow {
+    0% {
+      text-shadow: 0 0 5px #00d4ff, 0 0 10px #00d4ff;
+    }
+    100% {
+      text-shadow: 0 0 15px #007bff, 0 0 20px #007bff;
+    }
+  }
+  
+  
   

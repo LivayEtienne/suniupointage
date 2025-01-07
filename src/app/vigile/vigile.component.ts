@@ -3,10 +3,11 @@ import { WebsocketService } from '../websocket.service';  // Importez le service
 import { Auth1Service } from '../auth1.service';  // Importez le service Auth1
 import { FormsModule } from '@angular/forms';  // Importez FormsModule pour les formulaires template-driven
 import { CommonModule } from '@angular/common';  // Importez CommonModule pour les directives communes
+import { ReussiComponent } from '../reussi/reussi.component';
 
 @Component({
   selector: 'app-vigile',
-  imports: [FormsModule, CommonModule],  // Ajoutez FormsModule et CommonModule aux imports
+  imports: [FormsModule, CommonModule, ReussiComponent],  // Ajoutez FormsModule et CommonModule aux imports
   templateUrl: './vigile.component.html',
   styleUrls: ['./vigile.component.css']  // Correction de styleUrl => styleUrls
 })
@@ -21,6 +22,10 @@ export class VigileComponent implements OnInit, OnDestroy {
   userId: string = ''; // ID de l'utilisateur
   checkStatus: string = ''; // Statut de check
   users: any[] = [];  // Déclarez un tableau pour stocker les utilisateurs
+   // Déclare les propriétés message et messageType
+   message: string = '';  // Pour stocker le message à afficher
+   messageType: string = ''; // Pour stocker le type de message ('success', 'error')
+   showModal: boolean = false;  // Variable pour afficher/cacher le modal
 
 
   constructor(
@@ -166,20 +171,30 @@ export class VigileComponent implements OnInit, OnDestroy {
   }
 
    // Définissez la méthode onCheckStatus
-  // Assurez-vous que cette méthode existe
+ 
+  // Méthode pour mettre à jour le statut "check" de l'utilisateur
+ 
+  // Méthode pour mettre à jour le statut "check" de l'utilisateur
   onCheckStatus(userId: string, checkStatus: string): void {
     this.auth1Service.updateCheckStatus(userId, checkStatus).subscribe(
       (response) => {
-        console.log('Utilisateur mis à jour:', response);
-        // Vous pouvez éventuellement appeler fetchUsers() ici pour rafraîchir la liste des utilisateurs
+        if (checkStatus === 'checkIn') {
+          this.message = `✅ Utilisateur check-in avec succès !`;
+          this.messageType = 'success';
+        } else if (checkStatus === 'checkOut') {
+          this.message = `⛔ Utilisateur check-out avec succès !`;
+          this.messageType = 'warning';
+        }
+        this.showModal = true;  // Afficher le modal
       },
       (error) => {
-        console.error('Erreur lors de la mise à jour:', error);
-        // Afficher un message d'erreur plus explicite à l'utilisateur
-        alert('Erreur lors de la mise à jour du statut');
+        this.message = '❌ Erreur lors de la mise à jour.';
+        this.messageType = 'error';
+        this.showModal = true;
       }
     );
   }
+
   
   
    // Méthode pour récupérer les utilisateurs
@@ -198,14 +213,21 @@ export class VigileComponent implements OnInit, OnDestroy {
   updateUserCheck(userId: string, checkStatus: string): void {
     this.auth1Service.updateCheckStatus(userId, checkStatus).subscribe(
       (response) => {
+        this.message = response.message;  // Mettre à jour le message avec la réponse
+        this.messageType = 'success';  // Définir le type de message
         console.log('Utilisateur mis à jour:', response);
-        this.fetchUsers();  // Actualiser la liste des utilisateurs après la mise à jour
+        this.showModal = true;  // Afficher le modal
       },
       (error) => {
+        this.message = 'Erreur lors de la mise à jour.';
+        this.messageType = 'error';  // Type de message erreur
+        this.showModal = true;  // Afficher le modal même en cas d'erreur
         console.error('Erreur lors de la mise à jour:', error);
       }
     );
   }
-  
+  closeModal(): void {
+    this.showModal = false;  // Fermer le modal
+  }
   
 }

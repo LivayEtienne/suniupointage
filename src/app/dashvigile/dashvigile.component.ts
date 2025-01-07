@@ -4,10 +4,11 @@ import { Router } from '@angular/router'; // Importation du router Angular
 import { FormsModule } from '@angular/forms';  // Importez FormsModule pour les formulaires template-driven 
 import { CommonModule } from '@angular/common';  // Importez CommonModule pour les directives communes  
 import { ChangeDetectorRef } from '@angular/core';
+import { ReussiComponent } from '../reussi/reussi.component';
 
 @Component({
   selector: 'app-user-info',
-  imports: [FormsModule, CommonModule],  // Ajoutez FormsModule et CommonModule aux imports 
+  imports: [FormsModule, CommonModule, ReussiComponent],  // Ajoutez FormsModule et CommonModule aux imports 
   templateUrl: './dashvigile.component.html',
   styleUrls: ['./dashvigile.component.css']
 })

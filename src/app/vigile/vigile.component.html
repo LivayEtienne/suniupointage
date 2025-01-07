@@ -1,4 +1,6 @@
-<p>vigile works!</p>
+<app-reussi></app-reussi>
+<p class="vigile-title">Vigile</p>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 
@@ -17,6 +19,19 @@
     <p>{{ statusMessage }}</p>
   </div>
   
+  <!-- Affichage du message reçu -->
+ <!-- Modal -->
+<!-- Modal -->
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-content" [ngClass]="{'success': messageType === 'success', 'warning': messageType === 'warning', 'error': messageType === 'error'}">
+    <p>{{ message }}</p>
+    <button class="btn-close-modal" (click)="closeModal()">Fermer</button>
+  </div>
+</div>
+
+
+  
+  
 
 <div class="container">
     <!-- Image de l'utilisateur -->
@@ -28,9 +43,9 @@
     <div class="info-card">
       <h3><i class="fas fa-info-circle"></i> Informations</h3>
       <div class="info-details">
-        <p><strong>PRENOM :</strong></p>
-        <p><strong>NOM :</strong></p>
-        <p><strong>matricule :</strong></p>
+        <p><strong>Role :</strong> Apprenant</p>
+        <p><strong>NOM :</strong> Ababacar</p>
+        <p><strong>uid :</strong> B3DFD1C</p>
       </div>
       <!-- Boutons -->
       <div class="button-group">
@@ -49,16 +64,16 @@
 <table class="students-table">
   <thead>
     <tr>
-      <th>Nom</th>
-      <th>Prénom</th>
-      <th>Matricule</th>
+      <th>Role</th>
+      <th>NOM</th>
+      <th>uid</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Dupont</td>
-      <td>Jean</td>
-      <td>12345</td>
+      <td>Apprenant</td>
+      <td>Ababacar</td>
+      <td>B3DFD1C</td>
     </tr>
   </tbody>
 </table>

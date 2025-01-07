@@ -94,7 +94,7 @@ export class Auth1Service {
   }
 
   updateCheckStatus(userId: string, checkStatus: string): Observable<any> {
-    const url = `http://localhost:3000/users/updateCheck/${userId}`;  // L'URL avec l'ID de l'utilisateur
+    const url = `http://localhost:3000/users/users/updateCheck/677c5f77aa9bc773bb028181`;  // L'URL avec l'ID de l'utilisateur
     const body = { check: checkStatus };  // Le corps de la requête avec la nouvelle valeur de "check"
   
     return this.http.put(url, body).pipe(
