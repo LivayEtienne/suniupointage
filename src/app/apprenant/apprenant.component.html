@@ -1,121 +1,238 @@
-<app-sidebare></app-sidebare>
-
+<app-sidebar></app-sidebar>
+<app-dashboard></app-dashboard>
 <div class="container">
-    <h2>Liste des Apprenants</h2>
-    <button class="add-apprenant-button">Ajouter un apprenant</button><br>
-    <input
-    #fileInput
-    type="file"
-    accept=".csv"
-    style="display: none"
-    (change)="onFileSelected($event)"
+  <h1>Gestion des Apprenants</h1>
+
+  <!-- Bouton pour ouvrir le modal d'ajout d'un apprenant -->
+  <button (click)="openModal()" class="ajout">Ajouter un Apprenant</button> <br>
+
+  <input
+  
+  type="file"
+  accept=".csv"
+  style="display: none"
+  (change)="onFileSelected($event)"
 />
-<button id="import-csv-btn" class="import-csv-button" (click)="fileInput.click()">Importer un fichier CSV</button>
-<div class="search-container">
-    <input 
-      type="text" 
-      placeholder="Rechercher par nom, prénom ou email" 
-      [(ngModel)]="searchQuery" 
+  <button (click)="bulkDelete()" class="supprimer">
+    Supprimer les utilisateurs sélectionnés
+  </button>
+  
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Rechercher par nom, prénom ou email"
+      [(ngModel)]="searchQuery"
       (input)="onSearch()"
     />
   </div>
+  
+  
+  <input type="file" accept=".csv" (change)="onFileSelected($event)" />
+ 
+  <!-- Table avec tous les apprenants (visible par défaut) -->
+<table class="table" *ngIf="!searchQuery.trim()">
+  <thead>
+    <tr>
+      <th>
+        <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
+      </th>
+      
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Email</th>
+      <th>Adresse</th>
+      <th>Téléphone</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let apprenant of apprenants">
+      <td>
+        <input type="checkbox" [(ngModel)]="apprenant.selected" />
+      </td>
+      
+      <td>{{ apprenant.nom }}</td>
+      <td>{{ apprenant.prenom }}</td>
+      <td>{{ apprenant.email }}</td>
+      <td>{{ apprenant.adresse }}</td>
+      <td>{{ apprenant.telephone }}</td>
+      <td>{{ apprenant.statut }}</td>
+      <td>
+        <button (click)="openEditModal(apprenant)" class="btn btn-warning btn-sm">
+          <i class="fa fa-edit"></i>
+        </button>
+        <!-- <button (click)="toggleStatus(apprenant)" class="btn btn-secondary btn-sm">
+          <i class="fa fa-archive" *ngIf="apprenant.statut === 'active'"></i>
+          <i class="fa fa-box-open" *ngIf="apprenant.statut !== 'active'"></i>
+        </button> -->
+        <button (click)="deleteApprenant(apprenant.id)" class="btn btn-danger btn-sm">
+          <i class="fa fa-trash-alt"></i>
+        </button>
+        <button (click)="openUpdateUidModal(apprenant)" class="btn btn-info btn-sm">
+          Mettre à jour l'UID
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-    <button class="deleteplusieurs" (click)="deleteSelected()">Supprimer Sélectionnés</button> 
+<!-- Table avec les apprenants filtrés (visible uniquement quand une recherche est effectuée) -->
+<table class="table" *ngIf="searchQuery.trim()">
+  <thead>
+    <tr>
+      <th>
+        <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
+      </th>
+      <th>photo</th>
+      <th>Nom</th>
+      <th>Prénom</th>
+      <th>Email</th>
+      <th>Adresse</th>
+      <th>Téléphone</th>
+      <th>Statut</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let apprenant of filteredApprenants">
+      <td>
+        <input type="checkbox" [(ngModel)]="apprenant.selected" />
+      </td>
+      
+      <td>{{ apprenant.nom }}</td>
+      <td>{{ apprenant.prenom }}</td>
+      <td>{{ apprenant.email }}</td>
+      <td>{{ apprenant.adresse }}</td>
+      <td>{{ apprenant.telephone }}</td>
+      <td>{{ apprenant.statut }}</td>
+      <td>
+        <button (click)="openEditModal(apprenant)" class="btn btn-warning btn-sm">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button (click)="toggleStatus(apprenant)" class="btn btn-secondary btn-sm">
+          <i class="fa fa-archive" *ngIf="apprenant.statut === 'active'"></i>
+          <i class="fa fa-box-open" *ngIf="apprenant.statut !== 'active'"></i>
+        </button>
+        <button (click)="deleteApprenant(apprenant.id)" class="btn btn-danger btn-sm">
+          <i class="fa fa-trash-alt"></i>
+        </button>
+        <button (click)="openUpdateUidModal(apprenant.nom)" class="btn btn-info btn-sm">
+          Mettre à jour l'UID
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+  
+
+
+  <!-- Modal pour ajouter/éditer un apprenant -->
+  <div class="modal" [ngClass]="{'show': isModalOpen}" *ngIf="isModalOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditMode ? 'Éditer Apprenant' : 'Ajouter Apprenant' }}</h5>
+          <button type="button" class="close" (click)="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="nom">Nom</label>
+              <input type="text" id="nom" [(ngModel)]="nom" name="nom" class="form-control" required [readOnly]="">
+            </div>
+            <div class="form-group">
+              <label for="prenom">Prénom</label>
+              <input type="text" id="prenom" [(ngModel)]="prenom" name="prenom" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="photo">Photo</label>
+              <input type="file" id="photo" (change)="onFileSelected1($event)" class="form-control" />
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="adresse">Adresse</label>
+              <input type="text" id="adresse" [(ngModel)]="adresse" name="adresse" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="telephone">Téléphone</label>
+              <input type="text" id="telephone" [(ngModel)]="telephone" name="telephone" class="form-control" required>
+            </div>
+            <div class="form-group">Cohorte
+              <label for="cohorte">Cohorte</label>
+              <select id="cohorte"  name="cohorte" class="form-control" required>
+                <option value="">Sélectionnez une cohorte</option>
+                <!-- Ajoutez les cohortes existantes dans la base de données -->
+                  <option value="1">ADEFNIPA </option>
+                  <option value="2"> P7</option> 
+                  <option value="3">SAAS</option>
+                  
+              </select>
+            </div>
+            <div class="form-group" *ngIf="!isEditMode">
+              <label for="password">Mot de passe</label>
+              <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" >
+            </div>
+            <div class="form-group">
+              <label for="role">Rôle</label>
+              <select id="role" [(ngModel)]="role" name="role" class="form-control" >
+                <option value="apprenant">Apprenant</option>
+                <!-- Ajoutez d'autres rôles si nécessaire -->
+              </select>
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+            <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour mettre à jour l'UID -->
+  <div class="modal" [ngClass]="{'show': isUpdateUidModalOpen}" *ngIf="isUpdateUidModalOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Mettre à jour l'UID de l'Apprenant</h5>
+          <button type="button" class="close" (click)="closeUpdateUidModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updateUid()">
+            <div class="form-group">
+              <label for="matricule">Matricule</label>
+              <input type="text" id="matricule" [(ngModel)]="matricule" name="matricule" class="form-control"  required>
+            </div>
+            <div class="form-group">
+              <label for="newUid">Nouvel UID</label>
+              <input type="text" id="newUid" [(ngModel)]="newUid" name="newUid" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Mettre à jour l'UID</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination">
+    <button 
+      (click)="setPage(currentPage - 1)" 
+      [disabled]="currentPage === 1">
+      Précédent
+    </button>
     
-    <table class="table" >
-        
-        <thead>
-            <tr>
-                <th><input type="checkbox" (change)="selectAll($event)" /></th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>
-                    <span (click)="sortByCohorte()" style="cursor: pointer;">
-                        Cohorte
-                        <i *ngIf="sortOrder === 'asc'" class="fas fa-sort-up"></i>
-                        <i *ngIf="sortOrder === 'desc'" class="fas fa-sort-down"></i>
-                      </span>
-                </th>
-                
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let apprenant of apprenants">
-                <td><input type="checkbox" [(ngModel)]="apprenant.selected" /></td>
-                <td>{{ apprenant.user?.nom }}</td>
-                <td>{{ apprenant.user?.prenom }}</td>
-                <td>{{ apprenant.user?.email }}</td>
-                <td>{{ apprenant.cohorte?.nom }}</td>
-                <td>
-                    <span class="icon edit-icon" title="Modifier" (click)="onEditClick(apprenant)">
-                        <i class="fas fa-edit"></i>
-                      </span>
-                    <span (click)="onDeleteClick(apprenant)" class="icon delete-icon" title="Supprimer">
-                        <i class="fas fa-trash-alt"></i>
-                    </span>
-                    
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Pagination -->
-    <div class="pagination">
-        <button 
-            (click)="setPage(currentPage - 1)" 
-            [disabled]="currentPage <= 1" 
-            class="pagination-button">
-            &lt;
-        </button>
-        
-        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
-            <button 
-                (click)="setPage(i + 1)" 
-                [ngClass]="{'active': currentPage === (i + 1)}" 
-                class="pagination-button">
-                {{ i + 1 }}
-            </button>
-        </ng-container>
-        
-        <button 
-            (click)="setPage(currentPage + 1)" 
-            [disabled]="currentPage >= totalPages" 
-            class="pagination-button">
-            &gt;
-        </button>
-    </div>
-</div>
-
-<!-- Modal pour l'ajout ou l'édition -->
-<div *ngIf="isModalOpen" class="modal">
-    <div class="modal-content">
-        <span (click)="closeModal()" class="close">&times;</span>
-        
-        <form >
-            <label for="prenom">Prénom <span class="required">*</span>:</label>
-            <input type="text" [(ngModel)]="selectedApprenant.prenom" name="prenom" required />
-
-            <label for="nom">Nom <span class="required">*</span>:</label>
-            <input type="text" [(ngModel)]="selectedApprenant.nom" name="nom" required />
-
-            <label for="email">Email <span class="required">*</span>:</label>
-            <input type="email" [(ngModel)]="selectedApprenant.email" name="email" required />
-
-            <label for="adresse">Adresse:</label>
-            <input type="text" [(ngModel)]="selectedApprenant.adresse" name="adresse" />
-
-            <label for="fonction">Fonction <span class="required">*</span>:</label>
-            <input type="text" [(ngModel)]="selectedApprenant.fonction" name="fonction" required />
-
-            <label for="telephone">Numéro de Téléphone:</label>
-            <input type="text" [(ngModel)]="selectedApprenant.telephone" name="telephone" />
-
-            <label for="cohorte">Cohorte <span class="required">*</span>:</label>
-            <input type="text" [(ngModel)]="selectedApprenant.id_cohorte" name="id_cohorte" required />
-
-            <button type="submit">{{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}</button>
-        </form>
-    </div>
+    <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+    
+    <button 
+      (click)="setPage(currentPage + 1)" 
+      [disabled]="currentPage === totalPages">
+      Suivant
+    </button>
+  </div>
+  
 </div>
