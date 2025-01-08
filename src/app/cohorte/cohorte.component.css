@@ -7,9 +7,9 @@
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
-    position: relative; /* Ajouté pour le positionnement relatif */
+    /* Ajouté pour le positionnement relatif */
     margin-top: 115px; /* Décalage de 103px vers le bas */
-    margin-left: 250px; /* Décalage de 203px vers la droite */
+    margin-left: 300px; /* Décalage de 203px vers la droite */
   }
   .modal {
     display: flex;
@@ -48,6 +48,7 @@
   .button-container {
     display: flex;
     justify-content: space-between;
+   
   }
   
   .validate-btn {
@@ -72,7 +73,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 115px; /* Décalage de 207px vers le bas */
+    margin-top: 15px; /* Décalage de 207px vers le bas */
+    margin-left: 90px;
   }
   
   .cohorte-card {
@@ -83,6 +85,7 @@
     margin: 10px;
     text-align: center;
     width: 200px;
+   
   }
   
   .cohorte-name {

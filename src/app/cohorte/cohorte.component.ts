@@ -5,11 +5,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CohorteService, Cohorte } from '../cohorte.service';
 import { SidebareComponent } from '../sidebare/sidebare.component';
-
+import { DashboardComponent } from '../dashboard/dashboard.component';
 @Component({
   selector: 'app-cohorte',
   standalone: true, // Utilisation des composants autonomes
-  imports: [CommonModule, FormsModule, SidebareComponent], // Modules nécessaires
+  imports: [CommonModule, FormsModule, SidebareComponent,DashboardComponent], // Modules nécessaires
   templateUrl: './cohorte.component.html',
   styleUrls: ['./cohorte.component.css'],
   providers: [CohorteService], // Fournisseur du service
@@ -64,6 +64,7 @@ export class CohorteComponent implements OnInit {
         next: (data) => {
           this.cohortes.push(data); // Ajouter la cohorte à la liste
           this.cancelAddCohorte(); // Réinitialiser le formulaire
+          this.loadCohortes();
           console.log('Cohorte ajoutée :', data);
         },
         error: (error) => {

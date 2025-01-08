@@ -1,9 +1,18 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
 .main-container {
   padding: 24px;
   background-color: #F9FAFB;
   width: 82%;
   min-height: 100vh;
   margin-left: 290px;
+}
+
+
+.nav-item {
+  background: #e6f7f1;
+  color: #00bf8f;
+  border-left: 4px solid #00bf8f;
 }
 
 .stats-grid {

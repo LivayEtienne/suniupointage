@@ -98,18 +98,31 @@ selectedUser: IUser | null = null;
 
 
   loadEmployes(): void {
-    this.apiService.getUsersByRole(['admin', 'vigile', 'employe']).subscribe({
+    this.apiService.getUsersByRole(['admin', 'vigile', 'employer']).subscribe({
       next: (data: IUser[]) => {
-        this.users = data;
-        this.filteredUsers = data; 
-        this.updatePaginatedUsers(); // Mettre à jour les utilisateurs paginés
+        // Séparer les utilisateurs en deux groupes : apprenants et autres
+        this.users = data.filter(user => ['admin', 'vigile', 'employer'].includes(user.role));
+       
+        // Mettre à jour la liste paginée
+        this.filteredUsers = this.users;
+        this.updatePaginatedUsers();
+        
+        // Mettre à jour les statistiques
+        this.updateStats(data);
       },
       error: (error) => {
         console.error('Erreur lors du chargement des employés:', error);
       },
     });
   }
-  
+
+  updateStats(data: IUser[]): void {
+    this.stats.totalUsers = data.length;
+    this.stats.totalAdmins = data.filter(user => user.role === 'admin').length;
+    this.stats.totalVigiles = data.filter(user => user.role === 'vigile').length;
+    this.stats.totalVigiles = data.filter(user => user.role === 'employer').length;
+    this.stats.totalDepartments = new Set(data.map(user => user.departement_id)).size;  // Nombre de départements distincts
+  }
   // Charger les départements
 
   private departmentMap: { [key: number]: string } = {};
@@ -313,6 +326,8 @@ onModalClose() {
   this.showAddUserModal = false;
   // Rafraîchir la liste des utilisateurs si nécessaire
   this.loadUsers();
+  this.loadEmployes();
+    this.loadStats();
 }
 
 //  fonction pour ouvririr modal pour modification

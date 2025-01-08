@@ -48,6 +48,7 @@ input[type="text"], input[type="date"] {
 .button-container {
     display: flex;
     justify-content: space-between;
+   
 }
 
 .validate-btn {
@@ -59,6 +60,9 @@ input[type="text"], input[type="date"] {
     cursor: pointer;
 }
 
+.container{
+    margin-left: 300px;
+}
 .cancel-btn {
     background-color: #f44336; /* Rouge */
     color: white;

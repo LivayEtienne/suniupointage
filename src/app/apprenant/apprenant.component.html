@@ -130,69 +130,117 @@
 
 
   <!-- Modal pour ajouter/éditer un apprenant -->
-  <div class="modal" [ngClass]="{'show': isModalOpen}" *ngIf="isModalOpen">
-    <div class="modal-dialog">
+ 
+
+  <div class="modal-backdrop"    [ngClass]="{'show': isModalOpen}" *ngIf="isModalOpen">
+    <div class="modal">
       <div class="modal-content">
         <div class="modal-header">
+          <img src="logoo.png" alt="fingerprint icon" class="header-icon">
           <h5 class="modal-title">{{ isEditMode ? 'Éditer Apprenant' : 'Ajouter Apprenant' }}</h5>
           <button type="button" class="close" (click)="closeModal()">&times;</button>
         </div>
-        <div class="modal-body">
-          <form (ngSubmit)="onSubmit()">
+       
+        <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+          <div class="form-grid">
+            <!-- Prénom -->
             <div class="form-group">
-              <label for="nom">Nom</label>
-              <input type="text" id="nom" [(ngModel)]="nom" name="nom" class="form-control" required [readOnly]="">
+              <label>Prenom <span class="required">*</span></label>
+              <input 
+                type="text" 
+                [(ngModel)]="prenom" 
+                name="prenom" 
+                required
+               >
             </div>
+  
+            <!-- Nom -->
             <div class="form-group">
-              <label for="prenom">Prénom</label>
-              <input type="text" id="prenom" [(ngModel)]="prenom" name="prenom" class="form-control" required>
+              <label>Nom <span class="required">*</span></label>
+              <input 
+                type="text" 
+                [(ngModel)]="nom" 
+                name="nom" 
+                required>
             </div>
+  
+            <!-- Email -->
             <div class="form-group">
-              <label for="photo">Photo</label>
-              <input type="file" id="photo" (change)="onFileSelected1($event)" class="form-control" />
+              <label>Email <span class="required">*</span></label>
+              <input 
+                type="email" 
+                [(ngModel)]="email" 
+                name="email" 
+                required>
             </div>
-            
+  
+            <!-- Photo -->
             <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" [(ngModel)]="email" name="email" class="form-control" required>
+              <label>Photo</label>
+              <div class="file-input" id="phot">
+                <input 
+                  type="file" 
+                  (change)="onFileSelected1($event)" 
+                  accept="image/*">
+              </div>
             </div>
+  
+            <!-- Adresse -->
+            <div class="form-group ">
+              <label>Addresse <span class="required">*</span></label>
+              <input 
+                type="text" 
+                [(ngModel)]="adresse" 
+                name="adresse" 
+                required>
+            </div>
+  
+            <!-- Téléphone -->
             <div class="form-group">
-              <label for="adresse">Adresse</label>
-              <input type="text" id="adresse" [(ngModel)]="adresse" name="adresse" class="form-control" required>
+              <label>Numero Telephone <span class="required">*</span></label>
+              <input 
+                type="tel" 
+                [(ngModel)]="telephone" 
+                name="telephone" 
+                required>
+                
             </div>
+  
+            <!-- Cohorte -->
             <div class="form-group">
-              <label for="telephone">Téléphone</label>
-              <input type="text" id="telephone" [(ngModel)]="telephone" name="telephone" class="form-control" required>
-            </div>
-            <div class="form-group">Cohorte
-              <label for="cohorte">Cohorte</label>
-              <select id="cohorte"  name="cohorte" class="form-control" required>
-                <option value="">Sélectionnez une cohorte</option>
-                <!-- Ajoutez les cohortes existantes dans la base de données -->
-                  <option value="1">ADEFNIPA </option>
-                  <option value="2"> P7</option> 
-                  <option value="3">SAAS</option>
-                  
+              <label>Cohorte <span class="required">*</span></label>
+              <select name="cohorte" required>
+                <option value="">Sélectionner une cohorte</option>
+                <option value="1">ADEFNIPA</option>
+                <option value="2">P7</option>
+                <option value="3">SAAS</option>
               </select>
             </div>
-            <div class="form-group" *ngIf="!isEditMode">
-              <label for="password">Mot de passe</label>
-              <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" >
-            </div>
+  
+            <!-- Rôle (caché ou désactivé car toujours 'apprenant') -->
             <div class="form-group">
-              <label for="role">Rôle</label>
-              <select id="role" [(ngModel)]="role" name="role" class="form-control" >
+              <label>Role <span class="required">*</span></label>
+              <select [(ngModel)]="role" name="role" required disabled>
                 <option value="apprenant">Apprenant</option>
-                <!-- Ajoutez d'autres rôles si nécessaire -->
               </select>
             </div>
+  
+           
+          </div>
+  
+          <div class="form-footer">
+            <p class="error-message" *ngIf="errorMessage">{{errorMessage}}</p>
             <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
             <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Mettre à jour' : 'Ajouter' }}</button>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+
+
+
+
 
   <!-- Modal pour mettre à jour l'UID -->
   <div class="modal" [ngClass]="{'show': isUpdateUidModalOpen}" *ngIf="isUpdateUidModalOpen">

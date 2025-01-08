@@ -3,15 +3,16 @@ import { DepartmentService } from '../department.service';
 import { HttpClient } from '@angular/common/http';
 import { SidebareComponent } from '../sidebare/sidebare.component';
 
-
+import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-department',
 
     standalone: true, // Utilisation des composants autonomes
-    imports: [CommonModule, FormsModule, SidebareComponent], // Modules nécessaires
+    imports: [CommonModule, FormsModule, SidebareComponent,DashboardComponent], // Modules nécessaires
   templateUrl: './department.component.html',
   styleUrls: ['./department.component.css'],
 })
@@ -70,6 +71,7 @@ export class DepartmentComponent implements OnInit {
         console.log('Département ajouté avec succès :', response);
         this.getDepartments(); // Recharger la liste des départements
         this.cancelAddDepartment(); // Fermer le formulaire
+        this.getDepartments();
       },
       (error) => {
         console.error('Erreur lors de l\'ajout du département :', error);
