@@ -25,7 +25,7 @@ export class EmployerComponent {
 
   
   currentPage: number = 1; // Page actuelle
-itemsPerPage: number = 10; // Nombre d'utilisateurs par page
+itemsPerPage: number = 9; // Nombre d'utilisateurs par page
 paginatedUsers: IUser[] = []; // Liste des utilisateurs affichés
 errorMessage = '';  
 filteredUsers: IUser[] = []; // Liste des utilisateurs filtrés
@@ -394,6 +394,10 @@ totalPages(): number {
 
   this.updatePaginatedUsers(); // Mettre à jour les utilisateurs paginés après le filtrage
 }
+
+
+
+
 
 
 //recuperer le nom du departement
