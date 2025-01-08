@@ -9,24 +9,35 @@ export class UserService {
   private apiUrl = 'http://localhost:8000/api/users'; // URL de base mise à jour
 
   constructor(private http: HttpClient) {}
+  
 
   // Méthode pour récupérer les utilisateurs avec pagination
   getApprenants(page: number, pageSize: number): Observable<any> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', pageSize.toString());  // Remplacer 'pageSize' par 'limit' pour correspondre à l'API Laravel
-
+    const params = {
+      page: page.toString(),
+      pageSize: pageSize.toString(),
+    };
     return this.http.get<any>(this.apiUrl, { params });
   }
 
   // Méthode pour ajouter un utilisateur
-  addUser(userData: any): Observable<any> {
+  /* addUser(userData: any): Observable<any> {
     return this.http.post(this.apiUrl, userData, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       })
     });
+  } */
+    addUser(userData: FormData): Observable<any> {
+      return this.http.post(this.apiUrl, userData);
+    }
+
+    // Méthode pour mettre à jour un utilisateur
+  updateUser(id: number, userData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, userData);
   }
+    
+    
 
   // Méthode pour supprimer un utilisateur
   deleteUser(id: number): Observable<any> {
@@ -61,12 +72,24 @@ export class UserService {
   }
 
   // Méthode pour mettre à jour l'UID d'un utilisateur en appelant le service sur le port 4000
-  updateUID(matricule: string, newUid: string): Observable<any> {
-    const url = `http://localhost:4000/api/users/${matricule}/update-uid`;  // URL avec port 4000
-    return this.http.put(url, { newUid }, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    });
+  updateUID(id: string, newUid: string): Observable<any> {
+    const url = `http://localhost:8000/api/users/${id}/update-uid`;  // Utiliser la bonne route ici
+    return this.http.put(url, { cardId: newUid });
   }
+
+  
+  
+
+  bulkDelete(ids: number[]) {
+    return this.http.post('http://localhost:8000/api/users/bulk-delete', { ids });
+}
+
+deleteUsers(ids: number[]) {
+  return this.http.post('http://localhost:8000/api/users/bulk-delete', { ids });
+}
+
+// Importer un fichier CSV
+importApprenants(data: any): Observable<any> {
+  return this.http.post('http://localhost:8000/api/users/import', data); // Modifiez l'endpoint selon votre API
+}
 }
