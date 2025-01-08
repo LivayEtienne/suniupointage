@@ -5,6 +5,8 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
 
 
 
@@ -35,21 +37,24 @@ export class AuthService implements OnDestroy {
     this.connectWebSocket();  // Connexion WebSocket lors de l'initialisation
   }
 
-  // Méthodes API REST
   login(email: string, password: string): Observable<any> {
     const credentials = { email, password };
-    return this.http.post(`${this.apiUrl}/login`, credentials)
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials, { headers }) // <-- Ajout de `<any>`
       .pipe(
-        // En cas d'erreur lors de l'authentification, on transmet l'erreur via le Subject
+        tap((response: any) => console.log('Réponse API:', response)), // <-- Typage explicite
         catchError(error => {
           this.messagesSubject.next({
             status: 'error',
             message: `Erreur lors de l'authentification : ${error.message}`
           });
-          throw error; // Relancer l'erreur pour qu'elle soit gérée ailleurs si nécessaire
+          throw error;
         })
       );
   }
+  
+  
 
   logout(token: string): Observable<any> {
     const headers = new HttpHeaders({

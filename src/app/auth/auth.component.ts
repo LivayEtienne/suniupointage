@@ -53,6 +53,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     // Démarrer le scanning
     this.startScanning();
   }
+  
 
   ngOnDestroy(): void {
     // Se désabonner lors de la destruction du composant
@@ -94,7 +95,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   // Logique de redirection basée sur le rôle
   redirectBasedOnRole(role: string): void {
     if (role === 'admin') {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/dasbord']);
     } else if (role === 'vigile') {
       this.router.navigate(['/dashvigile']);
     } else {
@@ -105,15 +106,22 @@ export class AuthComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.authForm.valid) {
       const { email, password } = this.authForm.value;
-
+  
       this.authService.login(email, password).subscribe(
         (response) => {
-          if (response && response.token) {
+          console.log('Réponse API complète:', response); // Vérifier la structure de la réponse
+  
+          if (response && response.token && response.user) {
             localStorage.setItem('authToken', response.token);
+            console.log('Rôle utilisateur:', response.user.role); // Vérifier si le rôle est bien récupéré
             this.redirectBasedOnRole(response.user.role);
+          } else {
+            console.error('Données utilisateur manquantes dans la réponse API');
+            this.errorMessage = 'Erreur lors de la récupération des informations utilisateur.';
           }
         },
         (error) => {
+          console.error('Erreur lors de la connexion:', error);
           this.errorMessage = 'Identifiants incorrects. Veuillez réessayer.';
         }
       );
@@ -121,6 +129,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       this.errorMessage = 'Veuillez remplir correctement tous les champs.';
     }
   }
+  
 
 
 
@@ -206,8 +215,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.showErrorModal = false;  // Masquer le modal
   }
   
-  
-
 
    // Méthode pour valider un email
    customEmailValidator(control: AbstractControl): ValidationErrors | null {

@@ -4,8 +4,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import Swal from 'sweetalert2';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { DashboardComponent } from '../dashboard/dashboard.component';
+import { SidebareComponent } from '../sidebare/sidebare.component';
+
 
 interface Apprenant {
   id: number;
@@ -26,7 +26,7 @@ interface Apprenant {
 
 @Component({ 
   selector: 'app-apprenant',
-  imports: [FormsModule, CommonModule, SidebarComponent, DashboardComponent] ,
+  imports: [FormsModule, CommonModule, SidebareComponent] ,
   templateUrl: './apprenant.component.html',
   styleUrls: ['./apprenant.component.css']
 })
@@ -39,6 +39,7 @@ export class ApprenantComponent implements OnInit {
   isAffectationVisible: boolean = false;
   selected?: boolean;
   selectAll: boolean = false;
+  users: any[] = [];
   
   id: string = '';  // Déclarer la propriété `id` ici
 
@@ -82,6 +83,7 @@ export class ApprenantComponent implements OnInit {
     this.matricule = '';
     this.newUid = '';
     this.fetchApprenants();
+    
   }
 
   // Ouvrir le modal pour ajouter un utilisateur
