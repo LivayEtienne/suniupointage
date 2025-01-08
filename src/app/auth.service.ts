@@ -41,9 +41,14 @@ export class AuthService implements OnDestroy {
     const credentials = { email, password };
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   
-    return this.http.post<any>(`${this.apiUrl}/login`, credentials, { headers }) // <-- Ajout de `<any>`
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials, { headers }) 
       .pipe(
-        tap((response: any) => console.log('Réponse API:', response)), // <-- Typage explicite
+        tap((response: any) => {
+          console.log('Réponse API:', response);
+          if (response.token) {
+            localStorage.setItem('token', response.token); // Stocke le token
+          }
+        }),
         catchError(error => {
           this.messagesSubject.next({
             status: 'error',
@@ -54,23 +59,43 @@ export class AuthService implements OnDestroy {
       );
   }
   
-  
 
-  logout(token: string): Observable<any> {
+
+  logout(): Observable<any> {
+    const token = localStorage.getItem('token'); // Récupérer le token stocké
+  
+    if (!token) {
+      return new Observable(observer => {
+        observer.error('Aucun token trouvé');
+      });
+    }
+  
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,  // Ajouter le token dans les en-têtes
+      Authorization: `Bearer ${token}`
     });
+  
     return this.http.post(`${this.apiUrl}/logout`, {}, { headers })
       .pipe(
+        tap(() => {
+          localStorage.removeItem('token'); // Supprime le token après déconnexion
+        }),
         catchError(error => {
           this.messagesSubject.next({
             status: 'error',
             message: `Erreur lors de la déconnexion : ${error.message}`
           });
-          throw error; // Relancer l'erreur
+          throw error;
         })
       );
   }
+
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    const cardId = localStorage.getItem('cardId');
+    return !!token || !!cardId;
+  }
+  
+  
 
   connectWebSocket(): void {
     if (!this.isWebSocketConnected && !this.isAttemptingReconnect) {

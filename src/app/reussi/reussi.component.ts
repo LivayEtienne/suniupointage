@@ -17,33 +17,20 @@ export class ReussiComponent {
 
   // Méthode pour gérer la déconnexion
   logout(): void {
-    const token = localStorage.getItem('authToken');  // Récupérer le token depuis le localStorage
-
-    if (token) {
-      this.authService.logout(token).subscribe(
-        (response) => {
-          // Si la déconnexion est réussie
-          console.log('Déconnexion réussie', response);
-
-          // Supprimer le token du localStorage
-          localStorage.removeItem('authToken');
-
-          // Afficher le message de déconnexion réussie
-          this.message = 'Déconnexion réussie !';
-
-          // Rediriger l'utilisateur vers la page de connexion après un court délai
-          setTimeout(() => {
-            this.router.navigate(['/login']);  // Redirection vers la page de connexion
-          }, 2000);  // Attendre 2 secondes avant la redirection
-        },
-        (error) => {
-          // En cas d'erreur de déconnexion
-          console.error('Erreur lors de la déconnexion', error);
-          this.message = 'Erreur de déconnexion';
-        }
-      );
-    } else {
-      this.message = 'Aucun token trouvé, vous êtes déjà déconnecté.';
-    }
+    this.authService.logout().subscribe(
+      (response) => {
+        console.log('Déconnexion réussie', response);
+        localStorage.removeItem('authToken');
+        this.message = 'Déconnexion réussie !';
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
+      },
+      (error) => {
+        console.error('Erreur lors de la déconnexion', error);
+        this.message = 'Erreur de déconnexion';
+      }
+    );
   }
+  
 }
