@@ -17,13 +17,22 @@ export class DashvigileService {
   }
 
   private connectToWebSocket() {
-    this.socket$ = new WebSocketSubject('ws://localhost:3000'); // Modifier l'URL si nécessaire
+    this.socket$ = new WebSocketSubject('ws://localhost:4000'); // Modifier l'URL si nécessaire
 
     this.socket$.subscribe(
       (message) => {
-        console.log('Données reçues du WebSocket :', message); 
-        if (message.cardId && message.role === 'admin') {
-          this.router.navigate([''],    { queryParams: { cardId: message.cardId } });
+        console.log('Données reçues du WebSocket :', message);
+
+        // Si le message contient un rôle "admin", redirige vers le dashboard
+        if (message.role === 'admin') {
+          console.log('Rôle admin détecté, redirection vers le dashboard');
+          this.router.navigate(['vigile']); // Redirection vers "dashboard"
+        } else if (message.cardId && message.role) {
+          // Si le message contient un cardId et un role, redirige vers "vigile"
+          console.log('Pointage réussi pour la carte', message.cardId);
+          this.router.navigate(['vigile'], { queryParams: { cardId: message.cardId } });
+        } else {
+          console.error('Données invalides reçues:', message);
         }
       },
       (err) => console.error('Erreur WebSocket :', err),
@@ -31,12 +40,12 @@ export class DashvigileService {
     );
   }
 
-  // ✅ Correction : Utiliser messagesSubject au lieu de messageSubject
+  // ✅ Méthode pour envoyer des messages
   sendMessage(message: string) {
     this.messagesSubject.next(message);
   }
 
-  // ✅ Ajout des méthodes startScanning() et stopScanning()
+  // ✅ Ajout des méthodes startScanning() et stopScanning() pour gérer l'état du scan
   startScanning() {
     if (!this.scanning) {
       this.scanning = true;
