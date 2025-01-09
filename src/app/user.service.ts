@@ -2,6 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
+
+interface UserStats {
+  totalUsers: number;
+  totalVigiles: number;
+  totalDepartments: number;  // Ajout de la propriété totalDepartments
+  totalCohortes: number;  // Ajout de la propriété totalCohortes
+  totalemployer: number;  
+  totalAdmins:number;
+  totalEmployees:number
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -96,4 +107,9 @@ importApprenants(data: any): Observable<any> {
 getAllUsers(page: number, pageSize: number): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}?page=${page}&limit=${pageSize}`);
 }
+
+
+  getUserStats(): Observable<UserStats> {
+    return this.http.get<any>(`${this.apiUrl}/user-stats`);
+  }
 }

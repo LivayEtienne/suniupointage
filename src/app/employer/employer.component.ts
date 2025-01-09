@@ -69,7 +69,6 @@ selectedUser: IUser | null = null;
     departement: '',
   };
 
- 
 
   constructor(private apiService: ApiService) {}
 
@@ -375,23 +374,26 @@ totalPages(): number {
 
 //fonction pour recherche
  // Fonction de recherche
- searchUsers(): void {
+
+searchUsers(): void {
   // Appliquer le filtrage sur la liste des utilisateurs
   this.filteredUsers = this.users.filter(user => {
     const fullName = `${user.nom} ${user.prenom}`.toLowerCase();
     const lowerCaseQuery = this.searchQuery.toLowerCase();
+    // Obtenir le nom du département pour l'utilisateur actuel
+    const departmentName = this.getDepartmentName(user.departement_id)?.toLowerCase() || '';
 
     return (
       fullName.includes(lowerCaseQuery) ||
       user.email.toLowerCase().includes(lowerCaseQuery) ||
       user.role.toLowerCase().includes(lowerCaseQuery) ||
-      user.telephone.includes(lowerCaseQuery)
+      user.telephone.includes(lowerCaseQuery) ||
+      departmentName.includes(lowerCaseQuery)  // Ajouter la recherche par département
     );
   });
 
   this.updatePaginatedUsers(); // Mettre à jour les utilisateurs paginés après le filtrage
 }
-
 
 //recuperer le nom du departement
 

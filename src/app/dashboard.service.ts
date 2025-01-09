@@ -20,8 +20,6 @@ export class DashboardService {
   getUserCount(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
   }
-
-
   getDepartmentCount(): Observable<any> {
     return this.http.get<any>(this.departmentApiUrl);
   }

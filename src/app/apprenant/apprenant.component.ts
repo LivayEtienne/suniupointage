@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import Swal from 'sweetalert2';
 import { SidebareComponent } from '../sidebare/sidebare.component';
-
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 interface Apprenant {
   id: number;
@@ -26,7 +26,7 @@ interface Apprenant {
 
 @Component({ 
   selector: 'app-apprenant',
-  imports: [FormsModule, CommonModule, SidebareComponent] ,
+  imports: [FormsModule, CommonModule, SidebareComponent,DashboardComponent] ,
   templateUrl: './apprenant.component.html',
   styleUrls: ['./apprenant.component.css']
 })
@@ -42,6 +42,17 @@ export class ApprenantComponent implements OnInit {
   users: any[] = [];
   
   id: string = '';  // Déclarer la propriété `id` ici
+
+
+
+   
+    stats = {
+      totalUsers: 0,
+      totalVigiles: 0,
+      totalDepartments: 0,
+      totalAdmins: 0
+    };
+
 
   searchQuery: string = '';  // Variable liée à l'input de recherche
   currentPage: number = 1;
@@ -82,9 +93,23 @@ export class ApprenantComponent implements OnInit {
     this.fetchApprenants();
     this.matricule = '';
     this.newUid = '';
+    this.loadStats();
     this.fetchApprenants();
     
   }
+
+
+  loadStats(): void {
+    this.userService.getUserStats().subscribe({
+      next: (data) => {
+        this.stats = data;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des statistiques:', error);
+      }
+    });
+  }
+
 
   // Ouvrir le modal pour ajouter un utilisateur
   openModal(): void {

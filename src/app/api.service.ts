@@ -163,24 +163,6 @@ getUsersByRole(roles: string[]): Observable<IUser[]> {
     return this.http.get<IUser>(`${this.apiUrl}/users/${userId}`);
   }
 
-
-  //mettre a jour la photo
-  updateUserWithPhoto(userId: number, userData: Partial<IUser>, photo: File): Observable<IUser> {
-    const formData = new FormData();
-    formData.append('nom', userData.nom || '');
-    formData.append('prenom', userData.prenom || '');
-    formData.append('email', userData.email || '');
-    formData.append('adresse', userData.adresse || '');
-    formData.append('role', userData.role || '');
-    formData.append('departement_id', userData.departement_id?.toString() || '');
-    
-    // Ajout de la photo uniquement si elle est sélectionnée
-    if (photo) {
-      formData.append('photo', photo);
-    }
-  
-    return this.http.put<IUser>(`${this.apiUrl}/users/${userId}`, formData);
-  }
   
   
   
