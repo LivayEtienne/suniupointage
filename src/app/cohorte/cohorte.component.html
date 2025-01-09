@@ -1,6 +1,7 @@
 <app-sidebare></app-sidebare>
 
- <button class="add-cohorte-btn" (click)="openAddCohorteForm()">Ajouter Cohorte</button>
+<!-- Bouton pour ajouter une cohorte -->
+<button class="add-cohorte-btn" (click)="openAddCohorteForm()">Ajouter Cohorte</button>
 
 <!-- Formulaire pour ajouter une cohorte -->
 <div *ngIf="isAddCohorteFormVisible" class="modal">
@@ -17,12 +18,55 @@
   </div>
 </div>
 
+<!-- Liste des cohortes -->
 <div class="container">
   <div class="cohorte-list">
     <div class="cohorte-card" *ngFor="let cohorte of cohortes">
-      <div class="cohorte-name">{{ cohorte.nom }}</div>
+      <div *ngIf="editingCohorteId === cohorte.id; else viewMode">
+        <input
+          type="text"
+          [(ngModel)]="newCohorteName"
+          class="edit-input"
+        />
+        <button (click)="updateCohorteName(cohorte)">Sauvegarder</button>
+        <button (click)="cancelEditing()">Annuler</button>
+      </div>
+      <ng-template #viewMode>
+        <i class="fas fa-trash delete-icon" (click)="deleteCohorte(cohorte.id)" title="Supprimer"></i>
+
+        <div class="cohorte-name" (dblclick)="enableEditing(cohorte)">
+          {{ cohorte.nom }}
+        </div>
+      </ng-template>
       <div class="cohorte-code">{{ cohorte.code }}</div>
       <div class="cohorte-date">Créée le : {{ cohorte.date_de_creation }}</div>
+      <!-- <button (click)="showApprenants(cohorte.id!)">Voir Apprenants</button> -->
+      <!-- <button class="delete-btn" (click)="deleteCohorte(cohorte.id)">Supprimer</button> -->
+     
+      
     </div>
+  </div>
+</div>
+<!-- Modal pour afficher les apprenants -->
+<div *ngIf="isApprenantsModalVisible" class="modal">
+  <div class="modal-content">
+    <h2>Apprenants de la cohorte {{ selectedCohorteId }}</h2>
+
+    <!-- Liste des apprenants -->
+    <div *ngIf="apprenants.length > 0; else noApprenants">
+      <ul>
+        <li *ngFor="let apprenant of apprenants">
+          {{ apprenant.nom }} {{ apprenant.prenom }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Message si aucun apprenant -->
+    <ng-template #noApprenants>
+      <p>Aucun apprenant trouvé dans cette cohorte.</p>
+    </ng-template>
+
+    <!-- Bouton pour fermer -->
+    <button >Fermer</button>
   </div>
 </div>

@@ -1,9 +1,10 @@
 
-<app-sidebare></app-sidebare>
+
+ <app-sidebare></app-sidebare> 
 
 <button class="add-department-btn" (click)="openAddDepartmentForm()">Ajouter Département</button>
 
-<!-- Formulaire pour ajouter un département -->
+
 <!-- Formulaire pour ajouter un département -->
 <div *ngIf="isAddDepartmentFormVisible" class="modal">
     <div class="modal-content">
@@ -13,24 +14,41 @@
       <input type="date" [(ngModel)]="newDepartment.date_de_creation" placeholder="Date de création" />
   
       <div class="button-container">
-      <button 
-        class="validate-btn" 
-        (click)="addDepartment()">
-        Valider
-    </button>
-
+        <button class="validate-btn" (click)="addDepartment()">Valider</button>
         <button class="cancel-btn" (click)="cancelAddDepartment()">Annuler</button>
       </div>
     </div>
   </div>
   
 
-<div class="container">
-  <div class="department-list">
-    <div class="department-card" *ngFor="let department of departments">
-      <div class="department-name">{{ department.nom }}</div>
-      <div class="department-code">{{ department.code }}</div>
-      <div class="department-date">Créé le : {{ department.date_de_creation }}</div>
+  <div class="container">
+    <div class="department-list">
+      <div class="department-card" *ngFor="let department of departments">
+        <!-- Mode édition -->
+        <div *ngIf="editingDepartmentId === department.id; else viewMode">
+          <input
+            type="text"
+            [(ngModel)]="updatedDepartmentName"
+            class="edit-input"
+          />
+          <button (click)="updateDepartmentName(department)">Sauvegarder</button>
+          <button (click)="cancelEditing()">Annuler</button>
+        </div>
+        
+        <!-- Mode visualisation -->
+        <ng-template #viewMode>
+          <!-- <button class="delete-btn" (click)="deleteDepartment(department.id)">Supprimer</button> -->
+
+          <i class="fas fa-trash delete-icon" (click)="deleteDepartment(department.id)" title="Supprimer"></i>
+          <div class="department-name" (dblclick)="enableEditing(department)">
+            {{ department.nom }}
+          </div>
+        </ng-template>
+        
+        <div class="department-code">{{ department.code }}</div>
+        <div class="department-date">Créé le : {{ department.date_de_creation }}</div>
+        
+      </div>
     </div>
   </div>
-</div>
+  

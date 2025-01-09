@@ -9,6 +9,7 @@ export interface Cohorte {
   nom: string;
   code: string;
   date_de_creation: string;
+  
 }
 
 @Injectable({
@@ -25,7 +26,13 @@ export class CohorteService {
   getCohortes(): Observable<Cohorte[]> {
     return this.http.get<Cohorte[]>(this.apiUrl);
   }
+  getApprenantsByCohorte(cohorteId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${cohorteId}/apprenants`);
+  }
 
+  getCohorteWithStudents(id: number): Observable<Cohorte> {
+    return this.http.get<Cohorte>(`${this.apiUrl}/${id}`);
+  }
   /**
    * Ajoute une nouvelle cohorte.
    * @param cohorte Les données de la cohorte à créer.
@@ -47,7 +54,22 @@ export class CohorteService {
    * Supprime une cohorte.
    * @param id L'identifiant de la cohorte.
    */
+  
+  // Méthode pour supprimer une cohorte par son ID
   deleteCohorte(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  getApprenants(cohorteId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${cohorteId}/apprenants`);
+  }
+   // Méthode pour vérifier si une cohorte avec le même nom existe
+   checkCohorteNameExists(nom: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/check-name-exists/${nom}`);
+  }
+
+  checkNameExists(name: string) {
+    return this.http.get(`http://127.0.0.1:8000/api/cohortes/check-name-exists/${name}`);
+  }
+  
 }

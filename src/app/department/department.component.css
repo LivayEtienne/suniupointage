@@ -22,57 +22,64 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
-}
-
-.modal-content {
+  }
+  
+  .modal-content {
     background-color: white;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 15px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
-}
-
-.modal-content h2 {
+    width: 800px;
+    height: 400px;
+  }
+  
+  .modal-content h2 {
     margin-bottom: 15px;
-}
-
-input[type="text"], input[type="date"] {
-    width: 100%;
+  }
+  
+  input[type="text"], input[type="date"] {
+    width: 90%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
-
-.button-container {
+  }
+  
+  .button-container {
     display: flex;
     justify-content: space-between;
-}
-
-.validate-btn {
+    padding: 50px;
+  }
+  
+  .validate-btn {
     background-color: #4CAF50; /* Vert */
     color: white;
+    width: 250px;
+    height: 60px;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.cancel-btn {
+  }
+  
+  .cancel-btn {
     background-color: #f44336; /* Rouge */
     color: white;
+    width: 250px;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-}
+  }
 
 .department-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 20px; /* Ajusté pour ne pas trop décaler */
+    margin-left: 250px;
 }
 
 .department-card {
@@ -93,4 +100,24 @@ input[type="text"], input[type="date"] {
 .department-code, .department-date {
     margin-top: 15px;
     font-size: 14px; /* Taille de police ajustée pour une meilleure lisibilité */
+}
+
+.edit-input {
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    padding: 5px;
+    margin-right: 10px;
+  }
+  
+  .delete-icon {
+    color: #dc3545; /* Rouge pour l'icône de suppression */
+    cursor: pointer;
+    font-size: 20px; /* Taille de l'icône */
+    margin-left: 10px; /* Espacement autour de l'icône */
+    transition: color 0.3s ease;
+    margin-left: 230px;
+}
+
+.delete-icon:hover {
+    color: #c82333; /* Couleur plus foncée au survol */
 }

@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import Swal from 'sweetalert2';
 import { SidebareComponent } from '../sidebare/sidebare.component';
+import { AsignComponent } from '../asign/asign.component';
+import { Router } from '@angular/router'; // Importation du router Angular
 
 
 interface Apprenant {
@@ -21,6 +23,7 @@ interface Apprenant {
   role: string;
   statut: string;
   selected?: boolean;
+  carte?: string;  // Ajoutez cette propriété optionnelle
   
 }
 
@@ -72,7 +75,7 @@ export class ApprenantComponent implements OnInit {
   apprenants: Apprenant[] = []; // Liste des apprenants
   
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
         // Par défaut, afficher tous les apprenants
     this.filteredApprenants = [...this.apprenants];
 
@@ -554,6 +557,11 @@ openUpdateUidModal(apprenant: any) {
         confirmButtonText: 'OK'
       });
     }
+  }
+
+   // ✅ Fonction pour rediriger avec l'ID de l'apprenant
+  navigateToAsign(apprenantId: number) {
+    this.router.navigate(['/asign', apprenantId]); // Redirection avec l'ID en paramètre
   }
   
 

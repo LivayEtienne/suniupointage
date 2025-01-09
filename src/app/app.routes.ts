@@ -11,6 +11,7 @@ import { Auth1Component } from './auth1/auth1.component';
 import { EmployerComponent } from './employer/employer.component';
 import { CohorteComponent } from './cohorte/cohorte.component';
 import { DepartmentComponent } from './department/department.component';
+import { AsignComponent } from './asign/asign.component';
 
 import { AuthGuard } from './auth.guard'; // Import du AuthGuard
 
@@ -20,16 +21,17 @@ export const routes: Routes = [
 
   // Routes protégées
   { path: 'dasbord', component: DasbordComponent },
-  { path: 'pointage', component: PointageComponent, canActivate: [AuthGuard] },
-  { path: 'cohorte', component: CohorteComponent, canActivate: [AuthGuard] },
-  { path: 'departement', component: DepartmentComponent, canActivate: [AuthGuard] },
-  { path: 'apprenant', component: ApprenantComponent, canActivate: [AuthGuard] },
-  { path: 'historique', component: HistoriqueComponent, canActivate: [AuthGuard] },
-  { path: 'auth1', component: Auth1Component, canActivate: [AuthGuard] },
-  { path: 'dashvigile', component: DashvigileComponent, canActivate: [AuthGuard] },
+  { path: 'pointage', component: PointageComponent },
+  { path: 'cohorte', component: CohorteComponent },
+  { path: 'department', component: DepartmentComponent },
+  { path: 'apprenant', component: ApprenantComponent },
+  { path: 'historique', component: HistoriqueComponent },
+  { path: 'auth1', component: Auth1Component },
+  { path: 'dashvigile', component: DashvigileComponent },
   { path: 'vigile', component: VigileComponent },
-  { path: 'employer', component: EmployerComponent, canActivate: [AuthGuard] },
-  { path: 'buttonlecture', component: ButtonlectureComponent, canActivate: [AuthGuard] },
+  { path: 'employer', component: EmployerComponent },
+  { path: 'buttonlecture', component: ButtonlectureComponent },
+  { path: 'asign/:id', component: AsignComponent },// ✅ Route avec ID
 
   { path: '**', redirectTo: '/login' } // Redirection pour les URL non valides
 ];
