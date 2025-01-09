@@ -23,6 +23,11 @@ export class EmployerComponent {
   confirmationMessage: string | null = null; // Message de confirmation
   messageType: 'success' | 'error' = 'success'; // Type de message pour le style
 
+  totalUsers: number = 0;
+  totalVigiles: number = 0;
+  totalDepartements: number = 0;
+  totalCohortes: number = 0;
+  userStats: any = {};
   
   currentPage: number = 1; // Page actuelle
 itemsPerPage: number = 10; // Nombre d'utilisateurs par page
@@ -84,16 +89,26 @@ selectedUser: IUser | null = null;
    /**
    * Charger les statistiques
    */
-   loadStats(): void {
+  
+
+
+
+
+  loadStats() {
     this.apiService.getUserStats().subscribe({
       next: (data) => {
-        this.stats = data;
+        this.totalUsers = data.totalUsers;
+        this.totalVigiles = data.totalVigiles;
+        this.totalDepartements = data.totalDepartments;
+        this.totalCohortes = data.totalCohortes;
+       
       },
       error: (error) => {
         console.error('Erreur lors du chargement des statistiques:', error);
       }
     });
   }
+
 
 
   loadEmployes(): void {
@@ -160,6 +175,7 @@ selectedUser: IUser | null = null;
     this.apiService.registerUser(this.newUser).subscribe(
       (response) => {
         console.log('Utilisateur enregistré avec succès', response);
+        Swal.fire('Succès', 'Utilisateur enregistré avec succès', 'success');
         this.users.unshift(response); // Ajouter en haut de la liste
         this.stats.totalUsers++; // Mettre à jour les statistiques
         this.showAddUserModal = false; // Fermer le modal après succès
@@ -201,7 +217,7 @@ selectedUser: IUser | null = null;
       this.apiService.deleteUser(this.userIdToDelete).subscribe(
         (response) => {
           console.log('Utilisateur supprimé avec succès', response);
-          this.afficherMessage('Utilisateur supprimer avec succès', 'success');
+          Swal.fire('Succès', 'Utilisateur supprimer avec succès', 'success');
           this.loadEmployes();  // Recharger les utilisateurs
           this.cancelDelete();  // Fermer le modal après suppression
           this.loadStats();
@@ -239,7 +255,8 @@ selectedUser: IUser | null = null;
       this.apiService.updateUserRoleAndPassword(this.userIdToUpdatePassword, updatedUser).subscribe(
         (response) => {
           console.log('Mot de passe et rôle mis à jour avec succès', response);
-          this.afficherMessage('Role changer avec succès', 'success');
+          Swal.fire('Succès', 'Role changer avec succès', 'success');
+          
           this.loadEmployes(); // Recharger la liste des utilisateurs
           this.closePasswordModal(); // Fermer le modal
           
@@ -285,9 +302,9 @@ deleteSelectedUsers(): void {
       this.apiService.deleteUsers(userIds).subscribe(
         () => {
           console.log(`${userIds.length} utilisateurs supprimés avec succès`);
+          Swal.fire('Succès', 'Utilisateur supprimer avec succès', 'success');
           this.loadEmployes();  // Recharger les utilisateurs après la suppression
           this.cancelMultipleDelete();  // Fermer le modal après suppression
-          this.afficherMessage('Utilisateur Supprimer avec succès', 'success');
           this.loadUsers(); // Recharger la liste
           
         },
@@ -308,7 +325,8 @@ deleteSelectedUsers(): void {
     if (this.selectedUsers.length > 0) {
       this.showMultipleDeleteModal = true;
     } else {
-      alert('Veuillez sélectionner au moins un utilisateur à supprimer.');
+      Swal.fire('Erreur', "Veuillez sélectionner au moins un utilisateur à supprimer.", 'error');
+     
     }
   }
 

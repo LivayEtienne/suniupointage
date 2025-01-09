@@ -4,6 +4,7 @@ import { Component,Input, Output, EventEmitter } from '@angular/core';
 import { ApiService,IUser,IDepartment } from '../api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-modifieremployer',
   imports: [CommonModule,
@@ -65,6 +66,7 @@ export class ModifieremployerComponent {
         this.isSubmitting = false;
         this.userUpdated.emit(updatedUser); 
         this.closeModal.emit();  // Fermer le modal après la mise à jour
+         Swal.fire('Succès', 'Utilisateur modifier avec', 'success');
       },
       error: (error) => {
         this.isSubmitting = false;

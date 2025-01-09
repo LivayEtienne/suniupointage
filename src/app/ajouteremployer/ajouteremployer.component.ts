@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ApiService,IUser,IDepartment } from '../api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, FormBuilder, FormControl, Validators, AbstractControl, FormGroup  } from '@angular/forms';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-ajouteremployer',
   imports: [CommonModule,
@@ -143,6 +144,8 @@ updatePaginatedUsers(): void {
     this.apiService.registerUser(formData).subscribe({
       next: (response: IUser) => {
         console.log('Succès:', response);
+         Swal.fire('Succès', 'Utilisateur ajouter avec', 'success');
+                  
         this.users.push(response); // Ajouter le nouvel utilisateur à la liste
         this.filteredUsers.push(response); // Mettre à jour les utilisateurs filtrés
         this.updatePaginatedUsers(); // Mettre à jour la pagination

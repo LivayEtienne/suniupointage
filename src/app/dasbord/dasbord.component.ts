@@ -209,6 +209,8 @@ prepareLineChartData() {
       });
     }
   }
+
+  
   onDateChange() {
     this.apiService.getHistoriqueDataByDate(this.selectedDate).subscribe({
       next: (data) => {
