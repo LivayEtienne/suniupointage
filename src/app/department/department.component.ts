@@ -180,15 +180,56 @@ updatedDepartmentName: string = ''; // Nouveau nom du département
     this.updatedDepartmentName = '';
   }
   
+  
+ 
+/* deleteDepartment(departmentId: number): void {
+  Swal.fire({
+    title: 'Êtes-vous sûr ?',
+    text: 'Vous ne pourrez pas revenir en arrière !',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Oui, supprimer !'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.departmentService.deleteDepartment(departmentId).subscribe(
+        () => {
+          Swal.fire('Supprimé!', 'Le département a été supprimé.', 'success');
+          this.getDepartments(); // Recharger la liste des départements après la suppression
+        },
+        (error) => {
+          console.error('Erreur lors de la suppression du département :', error);
+          Swal.fire('Erreur', 'Une erreur est survenue lors de la suppression.', 'error');
+        }
+      );
+    }
+  });
+} */
+
   deleteDepartment(departmentId: number): void {
     Swal.fire({
-      title: 'Êtes-vous sûr ?',
-      text: 'Vous ne pourrez pas revenir en arrière !',
+      title: 'Confirmer la suppression',
+      text: 'Veuillez saisir le code secret pour confirmer.',
       icon: 'warning',
+      input: 'password', // Champ de saisie
+      inputAttributes: {
+        autocapitalize: 'off',
+        placeholder: 'Code secret'
+      },
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Oui, supprimer !'
+      confirmButtonText: 'Confirmer',
+      cancelButtonText: 'Annuler',
+      preConfirm: (inputValue) => {
+        const secretCode = 'khalifa87'; // Le code secret attendu
+        if (inputValue !== secretCode) {
+          Swal.showValidationMessage('Code secret incorrect !');
+          return false;
+        }
+        return true; // Validation réussie
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.departmentService.deleteDepartment(departmentId).subscribe(

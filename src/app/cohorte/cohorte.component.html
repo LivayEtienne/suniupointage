@@ -33,6 +33,8 @@
         <button (click)="cancelEditing()">Annuler</button>
       </div>
       <ng-template #viewMode>
+        <i class="fas fa-trash delete-icon" (click)="deleteCohorte(cohorte.id)" title="Supprimer"></i>
+
         <div class="cohorte-name" (dblclick)="enableEditing(cohorte)">
           {{ cohorte.nom }}
         </div>
@@ -40,6 +42,9 @@
       <div class="cohorte-code">{{ cohorte.code }}</div>
       <div class="cohorte-date">Créée le : {{ cohorte.date_de_creation }}</div>
       <!-- <button (click)="showApprenants(cohorte.id!)">Voir Apprenants</button> -->
+      <!-- <button class="delete-btn" (click)="deleteCohorte(cohorte.id)">Supprimer</button> -->
+     
+      
     </div>
   </div>
 </div>

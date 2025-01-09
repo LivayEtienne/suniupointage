@@ -5,7 +5,7 @@
 
 <button class="add-department-btn" (click)="openAddDepartmentForm()">Ajouter Département</button>
 
-<!-- Formulaire pour ajouter un département -->
+
 <!-- Formulaire pour ajouter un département -->
 <div *ngIf="isAddDepartmentFormVisible" class="modal">
     <div class="modal-content">
@@ -38,6 +38,9 @@
         
         <!-- Mode visualisation -->
         <ng-template #viewMode>
+          <!-- <button class="delete-btn" (click)="deleteDepartment(department.id)">Supprimer</button> -->
+
+          <i class="fas fa-trash delete-icon" (click)="deleteDepartment(department.id)" title="Supprimer"></i>
           <div class="department-name" (dblclick)="enableEditing(department)">
             {{ department.nom }}
           </div>
@@ -45,6 +48,7 @@
         
         <div class="department-code">{{ department.code }}</div>
         <div class="department-date">Créé le : {{ department.date_de_creation }}</div>
+        
       </div>
     </div>
   </div>

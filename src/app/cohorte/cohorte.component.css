@@ -6,6 +6,7 @@
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
+    
     font-size: 16px;
     position: relative; /* Ajouté pour le positionnement relatif */
     margin-top: 115px; /* Décalage de 103px vers le bas */
@@ -27,10 +28,12 @@
   .modal-content {
     background-color: white;
     padding: 20px;
-    border-radius: 5px;
+    border-radius: 15px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
+    width: 800px;
+    height: 400px;
   }
   
   .modal-content h2 {
@@ -38,7 +41,7 @@
   }
   
   input[type="text"], input[type="date"] {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
@@ -48,11 +51,14 @@
   .button-container {
     display: flex;
     justify-content: space-between;
+    padding: 50px;
   }
   
   .validate-btn {
     background-color: #4CAF50; /* Vert */
     color: white;
+    width: 250px;
+    height: 60px;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
@@ -62,6 +68,7 @@
   .cancel-btn {
     background-color: #f44336; /* Rouge */
     color: white;
+    width: 250px;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
@@ -92,3 +99,17 @@
   .cohorte-code, .cohorte-date {
     margin-top: 5px;
   }
+
+ /*  */
+ .delete-icon {
+  color: #dc3545; /* Rouge pour l'icône de suppression */
+  cursor: pointer;
+  font-size: 20px; /* Taille de l'icône */
+  margin-left: 10px; /* Espacement autour de l'icône */
+  transition: color 0.3s ease;
+  margin-left: 190px;
+}
+
+.delete-icon:hover {
+  color: #c82333; /* Couleur plus foncée au survol */
+}

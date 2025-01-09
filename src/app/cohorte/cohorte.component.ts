@@ -23,10 +23,10 @@ export class CohorteComponent implements OnInit {
   isApprenantsModalVisible: boolean = false; // Gérer l'affichage du modal
   selectedCohorteId: number | null = null; // ID de la cohorte sélectionnée pour afficher les apprenants
   apprenants: any[] = []; // Liste des apprenants d'une cohorte
-
+  
   editingCohorteId: number | null = null; // ID de la cohorte en cours d'édition
   newCohorteName: string = ''; // Nouveau nom temporaire
-
+  
   constructor(private cohorteService: CohorteService) {}
 
   ngOnInit() {
@@ -56,58 +56,7 @@ export class CohorteComponent implements OnInit {
     this.loadCohortes();
   }
 
-  /* addCohorte() {
-    if (this.newCohorte.nom.trim() && this.newCohorte.code.trim() && this.newCohorte.date_de_creation) {
-      this.cohorteService.addCohorte(this.newCohorte).subscribe({
-        next: (data) => {
-          this.cohortes.push(data); // Ajouter la cohorte à la liste
-          this.cancelAddCohorte(); // Réinitialiser le formulaire
-          console.log('Cohorte ajoutée :', data);
-          Swal.fire('Succès', 'La cohorte a été ajoutée.', 'success'); // SweetAlert pour le succès
-        },
-        error: (error) => {
-          console.error('Erreur lors de l\'ajout de la cohorte :', error);
-          Swal.fire('Erreur', 'Impossible d\'ajouter la cohorte.', 'error'); // SweetAlert pour l'erreur
-        },
-      });
-    } else {
-      Swal.fire('Erreur', 'Tous les champs sont obligatoires.', 'error'); // SweetAlert pour champs vides
-    }
-  }
- */
-
-/* 
-  addCohorte() {
-    if (this.newCohorte.nom.trim() && this.newCohorte.code.trim() && this.newCohorte.date_de_creation) {
-      // Vérifier si le nom de la cohorte existe déjà
-      this.cohorteService.checkCohorteNameExists(this.newCohorte.nom).subscribe({
-        next: (exists) => {
-          if (exists) {
-            Swal.fire('Erreur', 'Une cohorte avec ce nom existe déjà.', 'error');
-          } else {
-            // Ajouter la cohorte si le nom est unique
-            this.cohorteService.addCohorte(this.newCohorte).subscribe({
-              next: (data) => {
-                this.cohortes.push(data);
-                this.cancelAddCohorte();
-                Swal.fire('Succès', 'La cohorte a été ajoutée.', 'success');
-              },
-              error: (error) => {
-                console.error('Erreur lors de l\'ajout de la cohorte :', error);
-                Swal.fire('Erreur', 'Impossible d\'ajouter la cohorte.', 'error');
-              },
-            });
-          }
-        },
-        error: (error) => {
-          console.error('Erreur lors de la vérification du nom de la cohorte :', error);
-          Swal.fire('Erreur', 'Impossible de vérifier le nom de la cohorte.', 'error');
-        },
-      });
-    } else {
-      Swal.fire('Erreur', 'Tous les champs sont obligatoires.', 'error');
-    }
-  } */
+  
 
 
   addCohorte() {
@@ -200,4 +149,85 @@ export class CohorteComponent implements OnInit {
       },
     });
   }
+
+
+
+  
+  /* deleteCohorte(cohorteId: number | undefined): void {
+    if (!cohorteId) {
+      Swal.fire('Erreur', 'L\'ID de la cohorte est invalide.', 'error');
+      return;
+    }
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Vous ne pourrez pas revenir en arrière !',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimer !',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cohorteService.deleteCohorte(cohorteId).subscribe(
+          () => {
+            Swal.fire('Supprimé!', 'La cohorte a été supprimée.', 'success');
+            this.loadCohortes(); // Recharger la liste des cohortes
+          },
+          (error) => {
+            console.error('Erreur lors de la suppression de la cohorte :', error);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de la suppression.', 'error');
+          }
+        );
+      }
+    });
+  }
+   */
+
+
+  deleteCohorte(cohorteId: number | undefined): void {
+    if (!cohorteId) {
+      Swal.fire('Erreur', 'L\'ID de la cohorte est invalide.', 'error');
+      return;
+    }
+  
+    Swal.fire({
+      title: 'Confirmer la suppression',
+      text: 'Veuillez saisir le code secret pour confirmer.',
+      icon: 'warning',
+      input: 'password', // Champ de saisie pour le code secret
+      inputAttributes: {
+        autocapitalize: 'off',
+        placeholder: 'Code secret'
+      },
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmer',
+      cancelButtonText: 'Annuler',
+      preConfirm: (inputValue) => {
+        const secretCode = 'khalifa87'; // Code secret attendu
+        if (inputValue !== secretCode) {
+          Swal.showValidationMessage('Code secret incorrect !');
+          return false;
+        }
+        return true; // Validation réussie
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cohorteService.deleteCohorte(cohorteId).subscribe(
+          () => {
+            Swal.fire('Supprimé!', 'La cohorte a été supprimée.', 'success');
+            this.loadCohortes(); // Recharger la liste des cohortes
+          },
+          (error) => {
+            console.error('Erreur lors de la suppression de la cohorte :', error);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de la suppression.', 'error');
+          }
+        );
+      }
+    });
+  }
+  
+  
+  
 }

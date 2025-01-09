@@ -44,6 +44,7 @@
       <th>Téléphone</th>
       <th>Statut</th>
       <th>Actions</th>
+     
     </tr>
   </thead>
   <tbody>
@@ -58,14 +59,12 @@
       <td>{{ apprenant.adresse }}</td>
       <td>{{ apprenant.telephone }}</td>
       <td>{{ apprenant.statut }}</td>
+      
       <td>
         <button (click)="openEditModal(apprenant)" class="btn btn-warning btn-sm">
           <i class="fa fa-edit"></i>
         </button>
-        <!-- <button (click)="toggleStatus(apprenant)" class="btn btn-secondary btn-sm">
-          <i class="fa fa-archive" *ngIf="apprenant.statut === 'active'"></i>
-          <i class="fa fa-box-open" *ngIf="apprenant.statut !== 'active'"></i>
-        </button> -->
+       
         <button (click)="deleteApprenant(apprenant.id)" class="btn btn-danger btn-sm">
           <i class="fa fa-trash-alt"></i>
         </button>
@@ -165,17 +164,17 @@
               <label for="telephone">Téléphone</label>
               <input type="text" id="telephone" [(ngModel)]="telephone" name="telephone" class="form-control" required>
             </div>
-            <div class="form-group">Cohorte
-              <label for="cohorte">Cohorte</label>
-              <select id="cohorte"  name="cohorte" class="form-control" required>
-                <option value="">Sélectionnez une cohorte</option>
-                <!-- Ajoutez les cohortes existantes dans la base de données -->
-                  <option value="1">ADEFNIPA </option>
-                  <option value="2"> P7</option> 
-                  <option value="3">SAAS</option>
-                  
-              </select>
+            <div class="form-group">
+              <label for="id_cohorte">ID Cohorte</label>
+              <input
+                type="text"
+                id="id_cohorte"
+                [(ngModel)]="id_cohorte"
+                class="form-control"
+                placeholder="Entrez l'ID de la cohorte"
+              />
             </div>
+            
             <div class="form-group" *ngIf="!isEditMode">
               <label for="password">Mot de passe</label>
               <input type="password" id="password" [(ngModel)]="password" name="password" class="form-control" >

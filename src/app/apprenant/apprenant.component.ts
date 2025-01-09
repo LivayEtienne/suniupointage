@@ -19,6 +19,7 @@ interface Apprenant {
   matricule?: string;
   cardId?: string;
   role: string;
+  id_cohorte?: string;
   statut: string;
   selected?: boolean;
   
@@ -41,6 +42,8 @@ export class ApprenantComponent implements OnInit {
   selectAll: boolean = false;
   
 
+  sortByCohorte: boolean = true;
+
   searchQuery: string = '';  // Variable liée à l'input de recherche
   currentPage: number = 1;
   totalPages: number = 1;
@@ -62,6 +65,7 @@ export class ApprenantComponent implements OnInit {
   adresse: string = '';
   telephone: string = '';
   password: string = '';
+  id_cohorte: string = '';
   role: string = 'apprenant';
   isModalOpen: boolean = false;
   isEditMode: boolean = false;
@@ -106,6 +110,7 @@ export class ApprenantComponent implements OnInit {
     this.email = apprenant.email || '';
     this.adresse = apprenant.adresse || '';
     this.telephone = apprenant.telephone || '';
+    this.id_cohorte = apprenant.id_cohorte || '';
     this.password = '';  // Ne pas pré-remplir le mot de passe
     this.role = apprenant.role || 'apprenant';
   }
@@ -118,6 +123,7 @@ export class ApprenantComponent implements OnInit {
     this.email = '';
     this.adresse = '';
     this.telephone = '';
+    this.id_cohorte = '';
     this.password = '';
     this.errorMessage = null;
     this.successMessage = null; // Réinitialiser le message de succès
@@ -141,6 +147,7 @@ onSubmit(): void {
     adresse: this.adresse,
     telephone: this.telephone,
     password: this.password,
+    id_cohorte: this.id_cohorte,
     role: this.role,
   };
 
@@ -155,6 +162,7 @@ onSubmit(): void {
     if (apprenantId) {
       this.userService.updateUser(apprenantId, userData).subscribe(
         (response) => {
+          
           console.log('Utilisateur mis à jour avec succès:', response);
           this.successMessage = 'Utilisateur mis à jour avec succès.';
           this.fetchApprenants();
@@ -197,6 +205,7 @@ onSubmit(): void {
           console.log('Données récupérées:', data);  // Vérifiez si les données sont bien récupérées
           this.apprenants = data;
           this.totalPages = Math.ceil(this.apprenants.length / 10);
+          this.sortApprenantsByCohorte();
         },
         (error) => {
           console.error('Erreur lors de la récupération des apprenants:', error);
@@ -294,6 +303,7 @@ onSubmit(): void {
       adresse: apprenant.adresse,
       telephone: apprenant.telephone,
       matricule: apprenant.matricule,
+      id_cohorte: apprenant.id_cohorte,
       cardId: apprenant.cardId,
       role: apprenant.role,
       statut: newStatus
@@ -433,7 +443,9 @@ applyFilter() {
 
 
 openUpdateUidModal(apprenant: any) {
-  this.matricule = apprenant.nom; // Récupérer le matricule de l'apprenant
+  this.matricule = apprenant.nom ; // Récupérer le matricule de l'apprenant
+  this.matricule = apprenant.prenom ; // Récupérer le matric
+  
     this.newUid = ''; // Réinitialiser le nouveau UID
     this.isUpdateUidModalOpen = true;
   // Vérifier si l'apprenant est bien passé
@@ -450,26 +462,7 @@ openUpdateUidModal(apprenant: any) {
 }
 
 
-// Mettre à jour l'UID
-/* updateUid() {
-  console.log("Matricule:", this.matricule, "New UID:", this.newUid);
-  if (this.newUid && this.apprenant) {
-    this.userService.updateUID(this.apprenant.id, this.newUid).subscribe(
-      (response) => {
-        console.log("Réponse du serveur:", response);
-        alert('UID mis à jour avec succès!');
-        this.closeUpdateUidModal();
-        this.newUid = '';
-      },
-      (error) => {
-        console.error('Erreur lors de la mise à jour de l\'UID', error);
-        alert('Une erreur est survenue.');
-      }
-    );
-  } else {
-    console.log("Les données sont manquantes : newUid:", this.newUid, "apprenant:", this.apprenant);
-  }
-} */
+
 
   updateUid() {
     console.log("Matricule:", this.matricule, "New UID:", this.newUid);
@@ -518,4 +511,49 @@ openUpdateUidModal(apprenant: any) {
   }
   
 
+
+
+
+  sortApprenantsByCohorte(): void {
+    if (this.sortByCohorte) {
+      // Tri ascendant par cohorte, en s'assurant que les propriétés ne sont pas undefined
+      this.apprenants.sort((a: Apprenant, b: Apprenant) => {
+        const aCohorte = a.id_cohorte ?? ''; // Utilise une chaîne vide si id_cohorte est undefined
+        const bCohorte = b.id_cohorte ?? ''; // Utilise une chaîne vide si id_cohorte est undefined
+  
+        if (aCohorte < bCohorte) {
+          return -1;
+        }
+        if (aCohorte > bCohorte) {
+          return 1;
+        }
+        return 0;
+      });
+    } else {
+      // Tri descendant par cohorte, en s'assurant que les propriétés ne sont pas undefined
+      this.apprenants.sort((a: Apprenant, b: Apprenant) => {
+        const aCohorte = a.id_cohorte ?? ''; // Utilise une chaîne vide si id_cohorte est undefined
+        const bCohorte = b.id_cohorte ?? ''; // Utilise une chaîne vide si id_cohorte est undefined
+  
+        if (aCohorte < bCohorte) {
+          return 1;
+        }
+        if (aCohorte > bCohorte) {
+          return -1;
+        }
+        return 0;
+      });
+    }
+  }
+  
+  
+  toggleSortOrder(): void {
+    this.sortByCohorte = !this.sortByCohorte;  // Bascule l'ordre du tri
+    this.sortApprenantsByCohorte();  // Applique le tri
+  }
+  
+ 
+  
+
+  
 }
