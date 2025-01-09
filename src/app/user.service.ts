@@ -27,10 +27,18 @@ export class UserService {
       })
     });
   } */
-    addUser(userData: FormData): Observable<any> {
+    /* addUser(userData: FormData): Observable<any> {
       return this.http.post(this.apiUrl, userData);
+    } */
+    ///avec l insertion de la photo
+    addUser(userData: any): Observable<any> {
+      return this.http.post(this.apiUrl, userData, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      });
     }
-   
+    
 
   // Méthode pour supprimer un utilisateur
   deleteUser(id: number): Observable<any> {

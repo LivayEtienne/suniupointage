@@ -41,6 +41,8 @@ export class ApprenantComponent implements OnInit {
   selected?: boolean;
   selectAll: boolean = false;
   
+//pour la photo
+selectedFile: string | ArrayBuffer | null = null;
 
   sortByCohorte: boolean = true;
 
@@ -58,7 +60,7 @@ export class ApprenantComponent implements OnInit {
   }
   // Variables liées au formulaire
   photo: File | null = null;
-  selectedFile: File | null = null;
+  
   nom: string = '';
   prenom: string = '';
   email: string = '';
@@ -108,6 +110,8 @@ export class ApprenantComponent implements OnInit {
     this.nom = apprenant.nom || '';
     this.prenom = apprenant.prenom || '';
     this.email = apprenant.email || '';
+    this.photo = null; // Ne pas pré-remplir la photo
+
     this.adresse = apprenant.adresse || '';
     this.telephone = apprenant.telephone || '';
     this.id_cohorte = apprenant.id_cohorte || '';
@@ -122,6 +126,7 @@ export class ApprenantComponent implements OnInit {
     this.prenom = '';
     this.email = '';
     this.adresse = '';
+    
     this.telephone = '';
     this.id_cohorte = '';
     this.password = '';
@@ -138,12 +143,62 @@ onFileSelected1(event: any): void {
   }
 }
 
-// Méthode pour soumettre le formulaire
+
+//pour la photo
+
+// Cette fonction est appelée lorsqu'un fichier est sélectionné
+onFileSelected22(event: Event): void {
+  const fileInput = event.target as HTMLInputElement;
+  if (fileInput?.files?.length) {
+    const file = fileInput.files[0];
+    this.resizeImage(file);
+  }
+}
+// pour la conversion en base 64
+
+resizeImage(file: File): void {
+  const reader = new FileReader();
+  reader.onload = (event: any) => {
+    const img = new Image();
+    img.src = event.target.result;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d')!;
+      const maxWidth = 800; // Largeur maximale
+      const maxHeight = 800; // Hauteur maximale
+
+      let width = img.width;
+      let height = img.height;
+
+      // Redimensionner en maintenant les proportions
+      if (width > height) {
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+      this.selectedFile = canvas.toDataURL('image/jpeg'); // Base64 réduite
+    };
+  };
+  reader.readAsDataURL(file);
+}
+
+
 onSubmit(): void {
   const userData: any = {
     nom: this.nom,
     prenom: this.prenom,
     email: this.email,
+    photo: this.selectedFile, // Image en base64
     adresse: this.adresse,
     telephone: this.telephone,
     password: this.password,
@@ -151,18 +206,12 @@ onSubmit(): void {
     role: this.role,
   };
 
-  // Ajouter la photo si elle est sélectionnée
-  if (this.photo) {
-    userData.photo = this.photo;
-  }
-
   if (this.isEditMode) {
+    // Récupérer l'ID de l'utilisateur à modifier
     const apprenantId = this.apprenants.find(apprenant => apprenant.email === this.email)?.id;
-
     if (apprenantId) {
       this.userService.updateUser(apprenantId, userData).subscribe(
         (response) => {
-          
           console.log('Utilisateur mis à jour avec succès:', response);
           this.successMessage = 'Utilisateur mis à jour avec succès.';
           this.fetchApprenants();
@@ -171,8 +220,7 @@ onSubmit(): void {
         },
         (error) => {
           console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
-          this.errorMessage = 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.';
-          Swal.fire('Erreur', 'Une erreur est survenue lors de la mise à jour de l\'utilisateur.', 'error');
+          Swal.fire('Erreur', 'Une erreur est survenue.', 'error');
         }
       );
     }
@@ -187,14 +235,12 @@ onSubmit(): void {
       },
       (error) => {
         console.error('Erreur lors de l\'ajout de l\'utilisateur:', error);
-        this.errorMessage = 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.';
-        Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout de l\'utilisateur.', 'error');
+        Swal.fire('Erreur', 'Une erreur est survenue.', 'error');
       }
     );
   }
 }
 
-       
 
 
  
