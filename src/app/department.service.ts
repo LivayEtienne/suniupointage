@@ -42,4 +42,4 @@ export class DepartmentService {
   checkDepartmentNameExists(nom: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/check-name-exists/${nom}`);
   }
-}
+} 

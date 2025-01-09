@@ -554,6 +554,5 @@ openUpdateUidModal(apprenant: any) {
   
  
   
-
   
 }

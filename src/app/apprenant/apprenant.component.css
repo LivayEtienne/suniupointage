@@ -307,3 +307,17 @@ a:hover {
 .editer{
   background-color: #fff;
 }
+
+.supprimer {
+  color: #00bf8f; /* Rouge pour l'icône de suppression */
+  cursor: pointer;
+  font-size: 24px; /* Taille de l'icône */
+  margin-left: 1200px; /* Espacement autour de l'icône */
+  transition: color 0.3s ease;
+  padding: 25px;
+  background-color: #f8f9fa;
+}
+
+.supprimer:hover {
+  color: #c82333; /* Couleur plus foncée au survol */
+}

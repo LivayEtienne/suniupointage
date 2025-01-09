@@ -1,6 +1,7 @@
 <app-sidebar></app-sidebar>
 <app-dashboard></app-dashboard>
 <div class="container">
+ 
   <h1>Gestion des Apprenants</h1>
 
   <!-- Bouton pour ouvrir le modal d'ajout d'un apprenant -->
@@ -13,9 +14,8 @@
   style="display: none"
   (change)="onFileSelected($event)"
 />
-  <button (click)="bulkDelete()" class="supprimer">
-    Supprimer les utilisateurs sélectionnés
-  </button>
+  
+  <i class="fas fa-trash supprimer" (click)="bulkDelete()" title="Supprimer les utilisateurs sélectionnés"></i>Supprimer les utilisateurs sélectionnés
   
   <div class="search-bar">
     <input
@@ -59,6 +59,7 @@
       <td>{{ apprenant.adresse }}</td>
       <td>{{ apprenant.telephone }}</td>
       <td>{{ apprenant.statut }}</td>
+      
       
       <td>
         <button (click)="openEditModal(apprenant)" class="btn btn-warning btn-sm">
@@ -169,9 +170,10 @@
               <input
                 type="text"
                 id="id_cohorte"
+                name="id_cohorte"
                 [(ngModel)]="id_cohorte"
                 class="form-control"
-                placeholder="Entrez l'ID de la cohorte"
+                required
               />
             </div>
             
@@ -233,5 +235,19 @@
       Suivant
     </button>
   </div>
+  <!-- <div class="form-group">
+    <label for="id_cohorte">Cohorte</label>
+    <select 
+      id="id_cohorte"
+      name="id_cohorte"
+      [(ngModel)]="id_cohorte"
+      class="form-control"
+      required>
+      <option value="">Sélectionner une cohorte</option>
+      <option *ngFor="let cohorte of cohortes" [value]="cohorte.id">
+        {{cohorte.nom}}
+      </option>
+    </select>
+  </div> -->
   
 </div>

@@ -30,7 +30,7 @@ export class UserService {
     addUser(userData: FormData): Observable<any> {
       return this.http.post(this.apiUrl, userData);
     }
-    
+   
 
   // Méthode pour supprimer un utilisateur
   deleteUser(id: number): Observable<any> {
@@ -108,6 +108,11 @@ updateUser(id: number, userData: any): Observable<any> {
     });
   }
   
+
+  // Dans user.service.ts
+getCohortes() {
+  return this.http.get<any[]>(`${this.apiUrl}/cohortes`);
+}
   
 
 }

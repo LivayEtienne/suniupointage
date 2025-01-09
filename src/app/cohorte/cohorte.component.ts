@@ -65,41 +65,29 @@ export class CohorteComponent implements OnInit {
       // Vérifier si la date d'ajout est antérieure ou égale à la date actuelle
       const currentDate = new Date();
       const inputDate = new Date(this.newCohorte.date_de_creation);
-
+  
       if (inputDate > currentDate) {
         Swal.fire('Erreur', 'La date de création ne peut pas être dans le futur.', 'error');
         return;
       }
-
-      // Vérifier si le nom de la cohorte existe déjà
-      this.cohorteService.checkCohorteNameExists(this.newCohorte.nom).subscribe({
-        next: (exists) => {
-          if (exists) {
-            Swal.fire('Erreur', 'Une cohorte avec ce nom existe déjà.', 'error');
-          } else {
-            // Ajouter la cohorte si le nom est unique et la date est valide
-            this.cohorteService.addCohorte(this.newCohorte).subscribe({
-              next: (data) => {
-                this.cohortes.push(data);
-                this.cancelAddCohorte();
-                Swal.fire('Succès', 'La cohorte a été ajoutée.', 'success');
-              },
-              error: (error) => {
-                console.error('Erreur lors de l\'ajout de la cohorte :', error);
-                Swal.fire('Erreur', 'Impossible d\'ajouter la cohorte.', 'error');
-              },
-            });
-          }
+  
+      // Ajouter la cohorte directement sans vérifier le nom
+      this.cohorteService.addCohorte(this.newCohorte).subscribe({
+        next: (data) => {
+          this.cohortes.push(data);
+          this.cancelAddCohorte();
+          Swal.fire('Succès', 'La cohorte a été ajoutée.', 'success');
         },
         error: (error) => {
-          console.error('Erreur lors de la vérification du nom de la cohorte :', error);
-          Swal.fire('Erreur', 'Impossible de vérifier le nom de la cohorte.', 'error');
+          console.error('Erreur lors de l\'ajout de la cohorte :', error);
+          Swal.fire('Erreur', 'Impossible d\'ajouter la cohorte.', 'error');
         },
       });
     } else {
       Swal.fire('Erreur', 'Tous les champs sont obligatoires.', 'error');
     }
   }
+  
   enableEditing(cohorte: Cohorte): void {
     this.editingCohorteId = cohorte.id!;
     this.newCohorteName = cohorte.nom;
