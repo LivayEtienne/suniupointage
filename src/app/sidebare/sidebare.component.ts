@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ReussiComponent } from '../reussi/reussi.component';
+
 @Component({
   selector: 'app-sidebare',
   imports: [RouterModule, ReussiComponent],
