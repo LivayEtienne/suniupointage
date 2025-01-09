@@ -90,7 +90,7 @@
       <thead>
         <tr>
           <th><input type="checkbox"  (change)="selectAllUsers($event)" [checked]="isAllSelected()"></th>
-          <th>Nom Prenom</th>
+          <th>Prenom Nom</th>
           <th>Role</th>
           <th>Departement</th>
           <th>Telephone</th>
@@ -104,7 +104,7 @@
       <tbody>
         <tr *ngFor="let user of paginatedUsers">
           <td><input type="checkbox"  [(ngModel)]="user.isSelected"></td>
-          <td>{{ user.nom }} {{ user.prenom }}</td>
+          <td> {{ user.prenom }} {{ user.nom }} </td>
           <td>{{ user.role }}</td>
           <td>{{ getDepartmentName(user.departement_id) }}</td>
           <td>{{ user.telephone }}</td>

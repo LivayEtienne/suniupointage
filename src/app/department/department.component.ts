@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-department',

@@ -29,7 +29,7 @@ interface Apprenant {
 
 @Component({ 
   selector: 'app-apprenant',
-  imports: [FormsModule, CommonModule, SidebareComponent] ,
+  imports: [FormsModule, CommonModule, SidebareComponent,DashboardComponent] ,
   templateUrl: './apprenant.component.html',
   styleUrls: ['./apprenant.component.css']
 })
@@ -45,6 +45,17 @@ export class ApprenantComponent implements OnInit {
   users: any[] = [];
   
   id: string = '';  // Déclarer la propriété `id` ici
+
+
+
+   
+    stats = {
+      totalUsers: 0,
+      totalVigiles: 0,
+      totalDepartments: 0,
+      totalAdmins: 0
+    };
+
 
   searchQuery: string = '';  // Variable liée à l'input de recherche
   currentPage: number = 1;
@@ -85,9 +96,23 @@ export class ApprenantComponent implements OnInit {
     this.fetchApprenants();
     this.matricule = '';
     this.newUid = '';
+    this.loadStats();
     this.fetchApprenants();
     
   }
+
+
+  loadStats(): void {
+    this.userService.getUserStats().subscribe({
+      next: (data) => {
+        this.stats = data;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des statistiques:', error);
+      }
+    });
+  }
+
 
   // Ouvrir le modal pour ajouter un utilisateur
   openModal(): void {
@@ -194,22 +219,72 @@ onSubmit(): void {
 
        
 
+isPrenomValid(): boolean {
+  if (!this.apprenant.prenom) {
+    return false; // Considère comme invalide si prénom est undefined
+  }
+  const prenomPattern = /^[a-zA-ZÀ-ÿ' -]{2,}$/; // Minimum 2 caractères, accepte les espaces
+  return prenomPattern.test(this.apprenant.prenom);
+}
+
+
+isNomValid(): boolean {
+  if (!this.apprenant.nom) {
+    return false; // Considère comme invalide si nom est undefined
+  }
+  const nomPattern = /^[a-zA-ZÀ-ÿ\-']{2,}$/; // Minimum 2 caractères, pas de chiffres
+  return nomPattern.test(this.apprenant.nom);
+}
+
+isEmailValid(): boolean {
+  if (!this.apprenant.email) {
+    return false; // Considère comme invalide si email est undefined
+  }
+  const emailPattern = /\S+@\S+\.\S+/; // Pattern simple pour les emails
+  return emailPattern.test(this.apprenant.email);
+}
+
+
+isPhoneValid(): boolean {
+  if (!this.apprenant.telephone) {
+    return false; // Considère comme invalide si téléphone est undefined
+  }
+  const phonePattern = /^(75|76|77|78|70)\d{7}$/;
+  return phonePattern.test(this.apprenant.telephone);
+}
+
+isPasswordValid(): boolean {
+  if (!this.apprenant.password) {
+    return false; // Considère comme invalide si password est undefined
+  }
+  return this.apprenant.password.length >= 8; // Minimum 8 caractères
+}
 
  
 
-    fetchApprenants(): void {
-      this.userService.getApprenants(this.currentPage, 10).subscribe(
-        (data) => {
-          console.log('Données récupérées:', data);  // Vérifiez si les données sont bien récupérées
-          this.apprenants = data;
-          this.totalPages = Math.ceil(this.apprenants.length / 10);
-        },
-        (error) => {
-          console.error('Erreur lors de la récupération des apprenants:', error);
-          Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
-        }
-      );
+fetchApprenants(): void {
+  this.userService.getAllUsers(this.currentPage, 10).subscribe({
+    next: (response) => {
+      console.log('Réponse brute de l\'API:', response);
+      
+      const allUsers = response.data || response;
+      console.log('Tous les utilisateurs:', allUsers);
+      
+      this.apprenants = allUsers.filter((user: any) => {
+        console.log('Rôle de l\'utilisateur:', user.role);
+        return user.role === 'apprenant';
+      });
+      
+      console.log('Apprenants filtrés:', this.apprenants);
+      this.totalPages = Math.ceil(this.apprenants.length / 10);
+    },
+    error: (error) => {
+      console.error('Erreur complète:', error);
+      Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
     }
+  });
+}
+
     
 
   // Gérer la pagination

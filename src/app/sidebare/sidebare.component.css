@@ -66,7 +66,7 @@ padding-left: 80px;
     color: #333;
 }
 .logout {
-    margin-top: 250px; /* Positionnement en bas */
+    margin-top: 3500px; /* Positionnement en bas */
     color: #000000; /* Texte blanc */
     background-color: #FF0606; /* Rouge vif pour le fond */
     border-radius: 5px; /* Bordures légèrement arrondies */
@@ -78,7 +78,7 @@ padding-left: 80px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Légère ombre pour l'effet 3D */
     cursor: pointer; /* Curseur en mode "cliquable" */
     border: none; /* Supprimer toute bordure par défaut */
-    transition: background-color 0.3s ease; /* Animation lors du survol */
+    transition: background-color 0.8s ease; /* Animation lors du survol */
 }
 
 .logout:hover {

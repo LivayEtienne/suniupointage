@@ -69,7 +69,6 @@ selectedUser: IUser | null = null;
     departement: '',
   };
 
- 
 
   constructor(private apiService: ApiService) {}
 
@@ -98,18 +97,31 @@ selectedUser: IUser | null = null;
 
 
   loadEmployes(): void {
-    this.apiService.getUsersByRole(['admin', 'vigile', 'employe']).subscribe({
+    this.apiService.getUsersByRole(['admin', 'vigile', 'employer']).subscribe({
       next: (data: IUser[]) => {
-        this.users = data;
-        this.filteredUsers = data; 
-        this.updatePaginatedUsers(); // Mettre à jour les utilisateurs paginés
+        // Séparer les utilisateurs en deux groupes : apprenants et autres
+        this.users = data.filter(user => ['admin', 'vigile', 'employer'].includes(user.role));
+       
+        // Mettre à jour la liste paginée
+        this.filteredUsers = this.users;
+        this.updatePaginatedUsers();
+        
+        // Mettre à jour les statistiques
+        this.updateStats(data);
       },
       error: (error) => {
         console.error('Erreur lors du chargement des employés:', error);
       },
     });
   }
-  
+
+  updateStats(data: IUser[]): void {
+    this.stats.totalUsers = data.length;
+    this.stats.totalAdmins = data.filter(user => user.role === 'admin').length;
+    this.stats.totalVigiles = data.filter(user => user.role === 'vigile').length;
+    this.stats.totalVigiles = data.filter(user => user.role === 'employer').length;
+    this.stats.totalDepartments = new Set(data.map(user => user.departement_id)).size;  // Nombre de départements distincts
+  }
   // Charger les départements
 
   private departmentMap: { [key: number]: string } = {};
@@ -313,6 +325,8 @@ onModalClose() {
   this.showAddUserModal = false;
   // Rafraîchir la liste des utilisateurs si nécessaire
   this.loadUsers();
+  this.loadEmployes();
+    this.loadStats();
 }
 
 //  fonction pour ouvririr modal pour modification
@@ -360,23 +374,26 @@ totalPages(): number {
 
 //fonction pour recherche
  // Fonction de recherche
- searchUsers(): void {
+
+searchUsers(): void {
   // Appliquer le filtrage sur la liste des utilisateurs
   this.filteredUsers = this.users.filter(user => {
     const fullName = `${user.nom} ${user.prenom}`.toLowerCase();
     const lowerCaseQuery = this.searchQuery.toLowerCase();
+    // Obtenir le nom du département pour l'utilisateur actuel
+    const departmentName = this.getDepartmentName(user.departement_id)?.toLowerCase() || '';
 
     return (
       fullName.includes(lowerCaseQuery) ||
       user.email.toLowerCase().includes(lowerCaseQuery) ||
       user.role.toLowerCase().includes(lowerCaseQuery) ||
-      user.telephone.includes(lowerCaseQuery)
+      user.telephone.includes(lowerCaseQuery) ||
+      departmentName.includes(lowerCaseQuery)  // Ajouter la recherche par département
     );
   });
 
   this.updatePaginatedUsers(); // Mettre à jour les utilisateurs paginés après le filtrage
 }
-
 
 //recuperer le nom du departement
 

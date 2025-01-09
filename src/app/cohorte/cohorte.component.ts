@@ -9,7 +9,7 @@ import Swal from 'sweetalert2'; // Importation de SweetAlert2
 @Component({
   selector: 'app-cohorte',
   standalone: true, // Utilisation des composants autonomes
-  imports: [CommonModule, FormsModule, SidebareComponent], // Modules nécessaires
+  imports: [CommonModule, FormsModule, SidebareComponent,DashboardComponent], // Modules nécessaires
   templateUrl: './cohorte.component.html',
   styleUrls: ['./cohorte.component.css'],
   providers: [CohorteService], // Fournisseur du service

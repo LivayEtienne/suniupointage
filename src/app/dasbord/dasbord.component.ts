@@ -3,7 +3,6 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
 import { ApiService } from '../api.service';
-import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SidebareComponent } from '../sidebare/sidebare.component';
 
@@ -95,7 +94,8 @@ prepareLineChartData() {
 
     this.historiqueData.forEach((item: any) => {
       const heureEntree = new Date(item.heure_entree);
-      const jourSemaine = heureEntree.getDay(); // 0 = Dimanche, 1 = Lundi, ..., 6 = Samedi
+      let jourSemaine = heureEntree.getDay(); // 0 = Dimanche, 1 = Lundi, ..., 6 = Samedi
+      jourSemaine = jourSemaine === 0 ? 6 : jourSemaine - 1;
       joursPresence[jourSemaine] += 1; // Incrémenter le compteur pour ce jour de la semaine
     });
 
@@ -219,7 +219,7 @@ prepareLineChartData() {
         this.initializeBarChart(); // Réinitialiser le graphique en barres
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des historiques pour la date sélectionnée:', error);
+        console.error('Erreur lors du chargement des historiques pour la date sélectionnées:', error);
       },
     });
 }
