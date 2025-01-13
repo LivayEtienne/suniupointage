@@ -1,0 +1,83 @@
+<app-sidebare></app-sidebare>
+<!-- assigne.component.html -->
+<h1 class="text-2xl font-bold text-green-500 mb-8">Gestion des cartes</h1>
+<div class="container ">
+   
+  <!--parti remplacement-->
+
+  <div class="status-message" [ngClass]="{'error': statusMessage.includes('Erreur')}">
+    {{ statusMessage }}
+  </div>
+
+
+  <div class="scan-info" *ngIf="lastScannedRfid">
+    <h3>Dernière carte scannée</h3>
+    <p>{{ lastScannedRfid }}</p>
+  </div>
+
+   <!-- Table -->
+   <table>
+    <thead>
+      <tr>
+       
+        <th>Prenom Nom</th>
+        <th>Role</th>
+       
+        <th>Numero RFID</th>
+        <th>Telephone</th>
+        <th>Email</th>
+        
+        <th>Action</th>
+      
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of paginatedUsers"  >
+       
+        <td> {{ user.prenom }} {{ user.nom }} </td>
+        <td>{{ user.role }}</td>
+       <td>{{ user.cardId }}</td>
+        <td>{{ user.telephone }}</td>
+        <td>{{ user.email }}</td>
+        
+        <td>
+          <div class="action-icons">
+            <button class="edit-icon"  (click)="selectUser(user)"  [class.selected]="selectedUser?._id === user._id"><i class="fas fa-edit"></i></button>
+            
+          </div>
+        </td>
+        
+      </tr>
+    </tbody>
+  </table>
+
+
+
+  <!-- Pagination -->
+  <div class="pagination">
+    <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <span>Page {{ currentPage }} sur {{ totalPages() }}</span>
+    <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>
+
+  <!--modal assignation-->
+  <div class="container">
+   
+  
+    <!-- Modal -->
+    <div class="modal" *ngIf="selectedUser">
+      <div class="modal-content">
+        <h3>Assignation pour {{ selectedUser.nom }}</h3>
+        <p>Scannez une carte ou entrez manuellement le numéro UID :</p>
+        <input [(ngModel)]="lastScannedRfid" placeholder="UID scanné" />
+        <button (click)="assignRfid()">Assigner</button>
+        <button (click)="closeModal()">Annuler</button>
+      </div>
+    </div>
+  

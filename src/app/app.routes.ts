@@ -11,7 +11,7 @@ import { DashvigileComponent } from './dashvigile/dashvigile.component';
 import { VigileComponent } from './vigile/vigile.component';
 import { Auth1Component } from './auth1/auth1.component';
 import { EmployerComponent } from './employer/employer.component';
-
+import { AssigneComponent } from './assigne/assigne.component';
 /*  import { DepartementComponent } from './departement/departement.component';  */
 
 import { CohorteComponent } from './cohorte/cohorte.component';
@@ -29,6 +29,7 @@ export const routes: Routes = [
   { path: 'dashvigile', component: DashvigileComponent},
   { path: 'vigile', component: VigileComponent},
   { path: 'employer', component: EmployerComponent},
+  { path: 'assigne', component: AssigneComponent},
   
   
   { path: 'buttonlecture', component: ButtonlectureComponent },
