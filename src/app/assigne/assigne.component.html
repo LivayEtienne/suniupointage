@@ -1,6 +1,8 @@
 <app-sidebare></app-sidebare>
 <!-- assigne.component.html -->
+ <div   class="Gestion">
 <h1 class="text-2xl font-bold text-green-500 mb-8">Gestion des cartes</h1>
+</div>
 <div class="container ">
    
   <!--parti remplacement-->
@@ -73,7 +75,7 @@
     <!-- Modal -->
     <div class="modal" *ngIf="selectedUser">
       <div class="modal-content">
-        <h3>Assignation pour {{ selectedUser.nom }}</h3>
+        <h3>Assignation pour {{ selectedUser.prenom }}  {{ selectedUser.nom }}  </h3>
         <p>Scannez une carte ou entrez manuellement le numéro UID :</p>
         <input [(ngModel)]="lastScannedRfid" placeholder="UID scanné" />
         <button (click)="assignRfid()">Assigner</button>
