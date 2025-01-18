@@ -12,8 +12,10 @@ import { EmployerComponent } from './employer/employer.component';
 import { CohorteComponent } from './cohorte/cohorte.component';
 import { DepartmentComponent } from './department/department.component';
 import { AsignComponent } from './asign/asign.component';
+import { AssigneComponent } from './assigne/assigne.component';
 
 import { AuthGuard } from './auth.guard'; // Import du AuthGuard
+import { TestPointageComponent } from './testpointage/testpointage.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },  
@@ -32,6 +34,8 @@ export const routes: Routes = [
   { path: 'employer', component: EmployerComponent },
   { path: 'buttonlecture', component: ButtonlectureComponent },
   { path: 'asign/:id', component: AsignComponent },// ✅ Route avec ID
+  { path: 'test', component: TestPointageComponent},
+  { path: 'assigne', component: AssigneComponent},
 
   { path: '**', redirectTo: '/login' } // Redirection pour les URL non valides
 ];

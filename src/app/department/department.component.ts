@@ -1,19 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { DepartmentService } from '../department.service';
 import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { SidebareComponent } from '../sidebare/sidebare.component';
+import { CompteurComponent } from '../compteur/compteur.component';
+
 
 import Swal from 'sweetalert2';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-department',
 
     standalone: true, // Utilisation des composants autonomes
-    imports: [CommonModule, FormsModule, SidebareComponent ], // Modules nécessaires
+    imports: [CommonModule, FormsModule, SidebareComponent, CompteurComponent ], // Modules nécessaires
   templateUrl: './department.component.html',
   styleUrls: ['./department.component.css'],
 })

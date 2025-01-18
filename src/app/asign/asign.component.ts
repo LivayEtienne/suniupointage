@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AsignSocketService } from '../asign-socket.service';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router'; // Import du Router
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -14,18 +14,20 @@ import { CommonModule } from '@angular/common';
 export class AsignComponent implements OnInit, OnDestroy {
   uid: string = ''; // Stocke l'UID reçu
   successMessage: string = '';
+  valider: boolean = false;
   errorMessage: string = '';
   userId: number = 0; // L'ID sera récupéré dynamiquement depuis l'URL
   private subscription!: Subscription;
 
   constructor(
     private asignSocketService: AsignSocketService,
-    private route: ActivatedRoute  // Injection du service ActivatedRoute
+    private route: ActivatedRoute, // Injection du service ActivatedRoute
+    private router: Router // Injection du Router pour la redirection
   ) {}
 
   ngOnInit(): void {
     // Récupérer l'ID de l'utilisateur depuis l'URL
-    this.userId = +this.route.snapshot.paramMap.get('id')!;  // Récupérer l'ID dynamique de l'URL
+    this.userId = +this.route.snapshot.paramMap.get('id')!;  
     console.log('ID récupéré depuis l\'URL:', this.userId); // 🔍 Debug
 
     this.asignSocketService.connect();
@@ -52,8 +54,7 @@ export class AsignComponent implements OnInit, OnDestroy {
 
   // Méthode pour vérifier la validité de l'UID
   isValidUid(uid: string): boolean {
-    // Exemple d'UID valide : doit être alphanumérique et de longueur 7 à 10 caractères
-    const uidPattern = /^[A-Z0-9]{7,10}$/;
+    const uidPattern = /^[A-Z0-9]{7,10}$/; // UID alphanumérique de 7 à 10 caractères
     return uidPattern.test(uid);
   }
 
@@ -71,25 +72,34 @@ export class AsignComponent implements OnInit, OnDestroy {
     this.asignSocketService.updateUid(this.userId, this.uid).subscribe({
       next: (response) => {
         console.log('✅ Réponse du serveur après mise à jour :', response); // 🔍 Debug
-        if (response && response.uid) {
-          this.uid = response.uid; // ✅ Mettre à jour l'UID si renvoyé par l'API
-          this.successMessage = `✅ UID mis à jour avec succès! UID : ${this.uid}`;
+  
+        if (response && response.message === 'UID mis à jour avec succès') {
+          this.successMessage = response.message; // ✅ Utiliser le message renvoyé par le serveur
+  
+          // 🔄 Redirection après succès uniquement si l'UID a bien été mis à jour
+          setTimeout(() => {
+            this.router.navigate(['/apprenant']); // Redirige vers /apprenant après 1s
+          }, 1000);
+        } else if (response && response.message === 'Cette carte est déjà affectée.') {
+          this.errorMessage = '❌ Cette carte est déjà affectée.'; // ✅ Affichage du message d'erreur
         } else {
-          this.errorMessage = 'MERCI';
+          this.errorMessage = '❌ Une erreur est survenue.';
         }
   
         // Afficher le modal après la mise à jour
-        this.showModal(); // Afficher le modal
+        this.showModal();
       },
       error: (error) => {
         console.error('❌ Erreur API :', error); // 🔍 Debug
-        this.errorMessage = '❌ Erreur lors de la mise à jour de l’UID.';
+        this.errorMessage = '❌ Cette carte est déjà affectée.'; // ✅ Cas d'erreur serveur
   
         // Afficher le modal après l'erreur
-        this.showModal(); // Afficher le modal
+        this.showModal();
       }
     });
   }
+  
+  
   
   // Fonction pour afficher le modal
   showModal(): void {
@@ -111,8 +121,6 @@ export class AsignComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
   }
   
-
-
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

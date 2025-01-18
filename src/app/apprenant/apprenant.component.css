@@ -160,13 +160,26 @@ td:nth-last-child(2) {
 /* Modal */
 
 .modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   width: 90%;
-  max-width: 700px;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  
+  max-width: 450px;
+  padding: 25px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .modal-backdrop {
@@ -176,10 +189,10 @@ td:nth-last-child(2) {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 
 .modal-header {
@@ -191,28 +204,34 @@ td:nth-last-child(2) {
 }
 
 .header-icon {
-  width: 150px;
-  height: 150px;
-  margin-top: -20px;
+  width: 120px;
+  height: 120px;
+  margin-top: -10px;
 }
 
 .modal-header h2 {
-  margin: 0;
+  margin: 10px 0;
   color: #333;
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 30px;
+  font-size: 28px;
   cursor: pointer;
-  position: absolute;
- margin-left: 700px;
- margin-bottom: 90px;
- color: red;
- position: fixed;
+  color: red;
+  transition: color 0.3s ease-in-out;
 }
+
+.close:hover {
+  color: darkred;
+}
+
 
 .form-grid {
   display: grid;

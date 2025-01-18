@@ -5,9 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import Swal from 'sweetalert2';
 import { SidebareComponent } from '../sidebare/sidebare.component';
-import { AsignComponent } from '../asign/asign.component';
-import { Router } from '@angular/router'; // Importation du router Angular
-
+import { RouterModule, Router } from '@angular/router';
 
 interface Apprenant {
   id: number;
@@ -21,15 +19,15 @@ interface Apprenant {
   matricule?: string;
   cardId?: string;
   role: string;
+  id_cohorte?: string;
   statut: string;
   selected?: boolean;
-  carte?: string;  // Ajoutez cette propriété optionnelle
   
 }
 
 @Component({ 
   selector: 'app-apprenant',
-  imports: [FormsModule, CommonModule, SidebareComponent,DashboardComponent] ,
+  imports: [FormsModule, CommonModule, SidebareComponent, RouterModule],
   templateUrl: './apprenant.component.html',
   styleUrls: ['./apprenant.component.css']
 })
@@ -42,20 +40,9 @@ export class ApprenantComponent implements OnInit {
   isAffectationVisible: boolean = false;
   selected?: boolean;
   selectAll: boolean = false;
-  users: any[] = [];
   
-  id: string = '';  // Déclarer la propriété `id` ici
 
-
-
-   
-    stats = {
-      totalUsers: 0,
-      totalVigiles: 0,
-      totalDepartments: 0,
-      totalAdmins: 0
-    };
-
+  sortByCohorte: boolean = true;
 
   searchQuery: string = '';  // Variable liée à l'input de recherche
   currentPage: number = 1;
@@ -78,6 +65,7 @@ export class ApprenantComponent implements OnInit {
   adresse: string = '';
   telephone: string = '';
   password: string = '';
+  id_cohorte: string = '';
   role: string = 'apprenant';
   isModalOpen: boolean = false;
   isEditMode: boolean = false;
@@ -86,7 +74,7 @@ export class ApprenantComponent implements OnInit {
   apprenants: Apprenant[] = []; // Liste des apprenants
   
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService) {
         // Par défaut, afficher tous les apprenants
     this.filteredApprenants = [...this.apprenants];
 
@@ -96,23 +84,8 @@ export class ApprenantComponent implements OnInit {
     this.fetchApprenants();
     this.matricule = '';
     this.newUid = '';
-    this.loadStats();
     this.fetchApprenants();
-    
   }
-
-
-  loadStats(): void {
-    this.userService.getUserStats().subscribe({
-      next: (data) => {
-        this.stats = data;
-      },
-      error: (error) => {
-        console.error('Erreur lors du chargement des statistiques:', error);
-      }
-    });
-  }
-
 
   // Ouvrir le modal pour ajouter un utilisateur
   openModal(): void {
@@ -137,6 +110,7 @@ export class ApprenantComponent implements OnInit {
     this.email = apprenant.email || '';
     this.adresse = apprenant.adresse || '';
     this.telephone = apprenant.telephone || '';
+    this.id_cohorte = apprenant.id_cohorte || '';
     this.password = '';  // Ne pas pré-remplir le mot de passe
     this.role = apprenant.role || 'apprenant';
   }
@@ -149,6 +123,7 @@ export class ApprenantComponent implements OnInit {
     this.email = '';
     this.adresse = '';
     this.telephone = '';
+    this.id_cohorte = '';
     this.password = '';
     this.errorMessage = null;
     this.successMessage = null; // Réinitialiser le message de succès
@@ -172,6 +147,7 @@ onSubmit(): void {
     adresse: this.adresse,
     telephone: this.telephone,
     password: this.password,
+    id_cohorte: this.id_cohorte,
     role: this.role,
   };
 
@@ -186,6 +162,7 @@ onSubmit(): void {
     if (apprenantId) {
       this.userService.updateUser(apprenantId, userData).subscribe(
         (response) => {
+          
           console.log('Utilisateur mis à jour avec succès:', response);
           this.successMessage = 'Utilisateur mis à jour avec succès.';
           this.fetchApprenants();
@@ -219,72 +196,23 @@ onSubmit(): void {
 
        
 
-isPrenomValid(): boolean {
-  if (!this.apprenant.prenom) {
-    return false; // Considère comme invalide si prénom est undefined
-  }
-  const prenomPattern = /^[a-zA-ZÀ-ÿ' -]{2,}$/; // Minimum 2 caractères, accepte les espaces
-  return prenomPattern.test(this.apprenant.prenom);
-}
-
-
-isNomValid(): boolean {
-  if (!this.apprenant.nom) {
-    return false; // Considère comme invalide si nom est undefined
-  }
-  const nomPattern = /^[a-zA-ZÀ-ÿ\-']{2,}$/; // Minimum 2 caractères, pas de chiffres
-  return nomPattern.test(this.apprenant.nom);
-}
-
-isEmailValid(): boolean {
-  if (!this.apprenant.email) {
-    return false; // Considère comme invalide si email est undefined
-  }
-  const emailPattern = /\S+@\S+\.\S+/; // Pattern simple pour les emails
-  return emailPattern.test(this.apprenant.email);
-}
-
-
-isPhoneValid(): boolean {
-  if (!this.apprenant.telephone) {
-    return false; // Considère comme invalide si téléphone est undefined
-  }
-  const phonePattern = /^(75|76|77|78|70)\d{7}$/;
-  return phonePattern.test(this.apprenant.telephone);
-}
-
-isPasswordValid(): boolean {
-  if (!this.apprenant.password) {
-    return false; // Considère comme invalide si password est undefined
-  }
-  return this.apprenant.password.length >= 8; // Minimum 8 caractères
-}
 
  
 
-fetchApprenants(): void {
-  this.userService.getAllUsers(this.currentPage, 10).subscribe({
-    next: (response) => {
-      console.log('Réponse brute de l\'API:', response);
-      
-      const allUsers = response.data || response;
-      console.log('Tous les utilisateurs:', allUsers);
-      
-      this.apprenants = allUsers.filter((user: any) => {
-        console.log('Rôle de l\'utilisateur:', user.role);
-        return user.role === 'apprenant';
-      });
-      
-      console.log('Apprenants filtrés:', this.apprenants);
-      this.totalPages = Math.ceil(this.apprenants.length / 10);
-    },
-    error: (error) => {
-      console.error('Erreur complète:', error);
-      Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
+    fetchApprenants(): void {
+      this.userService.getApprenants(this.currentPage, 10).subscribe(
+        (data) => {
+          console.log('Données récupérées:', data);  // Vérifiez si les données sont bien récupérées
+          this.apprenants = data;
+          this.totalPages = Math.ceil(this.apprenants.length / 10);
+          this.sortApprenantsByCohorte();
+        },
+        (error) => {
+          console.error('Erreur lors de la récupération des apprenants:', error);
+          Swal.fire('Erreur', 'Une erreur est survenue lors de la récupération des apprenants.', 'error');
+        }
+      );
     }
-  });
-}
-
     
 
   // Gérer la pagination
@@ -375,6 +303,7 @@ fetchApprenants(): void {
       adresse: apprenant.adresse,
       telephone: apprenant.telephone,
       matricule: apprenant.matricule,
+      id_cohorte: apprenant.id_cohorte,
       cardId: apprenant.cardId,
       role: apprenant.role,
       statut: newStatus
@@ -395,48 +324,12 @@ fetchApprenants(): void {
 
 
 
+ 
 
-  // Méthode pour mettre à jour le statut de l'apprenant
-updateStatus(apprenant: any, updatedData: any, newStatus: string): void {
-  this.userService.updateStatus(apprenant.id, updatedData).subscribe(
-    () => {
-      apprenant.statut = newStatus; // Met à jour le statut dans le composant
-      console.log(`Le statut de l'apprenant a été mis à jour en ${newStatus}`);
-      this.successMessage = `Le statut de l'apprenant a été mis à jour en ${newStatus}.`; // Message de succès
-    },
-    (error: HttpErrorResponse) => {
-      console.error("Erreur lors de la mise à jour du statut :", error);
-      this.errorMessage = "Impossible de mettre à jour le statut. Veuillez réessayer."; // Message d'erreur
-    }
-  );
-}
-
-
-// Méthode pour fermer la modal de mise à jour de l'UID
-closeUpdateUidModal(): void {
-  this.isUpdateUidModalOpen = false; // Ferme la modal
-}
-
-// Méthode pour mettre à jour l'UID d'un utilisateur
-updateUserUID(id: string, newUid: string): void {
-  if (!newUid) {
-    this.errorMessage = 'Veuillez entrer un nouvel UID'; // Vérifie si un UID est fourni
-    return;
+  // Méthode pour fermer la modal de mise à jour de l'UID
+  closeUpdateUidModal(): void {
+    this.isUpdateUidModalOpen = false;
   }
-
-  // Appel de la méthode updateUID du service avec l'ID au lieu du matricule
-  this.userService.updateUID(id, newUid).subscribe(
-    response => {
-      console.log('UID mis à jour avec succès', response);
-      this.successMessage = 'UID mis à jour avec succès'; // Message de succès
-      this.closeUpdateUidModal(); // Ferme la modal après mise à jour
-    },
-    error => {
-      console.error('Erreur lors de la mise à jour de l\'UID', error);
-      this.errorMessage = 'Erreur lors de la mise à jour de l\'UID'; // Message d'erreur
-    }
-  );
-}
 
 
   // Sélectionner/désélectionner tous les apprenants
@@ -550,7 +443,9 @@ applyFilter() {
 
 
 openUpdateUidModal(apprenant: any) {
-  this.matricule = apprenant.nom; // Récupérer le matricule de l'apprenant
+  this.matricule = apprenant.nom ; // Récupérer le matricule de l'apprenant
+  this.matricule = apprenant.prenom ; // Récupérer le matric
+  
     this.newUid = ''; // Réinitialiser le nouveau UID
     this.isUpdateUidModalOpen = true;
   // Vérifier si l'apprenant est bien passé
@@ -567,26 +462,7 @@ openUpdateUidModal(apprenant: any) {
 }
 
 
-// Mettre à jour l'UID
-/* updateUid() {
-  console.log("Matricule:", this.matricule, "New UID:", this.newUid);
-  if (this.newUid && this.apprenant) {
-    this.userService.updateUID(this.apprenant.id, this.newUid).subscribe(
-      (response) => {
-        console.log("Réponse du serveur:", response);
-        alert('UID mis à jour avec succès!');
-        this.closeUpdateUidModal();
-        this.newUid = '';
-      },
-      (error) => {
-        console.error('Erreur lors de la mise à jour de l\'UID', error);
-        alert('Une erreur est survenue.');
-      }
-    );
-  } else {
-    console.log("Les données sont manquantes : newUid:", this.newUid, "apprenant:", this.apprenant);
-  }
-} */
+
 
   updateUid() {
     console.log("Matricule:", this.matricule, "New UID:", this.newUid);
@@ -633,11 +509,47 @@ openUpdateUidModal(apprenant: any) {
       });
     }
   }
-
-   // ✅ Fonction pour rediriger avec l'ID de l'apprenant
-  navigateToAsign(apprenantId: number) {
-    this.router.navigate(['/asign', apprenantId]); // Redirection avec l'ID en paramètre
-  }
   
 
+
+
+
+  sortApprenantsByCohorte(): void {
+    if (this.sortByCohorte) {
+      // Tri ascendant par cohorte, en s'assurant que les propriétés ne sont pas undefined
+      this.apprenants.sort((a: Apprenant, b: Apprenant) => {
+        const aCohorte = a.id_cohorte ?? ''; // Utilise une chaîne vide si id_cohorte est undefined
+        const bCohorte = b.id_cohorte ?? ''; // Utilise une chaîne vide si id_cohorte est undefined
+  
+        if (aCohorte < bCohorte) {
+          return -1;
+        }
+        if (aCohorte > bCohorte) {
+          return 1;
+        }
+        return 0;
+      });
+    } else {
+      // Tri descendant par cohorte, en s'assurant que les propriétés ne sont pas undefined
+      this.apprenants.sort((a: Apprenant, b: Apprenant) => {
+        const aCohorte = a.id_cohorte ?? ''; // Utilise une chaîne vide si id_cohorte est undefined
+        const bCohorte = b.id_cohorte ?? ''; // Utilise une chaîne vide si id_cohorte est undefined
+  
+        if (aCohorte < bCohorte) {
+          return 1;
+        }
+        if (aCohorte > bCohorte) {
+          return -1;
+        }
+        return 0;
+      });
+    }
+  }
+  
+  
+  toggleSortOrder(): void {
+    this.sortByCohorte = !this.sortByCohorte;  // Bascule l'ordre du tri
+    this.sortApprenantsByCohorte();  // Applique le tri
+  }
+   
 }

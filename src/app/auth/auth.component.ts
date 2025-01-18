@@ -97,7 +97,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (role === 'admin') {
       this.router.navigate(['/dasbord']);
     } else if (role === 'vigile') {
-      this.router.navigate(['/dashvigile']);
+      this.router.navigate(['/test']);
     } else {
       this.router.navigate(['/']);
     }

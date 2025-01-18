@@ -98,6 +98,7 @@
           
           <th>Action</th>
           <th>Etat</th>
+          <th>Assignation</th>
           
         </tr>
       </thead>
@@ -129,6 +130,13 @@
             }">
               {{ user.statut }}
             </span>
+          </td>
+
+          <td>
+            <!-- Icône pour assigner avec un lien vers la page asign -->
+            <a [routerLink]="['/asign', user.id]" title="Assigner une carte">
+              <i class="fas fa-id-card assign-icon"></i>
+            </a>
           </td>
         </tr>
       </tbody>

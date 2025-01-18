@@ -6,12 +6,14 @@ import { AjouteremployerComponent } from '../ajouteremployer/ajouteremployer.com
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService, IUser,IDepartment } from '../api.service';
+import { RouterModule } from '@angular/router';
 
 import Swal from 'sweetalert2';
+import { Router } from 'express';
 @Component({
   selector: 'app-employer',
   standalone: true,
-  imports: [CommonModule,FormsModule,AjouteremployerComponent,ModifieremployerComponent, SidebareComponent],
+  imports: [CommonModule,FormsModule,AjouteremployerComponent,ModifieremployerComponent, SidebareComponent, RouterModule],
   templateUrl: './employer.component.html',
   styleUrl: './employer.component.css'
 })

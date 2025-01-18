@@ -6,11 +6,10 @@
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
-  
   font-size: 16px;
-  position: relative; /* Ajouté pour le positionnement relatif */
-  margin-top: 115px; /* Décalage de 103px vers le bas */
-  margin-left: 250px; /* Décalage de 203px vers la droite */
+  margin-top: 20px; /* Positionné en haut, ajusté pour la visibilité */
+  margin-left: 300px; /* Décalage à gauche */
+  position: relative;
 }
 .modal {
   display: flex;

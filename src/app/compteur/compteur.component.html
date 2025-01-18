@@ -1,0 +1,44 @@
+// dashboard.component.html
+<app-sidebare></app-sidebare>
+<div class="dashboard-container">
+
+
+    
+    <!-- Première rangée de statistiques -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon green">
+                <img src="departement.png" alt="Départements" class="custom-icon">
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{totalDepartements}}</span>
+                <span class="stat-label">départements</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon mint">
+                <div class="stat-icon green">
+                    <img src="employer.png" alt="Utilisateur" class="custom-icon">
+                </div>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{totalUsers}}</span>
+                <span class="stat-label">Utilisateurs</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon mint">
+                <div class="stat-icon green">
+                    <img src="employer.png" alt="Vigile" class="custom-icon">
+                </div>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{totalVigiles}}</span>
+                <span class="stat-label">vigiles</span>
+            </div>
+        </div>
+    </div>
+
+    </div>

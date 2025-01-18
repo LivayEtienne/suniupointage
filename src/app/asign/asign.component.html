@@ -11,15 +11,12 @@
 <div class="modal" id="myModal">
   <div class="modal-content">
     <div class="modal-header">
-      <h5 class="modal-title">Mise à jour UID</h5>
+      <h5 class="modal-title"></h5>
       <button class="close" (click)="closeModal()">×</button>
     </div>
     <div class="modal-body">
-      <p *ngIf="successMessage">{{ successMessage }}</p>
+      <p *ngIf="successMessage"> {{ successMessage }}</p>
       <p *ngIf="errorMessage">{{ errorMessage }}</p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" (click)="closeModal()">Fermer</button>
     </div>
   </div>
 </div>
